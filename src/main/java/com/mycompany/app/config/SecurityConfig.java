@@ -27,10 +27,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/api/admin").hasRole("ADMIN")
-                        .requestMatchers("/api/manager").hasRole("MANAGER")
-                        .requestMatchers("/api/it").hasRole("IT")
-                        .requestMatchers("/api/employee").hasAnyRole("EMPLOYEE", "ADMIN", "MANAGER", "IT")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());
@@ -45,9 +41,9 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails admin = User.builder().username("admin@orange.com").password(encoder.encode("password123")).roles("ADMIN", "EMPLOYEE").build();
-        UserDetails manager = User.builder().username("manager@orange.com").password(encoder.encode("password123")).roles("MANAGER", "EMPLOYEE").build();
-        UserDetails it = User.builder().username("it@orange.com").password(encoder.encode("password123")).roles("IT", "EMPLOYEE").build();
+        UserDetails admin = User.builder().username("admin@orange.com").password(encoder.encode("password123")).roles("ADMIN").build();
+        UserDetails manager = User.builder().username("manager@orange.com").password(encoder.encode("password123")).roles("MANAGER").build();
+        UserDetails it = User.builder().username("it@orange.com").password(encoder.encode("password123")).roles("IT").build();
         UserDetails employee = User.builder().username("employee@orange.com").password(encoder.encode("password123")).roles("EMPLOYEE").build();
         return new InMemoryUserDetailsManager(admin, manager, it, employee);
     }
