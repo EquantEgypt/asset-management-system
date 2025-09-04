@@ -1,0 +1,21 @@
+package com.mycompany.app.runner;
+
+import com.mycompany.app.serivce.PasswordMigrationService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MigrationRunner implements CommandLineRunner {
+
+    private final PasswordMigrationService passwordMigrationService;
+
+    public MigrationRunner(PasswordMigrationService passwordMigrationService) {
+        this.passwordMigrationService = passwordMigrationService;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        passwordMigrationService.migratePasswords();
+        System.out.println("✅ Password migration completed!");
+    }
+}

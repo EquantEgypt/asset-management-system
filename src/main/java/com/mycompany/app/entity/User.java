@@ -15,7 +15,10 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    long userid;
+
+    @Column
+    String name;
 
     @Column
     String email;
@@ -29,5 +32,13 @@ public class User {
     @Column
     @Enumerated(EnumType.STRING)
     Role role;
+
+    @Column
+    long department_id;
+
+    @Column
+    long role_id;
+
+
 }
 
