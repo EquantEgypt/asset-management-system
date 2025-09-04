@@ -1,6 +1,6 @@
 package com.mycompany.app.controller;
 
-import com.mycompany.app.dto.LoginResponseDTO;
+import com.mycompany.app.dto.UserDTO;
 import com.mycompany.app.serivce.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticateUser(Authentication authentication) {
+    public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {
         return authService.authenticateUser(authentication);
     }
 }

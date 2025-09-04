@@ -1,36 +1,33 @@
 package com.mycompany.app.serivce;
 
-import com.mycompany.app.dto.LoginResponseDTO;
+import com.mycompany.app.dto.UserDTO;
+import com.mycompany.app.entity.User;
+import com.mycompany.app.mapper.UserMapper;
+import com.mycompany.app.reposetries.UserReposetries;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
+    @Autowired
+private  final UserReposetries userReposetries;
+    @Autowired
+private  final UserMapper userMapper;
 
-    public ResponseEntity<LoginResponseDTO> authenticateUser(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        String role = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(r -> r.replace("ROLE_", ""))
-                .findFirst()
-                .orElse(null);
-
-        long userId = getUserIdByEmail(userDetails.getUsername());
-
-        return ResponseEntity.ok(new LoginResponseDTO(userId, userDetails.getUsername(), role));
+    public AuthService(UserReposetries userReposetries, UserMapper userMapper) {
+        this.userReposetries = userReposetries;
+        this.userMapper = userMapper;
     }
 
-    private long getUserIdByEmail(String email) {
-        return switch (email) {
-            case "admin@orange.com" -> 1L;
-            case "manager@orange.com" -> 2L;
-            case "it@orange.com" -> 3L;
-            case "employee@orange.com" -> 4L;
-            default -> 0L;
-        };
+    public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {
+        String email=authentication.getName();
+        User user=userReposetries.findByEmail(email) .orElseThrow(() -> new RuntimeException("User not found"));;
+
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
+
 }
