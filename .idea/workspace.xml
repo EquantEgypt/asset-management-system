@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb065dc0-c1b1-4a12-94c3-f66601913b4f" name="Changes" comment="merge with main">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/reposetries/DepartmentReposetries.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/reposetries/RoleReposetries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_9_4_2025_10_44_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_9_4_2025_10_44_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V2__insert_types_&amp;_categories.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V2__insert_types_&amp;_categories.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtmlValidator.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +50,7 @@
     "Application.org.orange.oie.internship2025.assetmanagementsystem.App.executor": "Run",
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "JUnit.AppTest.executor": "Run",
-    "JUnit.AuthControllerIntegrationTest (2).executor": "Run",
+    "JUnit.AuthControllerIntegrationTest (2).executor": "Coverage",
     "JUnit.AuthControllerIntegrationTest.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
@@ -252,5 +248,10 @@
     <MESSAGE value="fixed password problem in sql" />
     <MESSAGE value="merge with main" />
     <option name="LAST_COMMIT_MESSAGE" value="merge with main" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/asset_management_system$AuthControllerIntegrationTest__2_.ic" NAME="AuthControllerIntegrationTest (2) Coverage Results" MODIFIED="1757093546233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>org.orange.oie.internship2025.assetmanagementsystem.*</FILTER>
+    </SUITE>
   </component>
 </project>
