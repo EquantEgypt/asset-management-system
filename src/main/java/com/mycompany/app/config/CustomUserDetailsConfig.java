@@ -25,7 +25,7 @@ public class CustomUserDetailsConfig {
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.getEmail())
                     .password(user.getPassword())
-                    .roles(user.getRole().name())
+                    .roles(user.getRole().getRoleType())
                     .build();
         };
     }

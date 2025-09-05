@@ -1,44 +1,33 @@
 package com.mycompany.app.entity;
 
-import com.mycompany.app.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Entity
-
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long userid;
+    private Long userId;
 
-    @Column
-    String name;
+    @Column(nullable = false,name = "name")
+    private String username;
 
-    @Column
-    String email;
+    @Column(nullable = false, unique = true, length = 200)
+    private String email;
+//hello here
+    @Column(nullable = false, length = 10)
+    private String password;
 
-    @Column
-    String password;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-    @Column
-    String username;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    Role role;
-
-    @Column
-    long department_id;
-
-    @Column
-    long role_id;
-
-
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 }
-

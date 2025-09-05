@@ -1,21 +1,24 @@
 package com.mycompany.app.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "assets")
-@Data
-
 public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long asset_Id;
+    private Long assetId;
 
-    private String asset_Name;
+    @Column(nullable = false)
+    private String assetName;
 
     @Column(columnDefinition = "TEXT")
-    private String asset_Description;
+    private String assetDescription;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -27,12 +30,8 @@ public class Asset {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;  // Assigned user
+    private User assignedUser;
 
     @Column(nullable = false)
-    private String status;
-
-    @OneToMany(mappedBy = "asset")
-    private List<AssetRequest> requests;
+    private String status; // instead of ENUM in Java
 }
-

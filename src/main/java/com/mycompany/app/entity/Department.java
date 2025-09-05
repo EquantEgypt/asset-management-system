@@ -1,22 +1,18 @@
 package com.mycompany.app.entity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
-@Entity
-@Table(name = "department")
-@Data
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "department")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long department_Id;
+    private Long departmentId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "department_name", nullable = false, unique = true)
     private String departmentName;
-
-    @OneToMany(mappedBy = "department")
-    private List<User> users;
 }

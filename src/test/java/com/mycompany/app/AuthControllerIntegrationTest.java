@@ -1,7 +1,7 @@
 package com.mycompany.app;
 
+import com.mycompany.app.entity.Role;
 import com.mycompany.app.entity.User;
-import com.mycompany.app.enums.Role;
 import com.mycompany.app.reposetries.UserReposetries;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class AuthControllerIntegrationTest {
         user.setEmail("test@orange.com");
         user.setPassword(passwordEncoder.encode("correct-password"));
         user.setUsername("testuser");
-        user.setRole(Role.EMPLOYEE);
+        user.setRole(new Role((long)1,"Employee"));
         userReposetries.save(user);
 
         String credentials = "test@orange.com:correct-password";
@@ -60,7 +60,7 @@ public class AuthControllerIntegrationTest {
         user.setEmail("test@orange.com");
         user.setPassword(passwordEncoder.encode("correct-password"));
         user.setUsername("testuser");
-        user.setRole(Role.EMPLOYEE);
+        user.setRole(new Role());
         userReposetries.save(user);
 
         String badCredentials = "test@orange.com:wrong-password";

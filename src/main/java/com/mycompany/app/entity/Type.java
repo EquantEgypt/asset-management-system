@@ -1,24 +1,19 @@
 package com.mycompany.app.entity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "type")
-@Data
-
+@Table(name = "asset_type")
 public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long type_Id;
+    private Long typeId;
 
-    @Column(nullable = false, unique = true)
-    private String type_Name;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @OneToMany(mappedBy = "type")
-    private List<Asset> assets;
+    @Column(name = "type_name", nullable = false, unique = true)
+    private String typeName;
 }
