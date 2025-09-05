@@ -32,36 +32,24 @@ public class AuthControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        userReposetries.deleteAll();
+
     }
 
     @Test
     void shouldReturnOkAndUserDTOWhenAuthenticationIsSuccessful() throws Exception {
-        User user = new User();
-        user.setEmail("test@orange.com");
-        user.setPassword(passwordEncoder.encode("correct-password"));
-        user.setUsername("testuser");
-        user.setRole(new Role((long)1,"Employee"));
-        userReposetries.save(user);
 
-        String credentials = "test@orange.com:correct-password";
+        String credentials = "ahmed@orange.com:12345678";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         mockMvc.perform(post("/auth/login")
                         .header("Authorization", "Basic " + encodedCredentials))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("test@orange.com"))
-                .andExpect(jsonPath("$.role").value("EMPLOYEE"));
+                .andExpect(jsonPath("$.email").value("ahmed@orange.com"))
+                .andExpect(jsonPath("$.role").value("employee"));
     }
 
     @Test
     void shouldReturnUnauthorizedWhenAuthenticationFails() throws Exception {
-        User user = new User();
-        user.setEmail("test@orange.com");
-        user.setPassword(passwordEncoder.encode("correct-password"));
-        user.setUsername("testuser");
-        user.setRole(new Role());
-        userReposetries.save(user);
 
         String badCredentials = "test@orange.com:wrong-password";
         String encodedBadCredentials = Base64.getEncoder().encodeToString(badCredentials.getBytes());
