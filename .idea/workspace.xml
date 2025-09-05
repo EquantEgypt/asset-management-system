@@ -5,11 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb065dc0-c1b1-4a12-94c3-f66601913b4f" name="Changes" comment="merge with main">
+      <change afterPath="$PROJECT_DIR$/src/test/resources/application-test.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/exception/GlobalExceptionHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtml.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtmlValidator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/CustomUserDetailsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/reposetries/UserReposetries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/reposetries/UserReposetries.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/runner/MigrationRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/runner/MigrationRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/serivce/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/serivce/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,9 +26,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -52,6 +59,7 @@
     "JUnit.AppTest.executor": "Run",
     "JUnit.AuthControllerIntegrationTest (2).executor": "Coverage",
     "JUnit.AuthControllerIntegrationTest.executor": "Run",
+    "JUnit.PasswordMigrationServiceIntegrationTest.executor": "Coverage",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -64,7 +72,7 @@
     "git-widget-placeholder": "feature--login",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/ahmed/Desktop/project1/asset-management-system",
+    "last_opened_file_path": "D:/final_project/asset-management-system/src/test",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -79,13 +87,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\final_project\asset-management-system\src\test" />
       <recent name="D:\final_project\asset-management-system\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\final_project\asset-management-system\src\main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AuthControllerIntegrationTest (2)">
+  <component name="RunManager" selected="Application.org.orange.oie.internship2025.assetmanagementsystem.App">
     <configuration name="org.orange.oie.internship2025.assetmanagementsystem.App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.orange.oie.internship2025.assetmanagementsystem.App" />
       <module name="asset-management-system" />
@@ -129,16 +138,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AuthControllerIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="my-app" />
+    <configuration name="PasswordMigrationServiceIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="asset-management-system" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.mycompany.app.*" />
+          <option name="PATTERN" value="org.orange.oie.internship2025.assetmanagementsystem.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.mycompany.app" />
-      <option name="MAIN_CLASS_NAME" value="com.mycompany.app.AuthControllerIntegrationTest" />
+      <option name="PACKAGE_NAME" value="org.orange.oie.internship2025.assetmanagementsystem" />
+      <option name="MAIN_CLASS_NAME" value="org.orange.oie.internship2025.assetmanagementsystem.PasswordMigrationServiceIntegrationTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -167,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AuthControllerIntegrationTest (2)" />
         <item itemvalue="Application.org.orange.oie.internship2025.assetmanagementsystem.App" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="JUnit.AuthControllerIntegrationTest (2)" />
+        <item itemvalue="JUnit.PasswordMigrationServiceIntegrationTest" />
         <item itemvalue="JUnit.AuthControllerIntegrationTest (1)" />
-        <item itemvalue="JUnit.AuthControllerIntegrationTest" />
       </list>
     </recent_temporary>
   </component>
@@ -250,7 +259,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="merge with main" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/asset_management_system$AuthControllerIntegrationTest__2_.ic" NAME="AuthControllerIntegrationTest (2) Coverage Results" MODIFIED="1757093546233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+    <SUITE FILE_PATH="coverage/asset_management_system$AuthControllerIntegrationTest__2_.ic" NAME="AuthControllerIntegrationTest (2) Coverage Results" MODIFIED="1757099131802" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>org.orange.oie.internship2025.assetmanagementsystem.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/asset_management_system$PasswordMigrationServiceIntegrationTest.ic" NAME="PasswordMigrationServiceIntegrationTest Coverage Results" MODIFIED="1757098699361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>org.orange.oie.internship2025.assetmanagementsystem.*</FILTER>
     </SUITE>
   </component>

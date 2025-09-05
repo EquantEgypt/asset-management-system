@@ -16,6 +16,6 @@ public class MigrationRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         passwordMigrationService.migratePasswords();
-        System.out.println("✅ Password migration completed!");
+        System.out.println("✅ Password migration completed!"); // for test only
     }
 }

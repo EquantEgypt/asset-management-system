@@ -18,7 +18,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {
-        System.out.println("hello");
         return authService.authenticateUser(authentication);
     }
 }

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    @Autowired
+
 private  final UserReposetries userReposetries;
-    @Autowired
+
 private  final UserMapper userMapper;
 
     public AuthService(UserReposetries userReposetries, UserMapper userMapper) {
@@ -24,7 +24,6 @@ private  final UserMapper userMapper;
     public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {
         String email=authentication.getName();
         User user=userReposetries.findByEmail(email) .orElseThrow(() -> new RuntimeException("User not found"));;
-
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
