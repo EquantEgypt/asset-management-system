@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package org.orange.oie.internship2025.assetmanagementsystem;
 
 import com.mycompany.app.entity.Role;
 import com.mycompany.app.entity.User;
