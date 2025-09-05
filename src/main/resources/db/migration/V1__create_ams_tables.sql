@@ -22,9 +22,9 @@ CREATE TABLE asset_type (
 -- Now create users (depends on role + department)
 CREATE TABLE users (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
-    password VARCHAR(10) NOT NULL,
+    password VARCHAR(200) NOT NULL,
     role_id BIGINT NOT NULL,
     department_id BIGINT,
     FOREIGN KEY (role_id) REFERENCES role(role_id),
