@@ -13,7 +13,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
-
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.4</version> <!-- Pick a stable Spring Boot version -->
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -59,11 +64,19 @@
 <!--  <version>10.5.0</version>-->
 </dependency>
     <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql -->
-<dependency>
+  <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-mysql</artifactId>
     <version>11.11.2</version>
 </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.3.230</version>
+      <scope>test</scope>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 <dependency>
     <groupId>org.springframework</groupId>
