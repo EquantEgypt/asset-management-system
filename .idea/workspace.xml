@@ -4,11 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb065dc0-c1b1-4a12-94c3-f66601913b4f" name="Changes" comment="fixed password problem in sql">
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    <list default="true" id="cb065dc0-c1b1-4a12-94c3-f66601913b4f" name="Changes" comment="merge with main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/mycompany/app/AuthControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/mycompany/app/AuthControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/config/CustomUserDetailsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/CustomUserDetailsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/Asset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/Asset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/AssetRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/AssetRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/Department.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/Department.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/reposetries/UserReposetries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/reposetries/UserReposetries.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/runner/MigrationRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/runner/MigrationRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/serivce/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/serivce/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/serivce/PasswordMigrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/serivce/PasswordMigrationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/validation/NoHtml.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtml.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mycompany/app/validation/NoHtmlValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/orange/oie/internship2025/assetmanagementsystem/validation/NoHtmlValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/AuthControllerIntegrationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +64,7 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Application.App.executor": "Run",
+    "Application.org.orange.oie.internship2025.assetmanagementsystem.App.executor": "Run",
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "JUnit.AppTest.executor": "Run",
     "JUnit.AuthControllerIntegrationTest.executor": "Run",
@@ -82,7 +101,7 @@
       <recent name="D:\final_project\asset-management-system\src\main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AuthControllerIntegrationTest">
+  <component name="RunManager" selected="JUnit.AuthControllerIntegrationTest (1)">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.mycompany.app.App" />
       <module name="my-app" />
@@ -96,16 +115,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AppTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="org.orange.oie.internship2025.assetmanagementsystem.App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.orange.oie.internship2025.assetmanagementsystem.App" />
       <module name="my-app" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.mycompany.app.*" />
+          <option name="PATTERN" value="org.orange.oie.internship2025.assetmanagementsystem.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.mycompany.app" />
-      <option name="MAIN_CLASS_NAME" value="com.mycompany.app.AppTest" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthControllerIntegrationTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="my-app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.orange.oie.internship2025.assetmanagementsystem.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.orange.oie.internship2025.assetmanagementsystem" />
+      <option name="MAIN_CLASS_NAME" value="org.orange.oie.internship2025.assetmanagementsystem.AuthControllerIntegrationTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -147,10 +179,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.AuthControllerIntegrationTest (1)" />
+        <item itemvalue="Application.org.orange.oie.internship2025.assetmanagementsystem.App" />
         <item itemvalue="JUnit.AuthControllerIntegrationTest" />
         <item itemvalue="Application.App" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
-        <item itemvalue="JUnit.AppTest" />
       </list>
     </recent_temporary>
   </component>
@@ -194,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757078705717</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="merge with main">
+      <option name="closed" value="true" />
+      <created>1757085723541</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1757085723541</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,6 +258,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="flyway working with entities" />
     <MESSAGE value="fixed password problem in sql" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed password problem in sql" />
+    <MESSAGE value="merge with main" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge with main" />
   </component>
 </project>

@@ -1,8 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem;
 
-import com.mycompany.app.entity.Role;
-import com.mycompany.app.entity.User;
-import com.mycompany.app.reposetries.UserReposetries;
+import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

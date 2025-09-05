@@ -1,9 +1,9 @@
-package com.mycompany.app.serivce;
+package org.orange.oie.internship2025.assetmanagementsystem.serivce;
 
 
 
-import com.mycompany.app.entity.User;
-import com.mycompany.app.reposetries.UserReposetries;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

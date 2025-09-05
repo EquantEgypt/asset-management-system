@@ -1,7 +1,7 @@
-package com.mycompany.app.mapper;
+package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
-import com.mycompany.app.dto.UserDTO;
-import com.mycompany.app.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component

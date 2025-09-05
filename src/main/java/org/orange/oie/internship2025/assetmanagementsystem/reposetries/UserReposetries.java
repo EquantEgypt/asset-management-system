@@ -1,6 +1,6 @@
-package com.mycompany.app.reposetries;
+package org.orange.oie.internship2025.assetmanagementsystem.reposetries;
 
-import com.mycompany.app.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

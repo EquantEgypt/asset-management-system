@@ -1,6 +1,6 @@
-package com.mycompany.app.runner;
+package org.orange.oie.internship2025.assetmanagementsystem.runner;
 
-import com.mycompany.app.serivce.PasswordMigrationService;
+import org.orange.oie.internship2025.assetmanagementsystem.serivce.PasswordMigrationService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

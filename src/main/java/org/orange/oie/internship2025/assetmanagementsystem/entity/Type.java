@@ -1,4 +1,4 @@
-package com.mycompany.app.entity;
+package org.orange.oie.internship2025.assetmanagementsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 

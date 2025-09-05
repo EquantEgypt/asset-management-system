@@ -1,7 +1,7 @@
-package com.mycompany.app.config;
+package org.orange.oie.internship2025.assetmanagementsystem.config;
 
-import com.mycompany.app.entity.User;
-import com.mycompany.app.reposetries.UserReposetries;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;

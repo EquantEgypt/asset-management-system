@@ -1,10 +1,11 @@
-package com.mycompany.app.dto;
+package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
-import com.mycompany.app.entity.Role;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Setter
 @Getter
 @AllArgsConstructor
