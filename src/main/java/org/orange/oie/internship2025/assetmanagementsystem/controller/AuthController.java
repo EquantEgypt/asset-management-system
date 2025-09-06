@@ -18,6 +18,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {
-        return authService.authenticateUser(authentication);
+        UserDTO userDTO = authService.authenticateUser(authentication);
+        return ResponseEntity.ok(userDTO);
     }
+
 }

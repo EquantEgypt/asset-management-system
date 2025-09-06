@@ -1,4 +1,5 @@
 package org.orange.oie.internship2025.assetmanagementsystem.config;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
@@ -56,16 +56,19 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            org.orange.oie.internship2025.assetmanagementsystem.entity.User user = userReposetries.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+            User user = userReposetries.findByEmail(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found: " + username);
+            }
 
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.getEmail())
-                    .password(user.getPassword())//encrypted
+                    .password(user.getPassword())
                     .roles(user.getRole().getRoleType())
                     .build();
         };
     }
+
 
 
     @Bean
