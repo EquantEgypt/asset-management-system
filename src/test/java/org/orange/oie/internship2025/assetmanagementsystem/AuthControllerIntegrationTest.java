@@ -36,7 +36,6 @@ public class AuthControllerIntegrationTest {
     @Autowired
     private RoleReposetries roleReposetries;
 
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -45,6 +44,7 @@ public class AuthControllerIntegrationTest {
         userReposetries.deleteAll();
         departmentReposetries.deleteAll();
         roleReposetries.deleteAll();
+
         Department department = new Department();
         department.setDepartmentName("IT");
         departmentReposetries.save(department);
@@ -55,18 +55,18 @@ public class AuthControllerIntegrationTest {
 
         User user = new User();
         user.setEmail("test@orange.com");
-        user.setPassword(("$2a$12$KxbfmLRj7wwfuWLS524qIugqjXMyPkETp2QVVukGdFH8z3Ys8AicC"));
+
+        user.setPassword(passwordEncoder.encode("password123"));
         user.setUsername("testuser");
         user.setRole(role);
         user.setDepartment(department);
         userReposetries.save(user);
     }
 
+
     @Test
     void shouldReturnOkAndUserDTOWhenAuthenticationIsSuccessful() throws Exception {
-
-
-        String credentials = "test@orange.com:12345678";
+        String credentials = "test@orange.com:password123";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         mockMvc.perform(post("/auth/login")
@@ -78,8 +78,6 @@ public class AuthControllerIntegrationTest {
 
     @Test
     void shouldReturnUnauthorizedWhenAuthenticationFails() throws Exception {
-
-
         String badCredentials = "test@orange.com:wrong-password";
         String encodedBadCredentials = Base64.getEncoder().encodeToString(badCredentials.getBytes());
 

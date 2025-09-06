@@ -20,7 +20,7 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
-    public UserDTO authenticateUser(Authentication authentication) {
+    public final UserDTO authenticateUser(Authentication authentication) {
         String email = authentication.getName();
 
         if (!email.toLowerCase().endsWith("@orange.com")) {
