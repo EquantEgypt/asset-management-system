@@ -8,7 +8,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.DepartmentReposetries;
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.RoleReposetries;
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
-import org.orange.oie.internship2025.assetmanagementsystem.serivce.PasswordMigrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,8 +40,6 @@ public class AuthControllerIntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    PasswordMigrationService p;
     @BeforeEach
     void setUp() {
         userReposetries.deleteAll();
@@ -58,19 +55,18 @@ public class AuthControllerIntegrationTest {
 
         User user = new User();
         user.setEmail("test@orange.com");
-        user.setPassword(("correct-password"));
+        user.setPassword(("$2a$12$KxbfmLRj7wwfuWLS524qIugqjXMyPkETp2QVVukGdFH8z3Ys8AicC"));
         user.setUsername("testuser");
         user.setRole(role);
         user.setDepartment(department);
         userReposetries.save(user);
-        p.migratePasswords();
     }
 
     @Test
     void shouldReturnOkAndUserDTOWhenAuthenticationIsSuccessful() throws Exception {
 
 
-        String credentials = "test@orange.com:correct-password";
+        String credentials = "test@orange.com:12345678";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         mockMvc.perform(post("/auth/login")
