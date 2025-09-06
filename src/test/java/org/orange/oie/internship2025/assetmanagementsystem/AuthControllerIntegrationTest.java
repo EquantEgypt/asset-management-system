@@ -9,6 +9,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.reposetries.Departmen
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.RoleReposetries;
 import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
+@EntityScan(basePackageClasses = { User.class, Role.class, Department.class })
 public class AuthControllerIntegrationTest {
 
     @Autowired
@@ -85,4 +87,5 @@ public class AuthControllerIntegrationTest {
                         .header("Authorization", "Basic " + encodedBadCredentials))
                 .andExpect(status().isUnauthorized());
     }
+
 }
