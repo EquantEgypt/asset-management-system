@@ -2,7 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.config;
 import java.util.List;
 
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,10 +22,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private  final UserReposetries userReposetries;
+    private  final UserRepository userRepository;
 
-    public SecurityConfig(UserReposetries userReposetries) {
-        this.userReposetries = userReposetries;
+    public SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -56,7 +56,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            User user = userReposetries.findByEmail(username);
+            User user = userRepository.findByEmail(username);
             if (user == null) {
                 throw new UsernameNotFoundException("User not found: " + username);
             }

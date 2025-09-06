@@ -1,7 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.serivce.AuthService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

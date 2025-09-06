@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.reposetries.DepartmentReposetries;
-import org.orange.oie.internship2025.assetmanagementsystem.reposetries.RoleReposetries;
-import org.orange.oie.internship2025.assetmanagementsystem.reposetries.UserReposetries;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,30 +30,30 @@ public class AuthControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserReposetries userReposetries;
+    private UserRepository userRepository;
 
     @Autowired
-    private DepartmentReposetries departmentReposetries;
+    private DepartmentRepository departmentRepository;
 
     @Autowired
-    private RoleReposetries roleReposetries;
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
-        userReposetries.deleteAll();
-        departmentReposetries.deleteAll();
-        roleReposetries.deleteAll();
+        userRepository.deleteAll();
+        departmentRepository.deleteAll();
+        roleRepository.deleteAll();
 
         Department department = new Department();
         department.setDepartmentName("IT");
-        departmentReposetries.save(department);
+        departmentRepository.save(department);
 
         Role role = new Role();
         role.setRoleType("Employee");
-        roleReposetries.save(role);
+        roleRepository.save(role);
 
         User user = new User();
         user.setEmail("test@orange.com");
@@ -61,7 +61,7 @@ public class AuthControllerIntegrationTest {
         user.setUsername("testuser");
         user.setRole(role);
         user.setDepartment(department);
-        userReposetries.save(user);
+        userRepository.save(user);
     }
 
     @Test
@@ -93,9 +93,9 @@ public class AuthControllerIntegrationTest {
         invalidUser.setEmail("test@gmail.com");
         invalidUser.setPassword(passwordEncoder.encode("password123"));
         invalidUser.setUsername("invaliduser");
-        invalidUser.setRole(roleReposetries.findAll().iterator().next());
-        invalidUser.setDepartment(departmentReposetries.findAll().iterator().next());
-        userReposetries.save(invalidUser);
+        invalidUser.setRole(roleRepository.findAll().iterator().next());
+        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
+        userRepository.save(invalidUser);
 
         // try to login with invalid domain email
         String credentials = "test@gmail.com:password123";
