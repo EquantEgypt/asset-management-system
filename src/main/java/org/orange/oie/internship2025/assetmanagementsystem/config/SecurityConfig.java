@@ -69,6 +69,10 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
+            if (username == null || !username.toLowerCase().endsWith("@orange.com")) {
+                throw new UsernameNotFoundException("Invalid domain for user: " + username);
+            }
+
             User user = userRepository.findByEmail(username);
             if (user == null) {
                 throw new UsernameNotFoundException("User not found: " + username);
