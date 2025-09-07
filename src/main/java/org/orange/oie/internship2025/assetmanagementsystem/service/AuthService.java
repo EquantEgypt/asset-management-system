@@ -23,14 +23,7 @@ public class AuthService {
     public final UserDTO authenticateUser(Authentication authentication) {
         String email = authentication.getName();
 
-        if (!email.toLowerCase().endsWith("@orange.com")) {
-            throw new BadCredentialsException("Email must be from @orange.com domain");
-        }
-
         User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("No user found with email: " + email);
-        }
 
         return UserMapper.toDto(user);
     }
