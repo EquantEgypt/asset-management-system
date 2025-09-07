@@ -1,6 +1,8 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -10,10 +12,12 @@ import lombok.*;
 @Entity
 @Table(name = "assets")
 public class Asset {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assetId;
 
+    @NotBlank(message = "Asset name cannot be blank")
     @Column(nullable = false)
     private String assetName;
 
@@ -21,10 +25,12 @@ public class Asset {
     private String assetDescription;
 
     @ManyToOne
+    @NotNull(message = "Asset category is required")
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
+    @NotNull(message = "Asset type is required")
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
@@ -32,6 +38,8 @@ public class Asset {
     @JoinColumn(name = "user_id")
     private User assignedUser;
 
+    @NotNull(message = "Asset status cannot be null")
+    @NotBlank(message = "Asset status cannot be blank")
     @Column(nullable = false)
-    private String status; // instead of ENUM in Java
+    private String status;
 }
