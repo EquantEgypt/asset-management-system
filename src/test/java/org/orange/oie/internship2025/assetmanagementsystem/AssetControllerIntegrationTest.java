@@ -17,7 +17,7 @@ import java.util.Base64;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(properties = "spring.profiles.active=test")
+@SpringBootTest(classes = App.class,properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
 @EntityScan(basePackages = "org.orange.oie.internship2025.assetmanagementsystem.entity")
 public class AssetControllerIntegrationTest {
@@ -105,9 +105,13 @@ public class AssetControllerIntegrationTest {
         {
           "assetName": "New Laptop",
           "assetDescription": "Standard issue laptop",
+          "brand": "Dell",
           "categoryId": %d,
           "typeId": %d,
-          "status": "available"
+          "allStock": 10,
+          "numberOfAvailableToAssign": 7,
+          "numberOfMaintenance": 2,
+          "numberOfRetired": 1
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
@@ -124,9 +128,14 @@ public class AssetControllerIntegrationTest {
         String assetJson = String.format("""
         {
           "assetName": "Another Laptop",
+          "assetDescription": "For employee",
+          "brand": "HP",
           "categoryId": %d,
           "typeId": %d,
-          "status": "available"
+          "allStock": 5,
+          "numberOfAvailableToAssign": 5,
+          "numberOfMaintenance": 0,
+          "numberOfRetired": 0
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
@@ -142,9 +151,13 @@ public class AssetControllerIntegrationTest {
         String assetJson = String.format("""
         {
           "assetDescription": "A laptop with no name",
+          "brand": "Lenovo",
           "categoryId": %d,
           "typeId": %d,
-          "status": "available"
+          "allStock": 3,
+          "numberOfAvailableToAssign": 1,
+          "numberOfMaintenance": 1,
+          "numberOfRetired": 1
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
@@ -152,7 +165,7 @@ public class AssetControllerIntegrationTest {
                         .header("Authorization", adminAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Bad Request"));
     }
-
 }

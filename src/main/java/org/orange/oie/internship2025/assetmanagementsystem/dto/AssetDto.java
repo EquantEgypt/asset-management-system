@@ -12,9 +12,12 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 public class AssetDto {
     private Long assetId;
     private String assetName;
+    private String brand;
     private String assetDescription;
     private Category category;
     private Type type;
-    private User assignedUser;
-    private String status;
+    private Integer allStock;
+    private Integer numberOfAvailableToAssign;
+    private Integer numberOfMaintenance;
+    private Integer numberOfRetired;
 }
