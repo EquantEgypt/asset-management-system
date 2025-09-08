@@ -3,8 +3,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
-import org.orange.oie.internship2025.assetmanagementsystem.service.AssetServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/asset")
 public class AssetController {
 
-    @Autowired
-    AssetServiceImpl assetService;
+    private final AssetService assetService;
+
+    public AssetController(AssetService assetService) {
+        this.assetService = assetService;
+    }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('Admin')")
