@@ -1,10 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -21,7 +17,6 @@ public class User {
 
     @Column(nullable = false, name = "username")
     private String username;
-
 
     @Column(nullable = false, unique = true, length = 200)
     private String email;
