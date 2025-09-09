@@ -18,6 +18,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    private final AuthService authService;
 
 
 
