@@ -15,11 +15,17 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
+
+
+
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return UserMapper.toDtoList(users);
+    }
+    public List<UserDTO> getUserByDepartment(Long  department) {
+        List<User> usersbydep =userRepository.findByDepartment_DepartmentId(department);
+        return UserMapper.toDtoList(usersbydep);
+
     }
 
 
