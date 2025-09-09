@@ -1,9 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.UserMapper;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
