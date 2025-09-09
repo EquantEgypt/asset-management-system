@@ -19,6 +19,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser() {
+
+        
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
         return ResponseEntity.ok(userDTO);

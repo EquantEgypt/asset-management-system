@@ -73,7 +73,7 @@ public class AuthControllerIntegrationTest {
                         .header("Authorization", "Basic " + encodedCredentials))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("test@orange.com"))
-                .andExpect(jsonPath("$.role.roleType").value("Employee"));
+                .andExpect(jsonPath("$.role").value("Employee"));
     }
 
     @Test
@@ -99,6 +99,44 @@ public class AuthControllerIntegrationTest {
 
         // try to login with invalid domain email
         String credentials = "test@gmail.com:password123";
+        String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+
+        mockMvc.perform(post("/auth/login")
+                        .header("Authorization", "Basic " + encodedCredentials))
+                .andExpect(status().isUnauthorized());
+    }
+        @Test
+    void shouldReturnUnauthorizedWhenEmailisNull() throws Exception {
+        // create user with non-orange email
+        User invalidUser = new User();
+        invalidUser.setEmail("test@gmail.com");
+        invalidUser.setPassword(passwordEncoder.encode("password123"));
+        invalidUser.setUsername("invaliduser");
+        invalidUser.setRole(roleRepository.findAll().iterator().next());
+        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
+        userRepository.save(invalidUser);
+
+        // try to login with invalid domain email
+        String credentials = ":password123";
+        String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+
+        mockMvc.perform(post("/auth/login")
+                        .header("Authorization", "Basic " + encodedCredentials))
+                .andExpect(status().isUnauthorized());
+    }
+            @Test
+    void shouldReturnUnauthorizedWhenEmailisNotAUser() throws Exception {
+        // create user with non-orange email
+        User invalidUser = new User();
+        invalidUser.setEmail("test@gmail.com");
+        invalidUser.setPassword(passwordEncoder.encode("password123"));
+        invalidUser.setUsername("invaliduser");
+        invalidUser.setRole(roleRepository.findAll().iterator().next());
+        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
+        userRepository.save(invalidUser);
+
+        // try to login with invalid domain email
+        String credentials = "notTest@orange.com:password123";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         mockMvc.perform(post("/auth/login")
