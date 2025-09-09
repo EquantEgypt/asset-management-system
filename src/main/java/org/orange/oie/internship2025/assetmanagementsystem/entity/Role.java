@@ -16,4 +16,5 @@ public class Role {
 
     @Column(name = "role_type", nullable = false, unique = true)
     private String roleType; // No enum, plain String
+
 }
