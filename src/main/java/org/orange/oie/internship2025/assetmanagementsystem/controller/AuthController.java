@@ -31,7 +31,7 @@ public class AuthController {
     @GetMapping("/users")
     public List<UserDTO> getAllUsers(Authentication authentication) {
         UserDTO userDTO1 = authService.authenticateUser(authentication);
-        String role = userDTO1.getRole().getRoleType();
+        String role = userDTO1.getRole();
         if (role.equals("Admin") ) {
             return userService.getAllUsers();
 
