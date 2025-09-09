@@ -14,7 +14,7 @@ public class UserDTO {
     private Long id;
     private String username;
     private String email;
-    private Role role; // mapped to RoleType enum in DB
+    private String role; // mapped to RoleType enum in DB
     private String departmentName;  // read-friendly instead of just ID
-private Long departmentId;
+    private Long departmentId;
 }

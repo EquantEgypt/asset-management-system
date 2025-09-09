@@ -17,12 +17,11 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getUserId());
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole());
+        userDTO.setRole(user.getRole().getRoleType());
         userDTO.setDepartmentName(user.getDepartment().getDepartmentName());
 
 
@@ -39,5 +38,4 @@ public class UserMapper {
         }
         return dtoList;
     }
-
 }
