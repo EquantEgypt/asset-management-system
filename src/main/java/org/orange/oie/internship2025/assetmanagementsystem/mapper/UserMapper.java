@@ -16,7 +16,6 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getUserId());
         userDTO.setEmail(user.getEmail());

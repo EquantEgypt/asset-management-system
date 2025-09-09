@@ -1,12 +1,13 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
+
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AuthService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,6 +17,8 @@ public class AuthController {
     private AuthService authService;
     @Autowired
     private UserService userService;
+
+
 
 
     @PostMapping("/login")
@@ -28,7 +31,7 @@ public class AuthController {
     @GetMapping("/users")
     public List<UserDTO> getAllUsers(Authentication authentication) {
         UserDTO userDTO1 = authService.authenticateUser(authentication);
-        String role = userDTO1.getRole().getRoleType();
+        String role = userDTO1.getRole();
         if (role.equals("Admin") ) {
             return userService.getAllUsers();
 
