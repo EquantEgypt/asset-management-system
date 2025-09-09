@@ -23,20 +23,8 @@ public class AuthService {
 
 
 
-    public final UserDTO authenticateUser(Authentication authentication) {
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email);
-
+    public final UserDTO authenticateUser(User user) {
         return userMapper.toDto(user);
     }
-
-//    public List<UserDTO> getEmployeeByDepartment(String departmentName) {
-//        User department = DepartmentRepository.findByDepartment(departmentName);
-//        return department.getEmployees();
-//    }
-
-
-
 
 }

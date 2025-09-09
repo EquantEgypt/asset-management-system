@@ -17,7 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        if (username == null || !username.endsWith("@orange.com")) {
+        if (username.isBlank()) {
+            throw new UsernameNotFoundException("Email is null");
+        }
+        if (!username.endsWith("@orange.com")) {
             throw new UsernameNotFoundException("Invalid domain for user: " + username);
         }
 
