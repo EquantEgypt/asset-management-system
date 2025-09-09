@@ -35,10 +35,12 @@ public class UserController {
         UserDTO userDTO = authService.authenticateUser(user);
 
         String role = userDTO.getRole();
+            Long dep=userDTO.getDepartmentId();
         if (role.equals("Admin") ) {
             return userService.getAllUsers();
 
         } else if (role.equals("Department_Manager")) {
+            return userService.getUserByDepartment(dep);
         } else {
             System.out.println("not allowed");
         }
