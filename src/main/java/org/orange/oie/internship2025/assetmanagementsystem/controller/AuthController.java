@@ -17,6 +17,11 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> authenticateUser(Authentication authentication) {

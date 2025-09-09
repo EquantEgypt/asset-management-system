@@ -2,6 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class UserMapper {
 
-    public  UserDTO toDto(User user) {
+    public static UserDTO toDto(User user) {
         if (user == null) {
             return null;
         }
@@ -21,12 +22,14 @@ public class UserMapper {
         userDTO.setId(user.getUserId());
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole().getRoleType());
+        userDTO.setRole(user.getRole());
         userDTO.setDepartmentName(user.getDepartment().getDepartmentName());
+
+
 
         return userDTO;
     }
-    public  List<UserDTO> toDtoList(List<User> users) {
+    public static List<UserDTO> toDtoList(List<User> users) {
         if (users == null) {
             return List.of();
         }
@@ -36,4 +39,5 @@ public class UserMapper {
         }
         return dtoList;
     }
+
 }
