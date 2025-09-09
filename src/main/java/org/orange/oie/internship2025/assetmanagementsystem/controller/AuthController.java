@@ -28,21 +28,4 @@ public class AuthController {
         return ResponseEntity.ok(userDTO);
     }
 
-
-    @GetMapping("/users")
-    public List<UserDTO> getAllUsers(Authentication authentication) {
-        UserDTO userDTO1 = authService.authenticateUser(authentication);
-        String role = userDTO1.getRole();
-        if (role.equals("Admin") ) {
-            return userService.getAllUsers();
-
-        } else if (role.equals("Department_Manager")) {
-            Long departmentId = userDTO1.getDepartmentId();
-            return ResponseEntity.ok(userService.getAllUsersByDepartment(departmentId)).getBody();
-        } else {
-            System.out.println("not allowed");
-        }
-
-        return null;
-    }
 }

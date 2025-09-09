@@ -1,5 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
+import lombok.*;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
