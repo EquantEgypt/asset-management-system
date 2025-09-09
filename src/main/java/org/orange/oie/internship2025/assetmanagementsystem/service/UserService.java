@@ -21,16 +21,6 @@ public class UserService {
         List<User> users = userRepository.findAll();
         return UserMapper.toDtoList(users);
     }
-//    @PersistenceContext
-//    private EntityManager entityManager;
-//
-//    //@Transactional ( readOnly = true)
-//    public List<UserDTO> getAllUsersByDepartment(Long depId) {
-//        List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.department.departmentName = :dep", User.class).setParameter("dep", departmentName).getResultList();
-//
-//        return UserMapper.toDtoList(users);
-//        List<User> users = userRepository. findByDepartment_DepartmentId(depId);
-//        return UserMapper.toDtoList(users);
-//    }
+
 
 }
