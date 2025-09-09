@@ -5,6 +5,10 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @Component
 
 public class UserMapper {
@@ -25,4 +29,15 @@ public class UserMapper {
 
         return userDTO;
     }
+    public static List<UserDTO> toDtoList(List<User> users) {
+        if (users == null) {
+            return List.of();
+        }
+        List<UserDTO> dtoList = new ArrayList<>();
+        for (User user : users) {
+            dtoList.add(toDto(user));
+        }
+        return dtoList;
+    }
+
 }
