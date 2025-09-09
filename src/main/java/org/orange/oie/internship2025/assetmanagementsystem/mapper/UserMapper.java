@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserMapper {
 
-    public UserDTO toDto(User user) {
+    public  UserDTO toDto(User user) {
         if (user == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class UserMapper {
 
         return userDTO;
     }
-    public static List<UserDTO> toDtoList(List<User> users) {
+    public  List<UserDTO> toDtoList(List<User> users) {
         if (users == null) {
             return List.of();
         }
@@ -36,5 +36,4 @@ public class UserMapper {
         }
         return dtoList;
     }
-
 }

@@ -21,7 +21,6 @@ public class AuthService {
     @Autowired
     private  UserMapper userMapper;
 
-    private final UserMapper userMapper;
 
 
     public final UserDTO authenticateUser(Authentication authentication) {
@@ -29,7 +28,7 @@ public class AuthService {
 
         User user = userRepository.findByEmail(email);
 
-        return UserMapper.toDto(user);
+        return userMapper.toDto(user);
     }
 
 //    public List<UserDTO> getEmployeeByDepartment(String departmentName) {
