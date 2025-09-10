@@ -28,3 +28,9 @@ target/
 
 # intellij idea
 .idea/
+# Ignore IntelliJ project files
+src/.idea/
+*.iml
+out/
+
+
