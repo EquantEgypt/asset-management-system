@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Base64;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -167,5 +168,19 @@ public class AssetControllerIntegrationTest {
                         .content(assetJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("Bad Request"));
+    }
+
+    @Test
+    void getAllAssets_AsAdmin_ShouldSucceed() throws Exception {
+        mockMvc.perform(get("/asset/all")
+                        .header("Authorization", adminAuthHeader))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllAssets_AsEmployee_ShouldBeForbidden() throws Exception {
+        mockMvc.perform(get("/asset/all")
+                        .header("Authorization", employeeAuthHeader))
+                .andExpect(status().isForbidden());
     }
 }

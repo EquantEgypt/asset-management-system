@@ -1,0 +1,110 @@
+package org.orange.oie.internship2025.assetmanagementsystem;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Base64;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest(classes = App.class, properties = "spring.profiles.active=test")
+@AutoConfigureMockMvc
+@EntityScan(basePackages = "org.orange.oie.internship2025.assetmanagementsystem.entity")
+public class TypeControllerIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private TypeRepository typeRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private String adminAuthHeader;
+    private String employeeAuthHeader;
+
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
+        departmentRepository.deleteAll();
+        typeRepository.deleteAll();
+
+        Department department = new Department();
+        department.setDepartmentName("IT");
+        departmentRepository.save(department);
+
+        Role adminRole = new Role();
+        adminRole.setRoleType("Admin");
+        roleRepository.save(adminRole);
+
+        Role employeeRole = new Role();
+        employeeRole.setRoleType("Employee");
+        roleRepository.save(employeeRole);
+
+        Type type1 = new Type();
+        type1.setTypeName("Laptop");
+        typeRepository.save(type1);
+
+        User admin = new User();
+        admin.setEmail("admin@orange.com");
+        admin.setPassword(passwordEncoder.encode("Password123##"));
+        admin.setUsername("admin");
+        admin.setRole(adminRole);
+        admin.setDepartment(department);
+        userRepository.save(admin);
+
+        User employee = new User();
+        employee.setEmail("employee@orange.com");
+        employee.setPassword(passwordEncoder.encode("Password123##"));
+        employee.setUsername("employee");
+        employee.setRole(employeeRole);
+        employee.setDepartment(department);
+        userRepository.save(employee);
+
+        String adminCredentials = "admin@orange.com:Password123##";
+        adminAuthHeader = "Basic " + Base64.getEncoder().encodeToString(adminCredentials.getBytes());
+
+        String employeeCredentials = "employee@orange.com:Password123##";
+        employeeAuthHeader = "Basic " + Base64.getEncoder().encodeToString(employeeCredentials.getBytes());
+    }
+
+    @Test
+    void getAllTypes_AsAdmin_ShouldSucceed() throws Exception {
+        mockMvc.perform(get("/type/all")
+                        .header("Authorization", adminAuthHeader))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllTypes_AsEmployee_ShouldBeForbidden() throws Exception {
+        mockMvc.perform(get("/type/all")
+                        .header("Authorization", employeeAuthHeader))
+                .andExpect(status().isForbidden());
+    }
+}

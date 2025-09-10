@@ -1,19 +1,18 @@
 package org.orange.oie.internship2025.assetmanagementsystem;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest {
+@SpringBootTest
+class AppTest {
 
-    /**
-     * Rigorous Test :-)
-     */
     @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue(true);
+    void contextLoads() {
     }
+
+    @Test
+    void main() {
+        App.main(new String[]{});
+    }
+
 }
