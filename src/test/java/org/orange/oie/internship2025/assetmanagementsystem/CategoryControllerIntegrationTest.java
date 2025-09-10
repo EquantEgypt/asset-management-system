@@ -1,3 +1,4 @@
+// asset-management-system/src/test/java/org/orange/oie/internship2025/assetmanagementsystem/CategoryControllerIntegrationTest.java
 package org.orange.oie.internship2025.assetmanagementsystem;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,6 +7,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
@@ -43,6 +45,9 @@ public class CategoryControllerIntegrationTest {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private AssetRepository assetRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private String adminAuthHeader;
@@ -50,6 +55,7 @@ public class CategoryControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        assetRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
         departmentRepository.deleteAll();
@@ -96,14 +102,14 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     void getAllCategories_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/category/all")
+        mockMvc.perform(get("/api/category/all") // Corrected Path
                         .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllCategories_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/category/all")
+        mockMvc.perform(get("/api/category/all") // Corrected Path
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }

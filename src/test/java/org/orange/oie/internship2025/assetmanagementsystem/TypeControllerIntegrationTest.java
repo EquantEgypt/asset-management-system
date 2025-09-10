@@ -6,6 +6,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
@@ -43,6 +44,9 @@ public class TypeControllerIntegrationTest {
     private TypeRepository typeRepository;
 
     @Autowired
+    private AssetRepository assetRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private String adminAuthHeader;
@@ -50,6 +54,7 @@ public class TypeControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        assetRepository.deleteAll();
         userRepository.deleteAll();
         roleRepository.deleteAll();
         departmentRepository.deleteAll();
@@ -96,14 +101,14 @@ public class TypeControllerIntegrationTest {
 
     @Test
     void getAllTypes_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/type/all")
+        mockMvc.perform(get("/api/types/all")
                         .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllTypes_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/type/all")
+        mockMvc.perform(get("/api/types/all")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }
