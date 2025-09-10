@@ -38,24 +38,28 @@ public class UserController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
 
         String role = userDTO.getRole();
-        Long dep=userDTO.getDepartmentId();
-        if (role.equals("Admin") ) {
-            Pageable pageable = PageRequest.of(page, size);
+        Long departmentId = userDTO.getDepartmentId();
+        Pageable pageable = PageRequest.of(page, size);
 
-            return userService.getAllUsers(pageable);
+        switch (role) {
+            case "Admin":
+                return userService.getAllUsers(pageable);
 
-        } else if (role.equals("Department_Manager")) {
-//            return userService.getUserByDepartment(dep);
-        } else {
-            System.out.println("not allowed");
+            case "Department_Manager":
+                return userService.getUserByDepartment(departmentId, pageable);
+
+            default:
+                return null;
         }
-
-        return null;
     }
 
+
+
+
 }
+
+
