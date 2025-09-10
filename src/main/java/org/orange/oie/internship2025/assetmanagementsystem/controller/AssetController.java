@@ -6,10 +6,9 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/asset")
@@ -26,6 +25,13 @@ public class AssetController {
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto){
         AssetDto dto =  assetService.addAsset(assetRequestDto);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<List<AssetDto>> getAllAssets(){
+        List<AssetDto> assets = assetService.getAllAssets();
+        return ResponseEntity.ok(assets);
     }
 
 
