@@ -39,6 +39,7 @@ public class UserMapper {
         }
         return dtoList;
     }
+
     public static Page<UserDTO> toDtoPage(Page<User> userPage) {
         if (userPage == null) {
             return Page.empty();
