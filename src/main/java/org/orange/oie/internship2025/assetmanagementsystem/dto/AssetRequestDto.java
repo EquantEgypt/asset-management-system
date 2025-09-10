@@ -3,11 +3,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class AssetRequestDto {
 
     @NotBlank(message = "Asset name cannot be empty")
@@ -39,4 +35,77 @@ public class AssetRequestDto {
     @NotNull(message = "Number of retired is required")
     @PositiveOrZero(message = "Number of retired cannot be negative")
     private Integer numberOfRetired;
+
+    // Getters and Setters
+    public String getAssetName() {
+        return assetName;
+    }
+
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getAssetDescription() {
+        return assetDescription;
+    }
+
+    public void setAssetDescription(String assetDescription) {
+        this.assetDescription = assetDescription;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    public Integer getAllStock() {
+        return allStock;
+    }
+
+    public void setAllStock(Integer allStock) {
+        this.allStock = allStock;
+    }
+
+    public Integer getNumberOfAvailableToAssign() {
+        return numberOfAvailableToAssign;
+    }
+
+    public void setNumberOfAvailableToAssign(Integer numberOfAvailableToAssign) {
+        this.numberOfAvailableToAssign = numberOfAvailableToAssign;
+    }
+
+    public Integer getNumberOfMaintenance() {
+        return numberOfMaintenance;
+    }
+
+    public void setNumberOfMaintenance(Integer numberOfMaintenance) {
+        this.numberOfMaintenance = numberOfMaintenance;
+    }
+
+    public Integer getNumberOfRetired() {
+        return numberOfRetired;
+    }
+
+    public void setNumberOfRetired(Integer numberOfRetired) {
+        this.numberOfRetired = numberOfRetired;
+    }
 }
