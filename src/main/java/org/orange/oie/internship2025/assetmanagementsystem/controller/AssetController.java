@@ -3,6 +3,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssignedAssetServiceImpl;
@@ -41,11 +42,15 @@ public class AssetController {
     }
     
     @GetMapping
-    public ResponseEntity<List<AssignedAsset>> getAssignedAssetByName(
-        @RequestParam String assetName
-    ){
-        List<AssignedAsset> assets = assignedAssetService.searchAssignedAssetsByAssetName(assetName);
+    public ResponseEntity<List<AssignedAsset>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
+        List<AssignedAsset> assets = assignedAssetService.getFilteredAsset(filterDTO);
         return ResponseEntity.ok(assets);
     }
+    
+    // @GetMapping
+    // public ResponseEntity<List<AssignedAsset>> getFilteredAsset(@RequestParam String assetName) {
+    //     List<AssignedAsset> assets = assignedAssetService.searchAssignedAssetsByAssetName(assetName);
+    //     return ResponseEntity.ok(assets);
+    // }
 
 }
