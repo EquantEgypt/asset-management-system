@@ -18,7 +18,8 @@ public class CategoryController {
     public CategoryController(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    @GetMapping("/categories")
+
+    @GetMapping("/category/all")
     @PreAuthorize("hasAuthority('Admin')")
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();

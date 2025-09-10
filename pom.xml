@@ -109,9 +109,15 @@
         <version>0.8.12</version>
         <configuration>
           <excludes>
-            <exclude>org/orange/oie/internship2025/assetmanagementsystem/App.class</exclude>
+            <exclude>org/orange/oie/internship2025/assetmanagementsystem/App.*</exclude>
+            <exclude>**/util/**</exclude>
+            <exclude>**/mapper/**</exclude>
+            <exclude>**/exception/**</exclude>
+            <exclude>**/dto/**</exclude>
+            <exclude>**/entity/**</exclude>
           </excludes>
         </configuration>
+
         <executions>
           <execution>
             <goals>
