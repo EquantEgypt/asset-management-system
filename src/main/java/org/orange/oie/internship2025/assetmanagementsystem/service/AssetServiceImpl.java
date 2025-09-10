@@ -40,24 +40,12 @@ public class AssetServiceImpl implements AssetService {
     }
 
     private void validateAssetRequest(AssetRequestDto assetDto) {
-        int totalCalculatedStock = assetDto.getNumberOfAvailableToAssign()
+        int sumOfParts = assetDto.getNumberOfAvailableToAssign()
                 + assetDto.getNumberOfMaintenance()
                 + assetDto.getNumberOfRetired();
 
-        if (totalCalculatedStock != assetDto.getAllStock()) {
-            throw new InvalidAssetException("The sum of available, maintenance, and retired assets must equal the total stock.");
-        }
-
-        if (assetDto.getNumberOfAvailableToAssign() > assetDto.getAllStock()) {
-            throw new InvalidAssetException("Available stock cannot be greater than total stock.");
-        }
-
-        if (assetDto.getNumberOfMaintenance() > assetDto.getAllStock()) {
-            throw new InvalidAssetException("Maintenance stock cannot be greater than total stock.");
-        }
-
-        if (assetDto.getNumberOfRetired() > assetDto.getAllStock()) {
-            throw new InvalidAssetException("Retired stock cannot be greater than total stock.");
+        if (sumOfParts > assetDto.getAllStock()) {
+            throw new InvalidAssetException("The sum of available, maintenance, and retired assets cannot exceed the total stock.");
         }
     }
 }
