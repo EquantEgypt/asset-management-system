@@ -33,5 +33,9 @@ public class AssetController {
         List<AssetDto> assets = assetService.getAllAssets();
         return ResponseEntity.ok(assets);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 654d4b8d421e5f68dc87f3798976e094763d35ba
 
 }
