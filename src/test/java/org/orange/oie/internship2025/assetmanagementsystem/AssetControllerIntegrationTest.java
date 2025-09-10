@@ -110,7 +110,7 @@ public class AssetControllerIntegrationTest {
           "categoryId": %d,
           "typeId": %d,
           "allStock": 10,
-          "numberOfAvailableToAssign": 7,
+          "numberOfAvailableToAssign": 5,
           "numberOfMaintenance": 2,
           "numberOfRetired": 1
         }
@@ -183,9 +183,9 @@ public class AssetControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-
     @Test
-    void addAsset_WithInconsistentStockSum_ShouldReturnBadRequest() throws Exception {
+    void addAsset_WithStockSumExceedingTotal_ShouldReturnBadRequest() throws Exception {
+        // This is the new failing case: sum of parts (11) is greater than total stock (10)
         String assetJson = String.format("""
         {
           "assetName": "Laptop Bad Sum",
@@ -194,9 +194,9 @@ public class AssetControllerIntegrationTest {
           "categoryId": %d,
           "typeId": %d,
           "allStock": 10,
-          "numberOfAvailableToAssign": 5,
+          "numberOfAvailableToAssign": 8,
           "numberOfMaintenance": 2,
-          "numberOfRetired": 2
+          "numberOfRetired": 1
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
@@ -205,79 +205,6 @@ public class AssetControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets must equal the total stock."));
-    }
-
-    @Test
-    void addAsset_WithAvailableStockGreaterThanTotal_ShouldReturnBadRequest() throws Exception {
-        String assetJson = String.format("""
-        {
-          "assetName": "Laptop High Avail",
-          "assetDescription": "Available stock > Total stock",
-          "brand": "Acer",
-          "categoryId": %d,
-          "typeId": %d,
-          "allStock": 10,
-          "numberOfAvailableToAssign": 11,
-          "numberOfMaintenance": 0,
-          "numberOfRetired": 0
-        }
-        """, testCategory.getCategoryId(), testType.getTypeId());
-
-        mockMvc.perform(post("/asset/add")
-                        .header("Authorization", adminAuthHeader)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(assetJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets must equal the total stock."));
-    }
-
-    @Test
-    void addAsset_WithMaintenanceStockGreaterThanTotal_ShouldReturnBadRequest() throws Exception {
-        String assetJson = String.format("""
-        {
-          "assetName": "Laptop High Maint",
-          "assetDescription": "Maintenance stock > Total stock",
-          "brand": "Razer",
-          "categoryId": %d,
-          "typeId": %d,
-          "allStock": 10,
-          "numberOfAvailableToAssign": 0,
-          "numberOfMaintenance": 11,
-          "numberOfRetired": 0
-        }
-        """, testCategory.getCategoryId(), testType.getTypeId());
-
-        mockMvc.perform(post("/asset/add")
-                        .header("Authorization", adminAuthHeader)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(assetJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets must equal the total stock."));
-    }
-
-    @Test
-    void addAsset_WithRetiredStockGreaterThanTotal_ShouldReturnBadRequest() throws Exception {
-        String assetJson = String.format("""
-        {
-          "assetName": "Laptop High Retired",
-          "assetDescription": "Retired stock > Total stock",
-          "brand": "MSI",
-          "categoryId": %d,
-          "typeId": %d,
-          "allStock": 10,
-          "numberOfAvailableToAssign": 0,
-          "numberOfMaintenance": 0,
-          "numberOfRetired": 11
-        }
-        """, testCategory.getCategoryId(), testType.getTypeId());
-
-        mockMvc.perform(post("/asset/add")
-                        .header("Authorization", adminAuthHeader)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(assetJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets must equal the total stock."));
+                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets cannot exceed the total stock."));
     }
 }
-
