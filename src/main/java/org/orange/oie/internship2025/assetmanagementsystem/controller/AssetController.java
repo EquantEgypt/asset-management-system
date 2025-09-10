@@ -34,5 +34,4 @@ public class AssetController {
         return ResponseEntity.ok(assets);
     }
 
-
 }
