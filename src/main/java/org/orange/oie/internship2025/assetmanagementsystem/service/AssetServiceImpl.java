@@ -8,6 +8,9 @@ import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AssetServiceImpl implements AssetService {
 
@@ -26,6 +29,14 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = assetMapper.toEntity(assetDto);
         assetRepository.save(asset);
         return assetMapper.toDto(asset);
+    }
+
+    @Override
+    public List<AssetDto> getAllAssets() {
+        List<Asset> assets = assetRepository.findAll();
+        return assets.stream()
+                .map(assetMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     private void validateAssetRequest(AssetRequestDto assetDto) {
