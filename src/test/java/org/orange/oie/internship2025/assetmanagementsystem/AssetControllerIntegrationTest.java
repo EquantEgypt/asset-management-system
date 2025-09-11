@@ -175,14 +175,14 @@ public class AssetControllerIntegrationTest {
 
     @Test
     void getAllAssets_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/asset/all")
+        mockMvc.perform(get("/asset")
                         .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllAssets_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/asset/all")
+        mockMvc.perform(get("/asset")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }

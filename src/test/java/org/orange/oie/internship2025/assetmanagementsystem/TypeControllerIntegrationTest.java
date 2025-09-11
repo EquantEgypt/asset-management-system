@@ -101,14 +101,14 @@ public class TypeControllerIntegrationTest {
 
     @Test
     void getAllTypes_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/api/types/all")
+        mockMvc.perform(get("/api/types")
                         .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllTypes_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/api/types/all")
+        mockMvc.perform(get("/api/types")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }

@@ -27,7 +27,7 @@ public class AssetController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<List<AssetDto>> getAllAssets(){
         List<AssetDto> assets = assetService.getAllAssets();

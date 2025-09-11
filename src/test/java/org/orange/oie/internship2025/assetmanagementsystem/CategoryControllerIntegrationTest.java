@@ -102,14 +102,14 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     void getAllCategories_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/api/category/all")
+        mockMvc.perform(get("/api/category")
                         .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllCategories_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/api/category/all")
+        mockMvc.perform(get("/api/category")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }

@@ -19,7 +19,7 @@ public class TypeController {
         this.typeRepository = typeRepository;
     }
 
-    @GetMapping("/types/all")
+    @GetMapping("/types")
     @PreAuthorize("hasAuthority('Admin')")
     public List<Type> getAllTypes() {
         return typeRepository.findAll();
