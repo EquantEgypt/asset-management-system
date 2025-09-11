@@ -37,33 +37,32 @@ public class UserController {
     public Page<UserDTO> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) String username
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Long departmentId
 
     ) {
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
 
         String role = userDTO.getRole();
-        Long departmentId = userDTO.getDepartmentId();
+        Long managerDepartmentId = userDTO.getDepartmentId();
         Pageable pageable = PageRequest.of(page, size);
 
         switch (role) {
             case "Admin":
-                if(username != null && !username.trim().isEmpty()){
-                    return  userService.getusersByName(username,pageable);
-                }else{
-                    return userService.getAllUsers(pageable);
-
-                }
+                return userService.searchUsers(username, departmentId, pageable);
 
             case "Department_Manager":
-                return userService.getUserByDepartment(departmentId, pageable);
+                return userService.searchUsers(username, managerDepartmentId, pageable);
 
             default:
                 return Page.empty(pageable);
 
         }
     }
+
+
+
 
 }
 
