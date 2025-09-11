@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping("/users")
     public Page<UserDTO> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "3") int size
     ) {
 
         User user = SecurityUtils.getCurrentUser();
