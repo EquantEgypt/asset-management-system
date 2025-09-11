@@ -10,5 +10,8 @@ public class UserSpecifications {
                 cb.like(cb.lower(root.get("username")), "%" + username.toLowerCase() + "%");
     }
 
-
+    public static Specification<User> inDepartment(Long departmentId) {
+        return (root, query, cb) ->
+                cb.equal(root.get("department").get("departmentId"), departmentId);
+    }
 }
