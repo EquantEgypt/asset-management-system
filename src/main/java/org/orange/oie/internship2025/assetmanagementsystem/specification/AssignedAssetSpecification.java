@@ -15,30 +15,28 @@ public class AssignedAssetSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (filter.getAssetName() != null) {
-                predicates.add(cb.like(
-    root.join("asset").get("assetName"), 
-    "%" + filter.getAssetName() + "%"
-));
+                predicates.add(cb.like(root.join("asset").get("assetName"), "%" + filter.getAssetName() + "%"));
 
             }
             if (filter.getStatus() != null) {
                 predicates.add(cb.equal(root.get("status"), filter.getStatus()));
             }
             if (filter.getType() != null) {
-                predicates.add(cb.equal(root.get("type"), filter.getType()));
+                predicates.add(cb.equal(root.join("asset").get("type"), filter.getType()));
             }
             if (filter.getCategory() != null) {
-                predicates.add(cb.like(root.get("category"), "%" + filter.getCategory() + "%"));
+                predicates.add(cb.like(root.join("asset").get("category"), "%" + filter.getCategory() + "%"));
             }
             if (filter.getBrand() != null) {
-                predicates.add(cb.equal(root.get("brand"), filter.getBrand()));
+                predicates.add(cb.equal(root.join("asset").get("brand"), filter.getBrand()));
             }
             if (filter.getAssignedUser() != null) {
-                predicates.add(cb.equal(root.get("assignedUser"), filter.getAssignedUser()));
+                predicates.add(cb.like(root.join("assignedUser").get("username"), "%" + filter.getAssignedUser() + "%"));
             }
             if (filter.getDepartment() != null) {
-                predicates.add(cb.equal(root.get("department"), filter.getDepartment()));
+                predicates.add(cb.equal(root.join("assignedUser").get("department").get("departmentName"), filter.getDepartment()));
             }
+            System.out.println(query);
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

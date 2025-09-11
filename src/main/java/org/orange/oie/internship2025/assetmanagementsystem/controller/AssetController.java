@@ -1,12 +1,15 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import jakarta.validation.Valid;
+
+import org.apache.catalina.security.SecurityUtil;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssignedAssetServiceImpl;
+import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +46,8 @@ public class AssetController {
     
     @GetMapping
     public ResponseEntity<List<AssignedAsset>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
+    
+        System.out.println('\n' + '\n' + SecurityUtils.getCurrentUser().getRole().getRoleType());
         List<AssignedAsset> assets = assignedAssetService.getFilteredAsset(filterDTO);
         return ResponseEntity.ok(assets);
     }
