@@ -36,26 +36,33 @@ public class UserController {
     @GetMapping("/users")
     public Page<UserDTO> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String username
 
+    ) {
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
 
         String role = userDTO.getRole();
-        Long dep=userDTO.getDepartmentId();
-        if (role.equals("Admin") ) {
-            Pageable pageable = PageRequest.of(page, size);
+        Long departmentId = userDTO.getDepartmentId();
+        Pageable pageable = PageRequest.of(page, size);
 
-            return userService.getAllUsers(pageable);
+        switch (role) {
+            case "Admin":
+                if(username != null && !username.trim().isEmpty()){
+return  userService.getusersByName(username,pageable);
+                }else{
+                    return userService.getAllUsers(pageable);
 
-        } else if (role.equals("Department_Manager")) {
-//            return userService.getUserByDepartment(dep);
-        } else {
-            System.out.println("not allowed");
+                }
+
+            case "Department_Manager":
+                return userService.getUserByDepartment(departmentId, pageable);
+
+            default:
+                return Page.empty(pageable);
+
         }
-
-        return null;
     }
 
 }
