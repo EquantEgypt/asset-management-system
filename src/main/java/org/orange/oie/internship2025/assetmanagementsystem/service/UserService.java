@@ -16,19 +16,22 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    
 
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+
+    public Page<UserDTO> searchUsers(String username, Long departmentId, Pageable pageable) {
+        Specification<User> spec = Specification.allOf(); // initializes an empty specification i can use .and(...) calls with
+
+        if (username != null && !username.trim().isEmpty()) {
+            spec = spec.and(UserSpecifications.hasName(username));
+        }
+        if (departmentId != null) {
+            spec = spec.and(UserSpecifications.inDepartment(departmentId));
+        }
+
+        Page<User> users = userRepository.findAll(spec, pageable);
         return UserMapper.toDtoPage(users);
     }
-    public Page<UserDTO> getUserByDepartment(Long  department, Pageable pageable) {
-        Page<User> usersbydep =userRepository.findByDepartment_DepartmentId(department , pageable);
-        return UserMapper.toDtoPage(usersbydep);
-    }
-    public Page<UserDTO> getusersByName(String username, Pageable pageable) {
-        Page<User> users = userRepository.findAll(UserSpecifications.hasName(username), pageable);
-        return UserMapper.toDtoPage(users);
-    }
+
+
 
 }
