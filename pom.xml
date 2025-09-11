@@ -24,11 +24,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.mockito</groupId>-->
+<!--      <artifactId>mockito-core</artifactId>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
@@ -47,6 +48,13 @@
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
           <version>1.18.36</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-test</artifactId>
+          <version>7.0.0-M2</version>
+          <scope>test</scope>
       </dependency>
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>
@@ -69,7 +77,7 @@
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-mysql</artifactId>
     <version>11.11.2</version>
-</dependency>
+  </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
     <dependency>
