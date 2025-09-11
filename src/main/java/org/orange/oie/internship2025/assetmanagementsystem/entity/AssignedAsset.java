@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.util.Date;
 
+import org.enums.AssetStatus;
+
 @Entity
 @Table(name = "assigned_assets")
 @Getter

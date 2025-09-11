@@ -36,10 +36,10 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to access this resource", request);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
-    }
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request) {
+    //     return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
+    // }
 
     private ResponseEntity<Object> buildResponse(HttpStatus status, String message, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();

@@ -27,6 +27,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, ex1) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{ \"error\": \"Forbidden\", \"message\": \"" + ex1.getMessage() + "\" }");
+                        }))
                 .httpBasic(basic -> basic
                         .authenticationEntryPoint(authenticationEntryPoint()));
 

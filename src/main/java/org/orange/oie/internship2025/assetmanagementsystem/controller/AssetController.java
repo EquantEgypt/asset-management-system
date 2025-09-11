@@ -9,6 +9,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilt
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssignedAssetServiceImpl;
+import org.orange.oie.internship2025.assetmanagementsystem.service.AssignedAssetServiceProxy;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AssetController {
     private final AssetService assetService;
 
     @Autowired
-    private AssignedAssetServiceImpl assignedAssetService;
+    private AssignedAssetServiceProxy assignedAssetServiceProxy;
 
     public AssetController(AssetService assetService) {
         this.assetService = assetService;
@@ -46,16 +47,11 @@ public class AssetController {
     
     @GetMapping
     public ResponseEntity<List<AssignedAsset>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
-    
-        System.out.println('\n' + '\n' + SecurityUtils.getCurrentUser().getRole().getRoleType());
-        List<AssignedAsset> assets = assignedAssetService.getFilteredAsset(filterDTO);
+
+        List<AssignedAsset> assets = assignedAssetServiceProxy.checkForAuthorization(filterDTO);
         return ResponseEntity.ok(assets);
     }
     
-    // @GetMapping
-    // public ResponseEntity<List<AssignedAsset>> getFilteredAsset(@RequestParam String assetName) {
-    //     List<AssignedAsset> assets = assignedAssetService.searchAssignedAssetsByAssetName(assetName);
-    //     return ResponseEntity.ok(assets);
-    // }
+
 
 }

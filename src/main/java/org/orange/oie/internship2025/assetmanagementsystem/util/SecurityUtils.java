@@ -31,7 +31,15 @@ public final class SecurityUtils {
 
         return ((CustomUserDetails) authentication.getPrincipal()).getUsername();
     }
+    public static String getCurrentUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+            return null;
+        }
+
+        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getUsername();
+    }
     public static long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -40,5 +48,23 @@ public final class SecurityUtils {
         }
 
         return ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserId();
+    }
+    public static String getCurrentUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+            return null;
+        }
+
+        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getRole().getRoleType();
+    }
+    public static String getCurrentUserDepartment() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+            return null;
+        }
+
+        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getDepartment().getDepartmentName();
     }
 }

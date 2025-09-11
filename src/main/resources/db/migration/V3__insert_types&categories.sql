@@ -8,4 +8,4 @@ INSERT INTO asset_type (type_name) VALUES ('Laptop');      -- type_id = 1
 INSERT INTO asset_type (type_name) VALUES ('Monitor');     -- type_id = 2
 INSERT INTO asset_type (type_name) VALUES ('Keyboard');    -- type_id = 3
 INSERT INTO asset_type (type_name) VALUES ('License');     -- type_id = 4
-INSERT INTO asset_type (type_name) VALUES ('Chair');       -- type_id = 5
+INSERT INTO asset_type (type_name) VALUES ('Chair');       -- type_id = 5a
