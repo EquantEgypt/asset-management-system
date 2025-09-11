@@ -50,7 +50,7 @@ public class UserController {
         switch (role) {
             case "Admin":
                 if(username != null && !username.trim().isEmpty()){
-return  userService.getusersByName(username,pageable);
+                    return  userService.getusersByName(username,pageable);
                 }else{
                     return userService.getAllUsers(pageable);
 
@@ -66,3 +66,5 @@ return  userService.getusersByName(username,pageable);
     }
 
 }
+
+
