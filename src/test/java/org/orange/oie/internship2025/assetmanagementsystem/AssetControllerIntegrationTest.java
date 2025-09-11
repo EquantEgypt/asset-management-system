@@ -27,6 +27,9 @@ public class AssetControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private AssetRepository assetRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -51,9 +54,10 @@ public class AssetControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        assetRepository.deleteAll();
         userRepository.deleteAll();
-        roleRepository.deleteAll();
         departmentRepository.deleteAll();
+        roleRepository.deleteAll();
         categoryRepository.deleteAll();
         typeRepository.deleteAll();
 
@@ -185,7 +189,6 @@ public class AssetControllerIntegrationTest {
 
     @Test
     void addAsset_WithStockSumExceedingTotal_ShouldReturnBadRequest() throws Exception {
-        // This is the new failing case: sum of parts (11) is greater than total stock (10)
         String assetJson = String.format("""
         {
           "assetName": "Laptop Bad Sum",

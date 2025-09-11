@@ -24,17 +24,15 @@ public class AssetRequestDto {
     @PositiveOrZero(message = "All stock cannot be negative")
     private Integer allStock;
 
-    @NotNull(message = "Number of available to assign is required")
     @PositiveOrZero(message = "Number of available to assign cannot be negative")
-    private Integer numberOfAvailableToAssign;
+    private Integer numberOfAvailableToAssign = 0;
 
-    @NotNull(message = "Number of maintenance is required")
     @PositiveOrZero(message = "Number of maintenance cannot be negative")
-    private Integer numberOfMaintenance;
+    private Integer numberOfMaintenance = 0;
 
-    @NotNull(message = "Number of retired is required")
     @PositiveOrZero(message = "Number of retired cannot be negative")
-    private Integer numberOfRetired;
+    private Integer numberOfRetired = 0;
+
 
     // Getters and Setters
     public String getAssetName() {
