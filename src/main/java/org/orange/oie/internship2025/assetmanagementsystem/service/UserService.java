@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-
-
     public Page<UserDTO> searchUsers(String username,String email,String role, Long departmentId, Pageable pageable) {
         Specification<User> spec = Specification.allOf(); // initializes an empty specification i can use .and(...) calls with
 
@@ -33,11 +31,7 @@ public class UserService {
         if (departmentId != null) {
             spec = spec.and(UserSpecifications.inDepartment(departmentId));
         }
-
         Page<User> users = userRepository.findAll(spec, pageable);
         return UserMapper.toDtoPage(users);
     }
-
-
-
 }

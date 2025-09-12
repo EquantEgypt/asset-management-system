@@ -24,10 +24,9 @@ public class UserController {
     private final AuthService authService;
 
     private final UserService userService;
-    public UserController(AuthService authService , UserService userService){  // Remove CustomUserDetails
+    public UserController(AuthService authService , UserService userService){
         this.authService = authService;
         this.userService=userService;
-        // Remove this line: this.customUserDetails=customUserDetails;
     }
 
 
@@ -37,26 +36,19 @@ public class UserController {
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String role,
-
             @RequestParam(required = false) Long departmentId,
             @RequestParam(required = false) String email
-
-
             ) {
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
-
         String userRole = userDTO.getRole();
         Long managerDepartmentId = userDTO.getDepartmentId();
         Pageable pageable = PageRequest.of(page, size);
-
         switch (userRole) {
             case "Admin":
                 return userService.searchUsers(username,email,role,departmentId, pageable);
-
             case "Department_Manager":
                 return userService.searchUsers(username,email,role, managerDepartmentId, pageable);
-
             default:
                 return Page.empty(pageable);
         }
