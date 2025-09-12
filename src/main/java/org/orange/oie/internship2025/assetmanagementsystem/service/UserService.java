@@ -18,11 +18,17 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public Page<UserDTO> searchUsers(String username, Long departmentId, Pageable pageable) {
+    public Page<UserDTO> searchUsers(String username,String email,String role, Long departmentId, Pageable pageable) {
         Specification<User> spec = Specification.allOf(); // initializes an empty specification i can use .and(...) calls with
 
         if (username != null && !username.trim().isEmpty()) {
             spec = spec.and(UserSpecifications.hasName(username));
+        }
+        if (role != null && !role.trim().isEmpty()) {
+            spec = spec.and(UserSpecifications.hasRole(role));
+        }
+        if (email != null && !email.trim().isEmpty()) {
+            spec = spec.and(UserSpecifications.hasEmail(email));
         }
         if (departmentId != null) {
             spec = spec.and(UserSpecifications.inDepartment(departmentId));
@@ -31,7 +37,5 @@ public class UserService {
         Page<User> users = userRepository.findAll(spec, pageable);
         return UserMapper.toDtoPage(users);
     }
-
-
 
 }
