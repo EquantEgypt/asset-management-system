@@ -9,7 +9,14 @@ public class UserSpecifications {
         return (root, query, cb) ->
                 cb.like(cb.lower(root.get("username")), "%" + username.toLowerCase() + "%");
     }
-
+    public static Specification<User> hasEmail(String email) {
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%");
+    }
+    public static Specification<User> hasRole(String role) {
+        return (root, query, cb) ->
+                cb.equal(root.get("role").get("roleType"), role);
+    }
     public static Specification<User> inDepartment(Long departmentId) {
         return (root, query, cb) ->
                 cb.equal(root.get("department").get("departmentId"), departmentId);
