@@ -3,8 +3,9 @@ package org.orange.oie.internship2025.assetmanagementsystem.service;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.exception.InvalidAssetException;
+import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
+import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,10 @@ public class AssetServiceImpl implements AssetService {
                 + assetDto.getNumberOfRetired();
 
         if (sumOfParts > assetDto.getAllStock()) {
-            throw new InvalidAssetException("The sum of available, maintenance, and retired assets cannot exceed the total stock.");
+            throw new BusinessException(
+                    ApiReturnCode.INVALID_ASSET_STATUS,
+                    "The sum of available, maintenance, and retired assets cannot exceed the total stock."
+            );
         }
     }
 }
