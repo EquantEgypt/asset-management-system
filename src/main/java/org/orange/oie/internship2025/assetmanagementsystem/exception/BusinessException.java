@@ -17,7 +17,4 @@ public class BusinessException extends RuntimeException {
         return code;
     }
 
-    public boolean isPrintStackTrace() {
-        return printStackTrace;
-    }
 }
