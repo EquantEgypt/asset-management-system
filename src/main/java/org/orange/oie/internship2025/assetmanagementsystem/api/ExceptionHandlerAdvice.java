@@ -4,9 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiResponse;
 import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
@@ -20,6 +27,32 @@ public class ExceptionHandlerAdvice {
                 null
         );
         return new ResponseEntity<>(response, ex.getCode().getHttpStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("code", ApiReturnCode.BAD_REQUEST.getCode());
+        body.put("error", ApiReturnCode.BAD_REQUEST.name());
+        body.put("message", errors);
+        body.put("data", null);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("code", HttpStatus.FORBIDDEN.value());
+        body.put("error", "FORBIDDEN");
+        body.put("message", ex.getMessage());
+        body.put("data", null);
+
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)
