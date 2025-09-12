@@ -113,6 +113,10 @@
       <exclude>org/orange/oie/internship2025/assetmanagementsystem/App.*</exclude>
       <exclude>**/util/**</exclude>
       <exclude>**/mapper/**</exclude>
+      <exclude>**/exception/**</exclude>
+      <exclude>**/api/**</exclude>
+      <exclude>**/model/**</exclude>
+
     </excludes>
   </configuration>
 
