@@ -22,10 +22,10 @@ public class AssignedAssetSpecification {
                 predicates.add(cb.equal(root.get("status"), filter.getStatus()));
             }
             if (filter.getType() != null) {
-                predicates.add(cb.equal(root.join("asset").get("type"), filter.getType()));
+                predicates.add(cb.equal(root.join("asset").get("type").get("typeName"), filter.getType()));
             }
             if (filter.getCategory() != null) {
-                predicates.add(cb.like(root.join("asset").get("category"), "%" + filter.getCategory() + "%"));
+                predicates.add(cb.like(root.join("asset").get("category").get("categoryName"), "%" + filter.getCategory() + "%"));
             }
             if (filter.getBrand() != null) {
                 predicates.add(cb.equal(root.join("asset").get("brand"), filter.getBrand()));
