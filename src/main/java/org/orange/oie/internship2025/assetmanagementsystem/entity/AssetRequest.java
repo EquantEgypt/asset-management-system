@@ -27,8 +27,8 @@ public class AssetRequest {
     private LocalDateTime requestDate;
 
     @Column(nullable = false)
-    private String type; // instead of ENUM
+    private String type;
 
     @Column(nullable = false)
-    private String status; // instead of ENUM
+    private String status;
 }
