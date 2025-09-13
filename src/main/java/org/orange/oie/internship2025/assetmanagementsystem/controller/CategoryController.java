@@ -1,7 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.service.CategoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +13,15 @@ import java.util.List;
 @RequestMapping("/api")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/category")
     @PreAuthorize("hasAuthority('Admin')")
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        return categoryService.getAllCategories();
     }
 }
