@@ -1,6 +1,8 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service;
 
 import java.util.List;
+
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
@@ -14,7 +16,7 @@ public class AssignedAssetServiceProxy {
     @Autowired
     private AssignedAssetServiceImpl assignedAssetService;
 
-    public List<AssignedAsset> checkForAuthorization(AssignedAssetFilterDTO filter) {
+    public List<AssignedAssetDTO> checkForAuthorization(AssignedAssetFilterDTO filter) {
 
         // ---------------Manager-----------------
 

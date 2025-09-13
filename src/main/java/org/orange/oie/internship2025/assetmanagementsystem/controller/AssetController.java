@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.apache.catalina.security.SecurityUtil;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AssetService;
@@ -46,9 +47,9 @@ public class AssetController {
     }
     
     @GetMapping
-    public ResponseEntity<List<AssignedAsset>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
+    public ResponseEntity<List<AssignedAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
 
-        List<AssignedAsset> assets = assignedAssetServiceProxy.checkForAuthorization(filterDTO);
+        List<AssignedAssetDTO> assets = assignedAssetServiceProxy.checkForAuthorization(filterDTO);
         return ResponseEntity.ok(assets);
     }
     
