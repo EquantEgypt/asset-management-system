@@ -40,6 +40,9 @@ public class UserController {
             ) {
         User user = SecurityUtils.getCurrentUser();
         UserDTO userDTO = authService.authenticateUser(user);
+        if (userDTO == null) {
+            throw new RuntimeException("user is not authenticated" );
+        }
         String userRole = userDTO.getRole();
         Long managerDepartmentId = userDTO.getDepartmentId();
         Pageable pageable = PageRequest.of(page, size);
