@@ -162,7 +162,7 @@ private String managerAuthHeader;
     }
 
 @Test
-    void SearchByNameOrEmailSuccefull() throws Exception{
+    void SearchByNameOrEmailSuccessful() throws Exception{
     mockMvc.perform(get("/api/users")
                     .param("search", "Baher")
                     .header("Authorization", adminAuthHeader)
@@ -175,7 +175,7 @@ private String managerAuthHeader;
             .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
 }
     @Test
-    void FilterByRoleSuccefull() throws Exception{
+    void FilterByRoleSuccessful() throws Exception{
         mockMvc.perform(get("/api/users")
                         .param("role", "Department_Manager")
                         .header("Authorization", adminAuthHeader)
@@ -188,7 +188,7 @@ private String managerAuthHeader;
                 .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
     }
     @Test
-    void FilterByDepSuccefull() throws Exception{
+    void FilterByDepSuccessful() throws Exception{
         mockMvc.perform(get("/api/users")
                         .param("departmentId",otherDepartmentId.toString())
                         .header("Authorization", adminAuthHeader)
@@ -202,7 +202,7 @@ private String managerAuthHeader;
 
     }
 @Test
-    void PaginationSuccefull() throws Exception{
+    void PaginationSuccessful() throws Exception{
     mockMvc.perform(get("/api/users")
                     .param("page", "1")
                     .param("size", "1")
