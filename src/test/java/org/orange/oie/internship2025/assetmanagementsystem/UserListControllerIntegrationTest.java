@@ -65,6 +65,7 @@ class UserListControllerIntegrationTest {
     private String adminAuthHeader;
 private String managerAuthHeader;
     private String userAuthHeader;
+    private Long otherDepartmentId;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +79,7 @@ private String managerAuthHeader;
         Department dep2 = new Department();
         dep2.setDepartmentName("other_team");
         departmentRepository.save(dep2);
-
+        otherDepartmentId = dep2.getDepartmentId();
         User admin = new User();
         admin.setUsername("admin");
         admin.setEmail("admin@orange.com");
@@ -131,7 +132,7 @@ private String managerAuthHeader;
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content", hasSize(3)))
                 .andExpect(jsonPath("$.content[0].email").value("admin@orange.com"))
                 .andExpect(jsonPath("$.content[1].email").value("baher.M@orange.com"));
     }
@@ -189,7 +190,7 @@ private String managerAuthHeader;
     @Test
     void FilterByDepSuccefull() throws Exception{
         mockMvc.perform(get("/api/users")
-                        .param("departmentId", "2")
+                        .param("departmentId",otherDepartmentId.toString())
                         .header("Authorization", adminAuthHeader)
 
                         .contentType(MediaType.APPLICATION_JSON))
