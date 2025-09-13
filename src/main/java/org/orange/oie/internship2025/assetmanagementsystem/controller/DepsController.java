@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/get")
+@RequestMapping("/api")
 public class DepsController {
     private final DepsService departmentService;
 
