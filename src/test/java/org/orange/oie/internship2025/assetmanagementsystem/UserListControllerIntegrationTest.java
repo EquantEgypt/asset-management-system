@@ -199,7 +199,6 @@ private String managerAuthHeader;
                 .andExpect(jsonPath("$.content", hasSize(1)))
         .andExpect(jsonPath("$.content[0].email").value("employee@orange.com"))
                 .andExpect(jsonPath("$.content[0].username").value("user employee"));
-
     }
 @Test
     void PaginationSuccessful() throws Exception{
