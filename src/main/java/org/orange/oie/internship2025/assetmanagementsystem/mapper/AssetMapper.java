@@ -31,10 +31,7 @@ public class AssetMapper {
         assetDto.setAssetDescription(asset.getAssetDescription());
         assetDto.setCategory(asset.getCategory());
         assetDto.setType(asset.getType());
-        assetDto.setAllStock(asset.getAllStock());
-        assetDto.setNumberOfAvailableToAssign(asset.getNumberOfAvailableToAssign());
-        assetDto.setNumberOfMaintenance(asset.getNumberOfMaintenance());
-        assetDto.setNumberOfRetired(asset.getNumberOfRetired());
+        assetDto.setQuantity(asset.getQuantity());
 
         return assetDto;
     }
@@ -48,10 +45,7 @@ public class AssetMapper {
         asset.setAssetName(assetDto.getAssetName());
         asset.setBrand(assetDto.getBrand());
         asset.setAssetDescription(assetDto.getAssetDescription());
-        asset.setAllStock(assetDto.getAllStock());
-        asset.setNumberOfAvailableToAssign(assetDto.getNumberOfAvailableToAssign());
-        asset.setNumberOfMaintenance(assetDto.getNumberOfMaintenance());
-        asset.setNumberOfRetired(assetDto.getNumberOfRetired());
+        asset.setQuantity(assetDto.getQuantity());
 
         Category category = categoryRepository.findById(assetDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));

@@ -6,7 +6,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
@@ -17,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = App.class, properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
 @EntityScan(basePackages = "org.orange.oie.internship2025.assetmanagementsystem.entity")
+@Transactional
 public class TypeControllerIntegrationTest {
 
     @Autowired
@@ -44,9 +45,6 @@ public class TypeControllerIntegrationTest {
     private TypeRepository typeRepository;
 
     @Autowired
-    private AssetRepository assetRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private String adminAuthHeader;
@@ -54,49 +52,18 @@ public class TypeControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        assetRepository.deleteAll();
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
-        departmentRepository.deleteAll();
-        typeRepository.deleteAll();
+        Department department = createDepartment("IT");
 
-        Department department = new Department();
-        department.setDepartmentName("IT");
-        departmentRepository.save(department);
+        Role adminRole = createRole("Admin");
+        Role employeeRole = createRole("Employee");
 
-        Role adminRole = new Role();
-        adminRole.setRoleType("Admin");
-        roleRepository.save(adminRole);
+        createType("Laptop");
 
-        Role employeeRole = new Role();
-        employeeRole.setRoleType("Employee");
-        roleRepository.save(employeeRole);
+        User admin = createUser("admin@orange.com", "admin", "Password123##", adminRole, department);
+        User employee = createUser("employee@orange.com", "employee", "Password123##", employeeRole, department);
 
-        Type type1 = new Type();
-        type1.setTypeName("Laptop");
-        typeRepository.save(type1);
-
-        User admin = new User();
-        admin.setEmail("admin@orange.com");
-        admin.setPassword(passwordEncoder.encode("Password123##"));
-        admin.setUsername("admin");
-        admin.setRole(adminRole);
-        admin.setDepartment(department);
-        userRepository.save(admin);
-
-        User employee = new User();
-        employee.setEmail("employee@orange.com");
-        employee.setPassword(passwordEncoder.encode("Password123##"));
-        employee.setUsername("employee");
-        employee.setRole(employeeRole);
-        employee.setDepartment(department);
-        userRepository.save(employee);
-
-        String adminCredentials = "admin@orange.com:Password123##";
-        adminAuthHeader = "Basic " + Base64.getEncoder().encodeToString(adminCredentials.getBytes());
-
-        String employeeCredentials = "employee@orange.com:Password123##";
-        employeeAuthHeader = "Basic " + Base64.getEncoder().encodeToString(employeeCredentials.getBytes());
+        adminAuthHeader = buildAuthHeader(admin.getEmail(), "Password123##");
+        employeeAuthHeader = buildAuthHeader(employee.getEmail(), "Password123##");
     }
 
     @Test
@@ -111,5 +78,39 @@ public class TypeControllerIntegrationTest {
         mockMvc.perform(get("/api/types")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
+    }
+
+    //  Helper methods
+    private Department createDepartment(String name) {
+        Department dept = new Department();
+        dept.setDepartmentName(name);
+        return departmentRepository.save(dept);
+    }
+
+    private Role createRole(String roleType) {
+        Role role = new Role();
+        role.setRoleType(roleType);
+        return roleRepository.save(role);
+    }
+
+    private Type createType(String typeName) {
+        Type type = new Type();
+        type.setTypeName(typeName);
+        return typeRepository.save(type);
+    }
+
+    private User createUser(String email, String username, String password, Role role, Department dept) {
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
+        user.setDepartment(dept);
+        return userRepository.save(user);
+    }
+
+    private String buildAuthHeader(String email, String rawPassword) {
+        String credentials = email + ":" + rawPassword;
+        return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
     }
 }

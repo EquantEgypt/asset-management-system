@@ -16,8 +16,5 @@ public class AssetDto {
     private String assetDescription;
     private Category category;
     private Type type;
-    private Integer allStock;
-    private Integer numberOfAvailableToAssign;
-    private Integer numberOfMaintenance;
-    private Integer numberOfRetired;
+    private Integer quantity;
 }

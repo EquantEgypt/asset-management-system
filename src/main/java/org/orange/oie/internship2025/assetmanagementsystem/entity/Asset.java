@@ -41,17 +41,5 @@ public class Asset {
 
     @NotNull
     @Min(0)
-    private Integer allStock;
-
-    @NotNull
-    @Min(0)
-    private Integer numberOfAvailableToAssign;
-
-    @NotNull
-    @Min(0)
-    private Integer numberOfMaintenance;
-
-    @NotNull
-    @Min(0)
-    private Integer numberOfRetired;
+    private Integer quantity;
 }

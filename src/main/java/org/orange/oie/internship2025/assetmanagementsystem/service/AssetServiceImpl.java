@@ -25,11 +25,9 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public AssetDto addAsset(AssetRequestDto assetDto) {
-        validateAssetRequest(assetDto);
-
         Asset asset = assetMapper.toEntity(assetDto);
-        assetRepository.save(asset);
-        return assetMapper.toDto(asset);
+        Asset savedAsset = assetRepository.save(asset);
+        return assetMapper.toDto(savedAsset);
     }
 
     @Override
@@ -40,16 +38,4 @@ public class AssetServiceImpl implements AssetService {
                 .collect(Collectors.toList());
     }
 
-    private void validateAssetRequest(AssetRequestDto assetDto) {
-        int sumOfParts = assetDto.getNumberOfAvailableToAssign()
-                + assetDto.getNumberOfMaintenance()
-                + assetDto.getNumberOfRetired();
-
-        if (sumOfParts > assetDto.getAllStock()) {
-            throw new BusinessException(
-                    ApiReturnCode.INVALID_ASSET_STATUS,
-                    "The sum of available, maintenance, and retired assets cannot exceed the total stock."
-            );
-        }
-    }
 }

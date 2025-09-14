@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "assigned_assets")
+@Table(name = "assigned_assets", uniqueConstraints = @UniqueConstraint(columnNames = {"asset_id", "status"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,11 +18,11 @@ public class AssignedAsset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User assignedUser;
 
@@ -32,7 +32,6 @@ public class AssignedAsset {
     private AssetStatus status;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date dateAssigned;
+    private LocalDateTime dateAssigned;
 }

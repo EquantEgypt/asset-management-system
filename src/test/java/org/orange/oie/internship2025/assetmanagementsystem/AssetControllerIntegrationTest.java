@@ -11,41 +11,31 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(classes = App.class,properties = "spring.profiles.active=test")
+@SpringBootTest(classes = App.class, properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
 @EntityScan(basePackages = "org.orange.oie.internship2025.assetmanagementsystem.entity")
+@Transactional
 public class AssetControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private AssetRepository assetRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private DepartmentRepository departmentRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private TypeRepository typeRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired private AssetRepository assetRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private TypeRepository typeRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     private Category testCategory;
     private Type testType;
@@ -54,54 +44,57 @@ public class AssetControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        assetRepository.deleteAll();
-        userRepository.deleteAll();
-        departmentRepository.deleteAll();
-        roleRepository.deleteAll();
-        categoryRepository.deleteAll();
-        typeRepository.deleteAll();
+        Department department = createDepartment("IT");
+        Role adminRole = createRole("Admin");
+        Role employeeRole = createRole("Employee");
 
-        Department department = new Department();
-        department.setDepartmentName("IT");
-        departmentRepository.save(department);
+        testCategory = createCategory("Electronics");
+        testType = createType("Laptop");
 
-        Role adminRole = new Role();
-        adminRole.setRoleType("Admin");
-        roleRepository.save(adminRole);
+        User admin = createUser("admin@orange.com", "admin", "Password123##", adminRole, department);
+        User employee = createUser("employee@orange.com", "employee", "Password123##", employeeRole, department);
 
-        Role employeeRole = new Role();
-        employeeRole.setRoleType("Employee");
-        roleRepository.save(employeeRole);
+        adminAuthHeader = buildBasicAuthHeader(admin.getEmail(), "Password123##");
+        employeeAuthHeader = buildBasicAuthHeader(employee.getEmail(), "Password123##");
+    }
 
-        testCategory = new Category();
-        testCategory.setCategoryName("Electronics");
-        categoryRepository.save(testCategory);
+    private Department createDepartment(String name) {
+        Department dept = new Department();
+        dept.setDepartmentName(name);
+        return departmentRepository.save(dept);
+    }
 
-        testType = new Type();
-        testType.setTypeName("Laptop");
-        typeRepository.save(testType);
+    private Role createRole(String type) {
+        Role role = new Role();
+        role.setRoleType(type);
+        return roleRepository.save(role);
+    }
 
-        User admin = new User();
-        admin.setEmail("admin@orange.com");
-        admin.setPassword(passwordEncoder.encode("Password123##"));
-        admin.setUsername("admin");
-        admin.setRole(adminRole);
-        admin.setDepartment(department);
-        userRepository.save(admin);
+    private User createUser(String email, String username, String password, Role role, Department dept) {
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
+        user.setDepartment(dept);
+        return userRepository.save(user);
+    }
 
-        User employee = new User();
-        employee.setEmail("employee@orange.com");
-        employee.setPassword(passwordEncoder.encode("Password123##"));
-        employee.setUsername("employee");
-        employee.setRole(employeeRole);
-        employee.setDepartment(department);
-        userRepository.save(employee);
+    private Category createCategory(String name) {
+        Category category = new Category();
+        category.setCategoryName(name);
+        return categoryRepository.save(category);
+    }
 
-        String adminCredentials = "admin@orange.com:Password123##";
-        adminAuthHeader = "Basic " + Base64.getEncoder().encodeToString(adminCredentials.getBytes());
+    private Type createType(String name) {
+        Type type = new Type();
+        type.setTypeName(name);
+        return typeRepository.save(type);
+    }
 
-        String employeeCredentials = "employee@orange.com:Password123##";
-        employeeAuthHeader = "Basic " + Base64.getEncoder().encodeToString(employeeCredentials.getBytes());
+    private String buildBasicAuthHeader(String email, String password) {
+        String credentials = email + ":" + password;
+        return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
     }
 
     @Test
@@ -113,19 +106,19 @@ public class AssetControllerIntegrationTest {
           "brand": "Dell",
           "categoryId": %d,
           "typeId": %d,
-          "allStock": 10,
-          "numberOfAvailableToAssign": 5,
-          "numberOfMaintenance": 2,
-          "numberOfRetired": 1
+          "quantity": 10
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
-        mockMvc.perform(post("/asset/add")
+        mockMvc.perform(post("/api/assets")
                         .header("Authorization", adminAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.assetName").value("New Laptop"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.assetName").value("New Laptop"))
+                .andExpect(jsonPath("$.brand").value("Dell"));
+
+        assertThat(assetRepository.findAll()).hasSize(1);
     }
 
     @Test
@@ -137,14 +130,11 @@ public class AssetControllerIntegrationTest {
           "brand": "HP",
           "categoryId": %d,
           "typeId": %d,
-          "allStock": 5,
-          "numberOfAvailableToAssign": 5,
-          "numberOfMaintenance": 0,
-          "numberOfRetired": 0
+          "quantity": 5
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
-        mockMvc.perform(post("/asset/add")
+        mockMvc.perform(post("/api/assets")
                         .header("Authorization", employeeAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
@@ -159,55 +149,54 @@ public class AssetControllerIntegrationTest {
           "brand": "Lenovo",
           "categoryId": %d,
           "typeId": %d,
-          "allStock": 3,
-          "numberOfAvailableToAssign": 1,
-          "numberOfMaintenance": 1,
-          "numberOfRetired": 1
+          "quantity": 3
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
-        mockMvc.perform(post("/asset/add")
+        mockMvc.perform(post("/api/assets")
                         .header("Authorization", adminAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("assetName: Asset name cannot be empty"));
     }
 
     @Test
     void getAllAssets_AsAdmin_ShouldSucceed() throws Exception {
-        mockMvc.perform(get("/asset")
+        mockMvc.perform(get("/api/assets")
                         .header("Authorization", adminAuthHeader))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
     void getAllAssets_AsEmployee_ShouldBeForbidden() throws Exception {
-        mockMvc.perform(get("/asset")
+        mockMvc.perform(get("/api/assets")
                         .header("Authorization", employeeAuthHeader))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void addAsset_WithStockSumExceedingTotal_ShouldReturnBadRequest() throws Exception {
+    void addAsset_WithInvalidQuantity_ShouldReturnBadRequest() throws Exception {
         String assetJson = String.format("""
         {
-          "assetName": "Laptop Bad Sum",
-          "assetDescription": "Inconsistent stock count",
+          "assetName": "Laptop Bad Quantity",
+          "assetDescription": "Invalid stock count",
           "brand": "Asus",
           "categoryId": %d,
           "typeId": %d,
-          "allStock": 10,
-          "numberOfAvailableToAssign": 8,
-          "numberOfMaintenance": 2,
-          "numberOfRetired": 1
+          "quantity": -5
         }
         """, testCategory.getCategoryId(), testType.getTypeId());
 
-        mockMvc.perform(post("/asset/add")
+        mockMvc.perform(post("/api/assets")
                         .header("Authorization", adminAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(assetJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("The sum of available, maintenance, and retired assets cannot exceed the total stock."));
+                .andExpect(jsonPath("$.error").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("quantity: quantity cannot be negative"));
     }
 }
