@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -47,9 +51,11 @@ public class AssetController {
     }
     
     @GetMapping
-    public ResponseEntity<List<AssignedAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
-
-        List<AssignedAssetDTO> assets = assignedAssetServiceProxy.checkForAuthorization(filterDTO);
+    public ResponseEntity<Page<AssignedAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO){ 
+        Sort sort = filterDTO.isAscending() ? Sort.by(filterDTO.getSortBy()).ascending() : Sort.by(filterDTO.getSortBy()).descending();
+        Pageable pageable = PageRequest.of(filterDTO.getPage(), filterDTO.getSize(), sort);
+        // return assignedAssetServiceProxy.checkForAuthorization(filterDTO , pageable); // Admin can access all assets
+        Page<AssignedAssetDTO> assets = assignedAssetServiceProxy.checkForAuthorization(filterDTO,pageable);
         return ResponseEntity.ok(assets);
     }
     

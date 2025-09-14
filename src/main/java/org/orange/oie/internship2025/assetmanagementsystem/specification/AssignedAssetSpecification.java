@@ -16,7 +16,6 @@ public class AssignedAssetSpecification {
 
             if (filter.getAssetName() != null) {
                 predicates.add(cb.like(root.join("asset").get("assetName"), "%" + filter.getAssetName() + "%"));
-
             }
             if (filter.getStatus() != null) {
                 predicates.add(cb.equal(root.get("status"), filter.getStatus()));

@@ -7,6 +7,8 @@ import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssignedAssetM
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssignedAssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.specification.AssignedAssetSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
@@ -28,9 +30,9 @@ public class AssignedAssetServiceImpl {
     // }
 //Get request localhost:8080/asset?assetName=dell?type=laptop?category=hardware?brand=dell?status=active?assignedUser=john?department=team1
 
-    public List<AssignedAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO) {
-        List<AssignedAsset> assignedAssets = assignedAssetRepository.findAll(AssignedAssetSpecification.withFilter(filterDTO));
-        return mapper.toDtoList(assignedAssets);
+    public Page<AssignedAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
+        Page<AssignedAsset> assignedAssets = assignedAssetRepository.findAll(AssignedAssetSpecification.withFilter(filterDTO), pageable);
+        return assignedAssets.map(mapper::toDto);
     }
     
 }

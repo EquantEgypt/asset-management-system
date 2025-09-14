@@ -3,7 +3,7 @@ INSERT INTO role (role_type) VALUES ('Department_Manager'); -- role_id = 2
 INSERT INTO role (role_type) VALUES ('Admin');              -- role_id = 3
 INSERT INTO role (role_type) VALUES ('IT');                 -- role_id = 4
 
-INSERT INTO department (department_name) VALUES ('team 1');
+INSERT INTO department (department_name) VALUES ('team 1'),('team 2'),('team 3');
 
 --  'Password123##'
 INSERT INTO users (username, email, password, department_id, role_id)

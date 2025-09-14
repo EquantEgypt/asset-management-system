@@ -7,6 +7,9 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilt
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssignedAsset;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,8 +19,8 @@ public class AssignedAssetServiceProxy {
     @Autowired
     private AssignedAssetServiceImpl assignedAssetService;
 
-    public List<AssignedAssetDTO> checkForAuthorization(AssignedAssetFilterDTO filter) {
 
+    public Page<AssignedAssetDTO> checkForAuthorization(AssignedAssetFilterDTO filter, Pageable pageable) {
         // ---------------Manager-----------------
 
         if (SecurityUtils.getCurrentUserRole().equals("Department Manager")) {
@@ -56,6 +59,7 @@ public class AssignedAssetServiceProxy {
 
             }
         }
-        return assignedAssetService.getFilteredAsset(filter); // Admin can access all assets
+
+         return assignedAssetService.getFilteredAsset(filter,pageable); // Admin can access all assets
     }
 }

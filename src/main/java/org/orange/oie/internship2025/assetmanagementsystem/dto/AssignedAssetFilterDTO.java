@@ -13,4 +13,8 @@ public class AssignedAssetFilterDTO {
     private String brand;
     private String assignedUser;
     private String department;
+    private int page = 0;
+    private int size = 10;
+    private String sortBy = "id";
+    private boolean ascending = true;
 }
