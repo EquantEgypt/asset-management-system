@@ -54,6 +54,7 @@ public class CategoryControllerIntegrationTest {
         roleRepository.deleteAll();
         departmentRepository.deleteAll();
         categoryRepository.deleteAll();
+        roleRepository.deleteAll();
         Department department = createDepartment("IT");
 
         Role adminRole = createRole("Admin");
