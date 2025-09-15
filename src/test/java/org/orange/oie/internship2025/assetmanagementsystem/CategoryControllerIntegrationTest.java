@@ -50,6 +50,10 @@ public class CategoryControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
+        departmentRepository.deleteAll();
+        categoryRepository.deleteAll();
         Department department = createDepartment("IT");
 
         Role adminRole = createRole("Admin");

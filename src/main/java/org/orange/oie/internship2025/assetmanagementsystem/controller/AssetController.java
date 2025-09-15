@@ -22,14 +22,14 @@ public class AssetController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
         AssetDto dto = assetService.addAsset(assetRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<List<AssetDto>> getAllAssets(){
         List<AssetDto> assets = assetService.getAllAssets();
         return ResponseEntity.ok(assets);

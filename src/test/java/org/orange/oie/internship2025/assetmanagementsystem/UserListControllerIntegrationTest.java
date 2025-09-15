@@ -69,6 +69,8 @@ private String managerAuthHeader;
 
     @BeforeEach
     void setUp() {
+
+
         userRepository.deleteAll();
         departmentRepository.deleteAll();
         roleRepository.deleteAll();
