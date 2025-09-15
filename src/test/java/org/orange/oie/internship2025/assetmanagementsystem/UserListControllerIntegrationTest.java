@@ -159,9 +159,7 @@ private String managerAuthHeader;
                         .header("Authorization", userAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(0)));
-    }
+                .andExpect(status().isForbidden());     }
 
 @Test
     void SearchByNameOrEmailSuccessful() throws Exception{
