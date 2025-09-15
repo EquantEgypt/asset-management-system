@@ -50,6 +50,11 @@ public class CategoryControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
+        departmentRepository.deleteAll();
+        categoryRepository.deleteAll();
+        roleRepository.deleteAll();
         Department department = createDepartment("IT");
 
         Role adminRole = createRole("Admin");
@@ -64,6 +69,7 @@ public class CategoryControllerIntegrationTest {
         employeeAuthHeader = buildBasicAuthHeader("employee@orange.com", "Password123##");
     }
 
+    @Transactional
     @Test
     void getAllCategories_AsAdmin_ShouldSucceed() throws Exception {
         mockMvc.perform(get("/api/categories")
@@ -72,6 +78,7 @@ public class CategoryControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].categoryName").value("Electronics"));
     }
 
+    @Transactional
     @Test
     void getAllCategories_AsEmployee_ShouldBeForbidden() throws Exception {
         mockMvc.perform(get("/api/categories")

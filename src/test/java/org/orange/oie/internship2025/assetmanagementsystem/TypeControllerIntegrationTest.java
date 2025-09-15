@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = App.class, properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
 @EntityScan(basePackages = "org.orange.oie.internship2025.assetmanagementsystem.entity")
-@Transactional
 public class TypeControllerIntegrationTest {
 
     @Autowired
@@ -57,7 +56,7 @@ public class TypeControllerIntegrationTest {
         Role adminRole = createRole("Admin");
         Role employeeRole = createRole("Employee");
 
-        createType("Laptop");
+       // createType("Laptop");
 
         User admin = createUser("admin@orange.com", "admin", "Password123##", adminRole, department);
         User employee = createUser("employee@orange.com", "employee", "Password123##", employeeRole, department);
@@ -66,6 +65,7 @@ public class TypeControllerIntegrationTest {
         employeeAuthHeader = buildAuthHeader(employee.getEmail(), "Password123##");
     }
 
+    @Transactional
     @Test
     void getAllTypes_AsAdmin_ShouldSucceed() throws Exception {
         mockMvc.perform(get("/api/types")
@@ -73,6 +73,7 @@ public class TypeControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
+    @Transactional
     @Test
     void getAllTypes_AsEmployee_ShouldBeForbidden() throws Exception {
         mockMvc.perform(get("/api/types")
