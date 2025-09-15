@@ -21,6 +21,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import org.springframework.http.MediaType;
@@ -36,10 +37,9 @@ import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@AutoConfigureTestWebSecurity
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.properties")
-//@Transactional
+@Transactional
 class UserListControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -63,14 +63,12 @@ class UserListControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
     private String adminAuthHeader;
-private String managerAuthHeader;
+    private String managerAuthHeader;
     private String userAuthHeader;
     private Long otherDepartmentId;
 
     @BeforeEach
     void setUp() {
-
-
         userRepository.deleteAll();
         departmentRepository.deleteAll();
         roleRepository.deleteAll();
@@ -152,6 +150,7 @@ private String managerAuthHeader;
                 .andExpect(jsonPath("$.content[0].departmentName").value("testing_team"))
                 .andExpect(jsonPath("$.content[1].departmentName").value("testing_team"));
     }
+
     @Test
     void OtherUsersGetEmptyResults() throws Exception {
 
@@ -159,23 +158,25 @@ private String managerAuthHeader;
                         .header("Authorization", userAuthHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());     }
+                .andExpect(status().isForbidden());
+    }
 
-@Test
-    void SearchByNameOrEmailSuccessful() throws Exception{
-    mockMvc.perform(get("/api/users")
-                    .param("search", "Baher")
-                    .header("Authorization", adminAuthHeader)
-
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content", hasSize(1)))
-            .andExpect(jsonPath("$.content[0].email").value("baher.M@orange.com"))
-            .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
-}
     @Test
-    void FilterByRoleSuccessful() throws Exception{
+    void SearchByNameOrEmailSuccessful() throws Exception {
+        mockMvc.perform(get("/api/users")
+                        .param("search", "Baher")
+                        .header("Authorization", adminAuthHeader)
+
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].email").value("baher.M@orange.com"))
+                .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
+    }
+
+    @Test
+    void FilterByRoleSuccessful() throws Exception {
         mockMvc.perform(get("/api/users")
                         .param("role", "Department_Manager")
                         .header("Authorization", adminAuthHeader)
@@ -187,30 +188,32 @@ private String managerAuthHeader;
                 .andExpect(jsonPath("$.content[0].email").value("baher.M@orange.com"))
                 .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
     }
+
     @Test
-    void FilterByDepSuccessful() throws Exception{
+    void FilterByDepSuccessful() throws Exception {
         mockMvc.perform(get("/api/users")
-                        .param("departmentId",otherDepartmentId.toString())
+                        .param("departmentId", otherDepartmentId.toString())
                         .header("Authorization", adminAuthHeader)
 
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-        .andExpect(jsonPath("$.content[0].email").value("employee@orange.com"))
+                .andExpect(jsonPath("$.content[0].email").value("employee@orange.com"))
                 .andExpect(jsonPath("$.content[0].username").value("user employee"));
     }
-@Test
-    void PaginationSuccessful() throws Exception{
-    mockMvc.perform(get("/api/users")
-                    .param("page", "1")
-                    .param("size", "1")
-                    .header("Authorization", adminAuthHeader)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content", hasSize(1)))
-            .andExpect(jsonPath("$.content[0].email").value("baher.M@orange.com"))
-            .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
-}
+
+    @Test
+    void PaginationSuccessful() throws Exception {
+        mockMvc.perform(get("/api/users")
+                        .param("page", "1")
+                        .param("size", "1")
+                        .header("Authorization", adminAuthHeader)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].email").value("baher.M@orange.com"))
+                .andExpect(jsonPath("$.content[0].username").value("Baher manager"));
+    }
 }

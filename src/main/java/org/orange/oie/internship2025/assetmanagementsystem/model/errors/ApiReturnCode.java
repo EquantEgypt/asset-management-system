@@ -15,7 +15,8 @@ public enum ApiReturnCode {
     // Domain-specific errors
     ASSET_ALREADY_EXISTS(100, HttpStatus.CONFLICT, Level.WARN),
     INVALID_ASSET_STATUS(101, HttpStatus.BAD_REQUEST, Level.WARN),
-    ASSET_NOT_FOUND(102, HttpStatus.NOT_FOUND, Level.WARN);
+    ASSET_NOT_FOUND(102, HttpStatus.NOT_FOUND, Level.WARN),
+    USER_NOT_EXISTS(103, HttpStatus.UNAUTHORIZED, Level.WARN);
 
     private final int code;
     private final HttpStatus httpStatus;

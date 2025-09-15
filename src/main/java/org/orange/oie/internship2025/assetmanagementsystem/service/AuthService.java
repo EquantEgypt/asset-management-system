@@ -15,7 +15,7 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
-    public final UserDTO authenticateUser(User user) {
+    public final UserDTO fromEntity(User user) {
         return userMapper.toDto(user);
     }
 
