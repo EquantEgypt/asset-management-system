@@ -55,15 +55,17 @@ CREATE TABLE asset (
 );
 
 CREATE TABLE asset_assignment (
-                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                  asset_id BIGINT NOT NULL,
-                                  assigned_to_user_id BIGINT NOT NULL,
-                                  assignment_date DATETIME NOT NULL,
-                                  return_date DATETIME,
-                                  note TEXT,
-                                  CONSTRAINT fk_assignment_asset FOREIGN KEY (asset_id) REFERENCES asset(id),
-                                  CONSTRAINT fk_assignment_user FOREIGN KEY (assigned_to_user_id) REFERENCES users(id)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    asset_id BIGINT NOT NULL,
+    assigned_to_user_id BIGINT NOT NULL,
+    assignment_date DATETIME NOT NULL,
+    status ENUM('ACTIVE', 'CLOSED') NOT NULL,
+    return_date DATETIME,
+    note TEXT,
+    CONSTRAINT fk_asset_assignment_asset FOREIGN KEY (asset_id) REFERENCES asset(id),
+    CONSTRAINT fk_asset_assignment_user FOREIGN KEY (assigned_to_user_id) REFERENCES users(id)
 );
+
 
 CREATE TABLE asset_history (
                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -77,14 +79,17 @@ CREATE TABLE asset_history (
 );
 
 CREATE TABLE asset_request (
-                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                               asset_id BIGINT NOT NULL,
-                               requester_id BIGINT NOT NULL,
-                               request_date DATETIME,
-                               status ENUM('Pending', 'Accepted', 'Rejected'),
-                               approved_by_id BIGINT,
-                               approved_date DATETIME,
-                               CONSTRAINT fk_request_asset FOREIGN KEY (asset_id) REFERENCES asset(id),
-                               CONSTRAINT fk_request_requester FOREIGN KEY (requester_id) REFERENCES users(id),
-                               CONSTRAINT fk_request_approved FOREIGN KEY (approved_by_id) REFERENCES users(id)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    asset_id BIGINT NOT NULL,
+    type_id BIGINT NOT NULL,
+    requester_id BIGINT NOT NULL,
+    request_date DATETIME,
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL,
+    request_type ENUM('NEW', 'MAINTENANCE') NOT NULL,
+    approved_by_id BIGINT,
+    approved_date DATETIME,
+    CONSTRAINT fk_asset_request_asset FOREIGN KEY (asset_id) REFERENCES asset(id),
+    CONSTRAINT fk_asset_request_type FOREIGN KEY (type_id) REFERENCES asset_type(id),
+    CONSTRAINT fk_asset_request_requester FOREIGN KEY (requester_id) REFERENCES users(id),
+    CONSTRAINT fk_asset_request_approved_by FOREIGN KEY (approved_by_id) REFERENCES users(id)
 );

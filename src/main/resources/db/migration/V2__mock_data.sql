@@ -1,9 +1,4 @@
--- V2__mock_data.sql
--- Mock Data for Asset Management System
 
--- ========================
--- Departments
--- ========================
 INSERT INTO department (department_name) VALUES
                                              ('IT'),
                                              ('HR'),
