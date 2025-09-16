@@ -22,7 +22,7 @@ import lombok.Setter;
 public class AssetRequestDto {
 
     @NotBlank(message = "Asset name cannot be empty")
-    private String assetName;
+    private String name;
 
     @NotBlank(message = "Brand cannot be empty")
     private String brand;

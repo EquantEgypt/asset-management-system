@@ -1,7 +1,8 @@
-package org.orange.oie.internship2025.assetmanagementsystem.service;
+package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

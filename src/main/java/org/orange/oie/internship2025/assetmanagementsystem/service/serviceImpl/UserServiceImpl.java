@@ -1,4 +1,4 @@
-package org.orange.oie.internship2025.assetmanagementsystem.service;
+package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
@@ -6,6 +6,8 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.UserMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.service.AuthService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.UserService;
 import org.orange.oie.internship2025.assetmanagementsystem.specification.UserSpecifications;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,10 @@ public class UserServiceImpl implements UserService {
     public Page<UserDTO> searchUsers(String searchWord, String role, Long departmentId, Pageable pageable) {
         User user = validateUser();
 
-        String userRole = user.getRole().getRoleName();
+        String userRole = user.getRole().getName();
 
         if ("Department_Manager".equals(userRole))
-            departmentId = user.getDepartment().getDepartmentId();
+            departmentId = user.getDepartment().getId();
 
 
         Specification<User> spec = Specification.allOf();

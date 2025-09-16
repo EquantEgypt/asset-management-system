@@ -32,7 +32,7 @@ public class AssetMapper {
         assetDto.setSerialNumber(asset.getSerialNumber());
         assetDto.setPurchaseDate(asset.getPurchaseDate().toString());
         assetDto.setWarrantyEndDate(asset.getWarrantyEndDate().toString());
-        assetDto.setStatus(asset.getStatus().toString());
+        assetDto.setStatus(asset.getStatus());
         assetDto.setBrand(asset.getBrand());
         assetDto.setAssetDescription(asset.getDescription());
         assetDto.setCategory(asset.getCategory());
@@ -47,7 +47,7 @@ public class AssetMapper {
         }
 
         Asset asset = new Asset();
-        asset.setName(assetDto.getAssetName());
+        asset.setName(assetDto.getName());
         asset.setBrand(assetDto.getBrand());
         asset.setDescription(assetDto.getAssetDescription());
 

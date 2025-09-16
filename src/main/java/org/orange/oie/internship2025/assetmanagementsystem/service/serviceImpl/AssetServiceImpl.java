@@ -1,10 +1,11 @@
-package org.orange.oie.internship2025.assetmanagementsystem.service;
+package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

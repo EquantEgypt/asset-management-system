@@ -2,6 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import lombok.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 
 @Setter
@@ -19,6 +20,6 @@ public class AssetDto {
     private String serialNumber;
     private String purchaseDate;
     private String warrantyEndDate;
-    private String status;
+    private AssetStatus status;
     private String imagePath;
 }
