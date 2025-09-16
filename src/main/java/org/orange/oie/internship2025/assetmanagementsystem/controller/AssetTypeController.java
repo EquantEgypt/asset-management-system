@@ -20,7 +20,7 @@ public class AssetTypeController {
     }
 
     @GetMapping("/types")
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetType> getAllTypes() {
         return typeService.getAllTypes();
     }

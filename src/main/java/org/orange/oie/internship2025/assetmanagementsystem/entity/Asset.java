@@ -41,6 +41,7 @@ public class Asset {
 
     @Column(unique = true,name = "serial_number")
     private String serialNumber;
+    
 
     @Column(nullable = false,name = "purchase_date")
     private LocalDateTime purchaseDate;
