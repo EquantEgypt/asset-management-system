@@ -1,11 +1,11 @@
 CREATE TABLE department (
-                            department_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                            department_name VARCHAR(255) NOT NULL UNIQUE
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE role (
-                      role_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                      role_name VARCHAR(255) NOT NULL UNIQUE
+                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                      name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
@@ -21,20 +21,20 @@ CREATE TABLE users (
                        is_active BOOLEAN,
                        created_at DATE,
                        updated_at DATE,
-                       CONSTRAINT fk_users_department FOREIGN KEY (department_id) REFERENCES department(department_id),
-                       CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES role(role_id)
+                       CONSTRAINT fk_users_department FOREIGN KEY (department_id) REFERENCES department(id),
+                       CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 CREATE TABLE asset_category (
-                                category_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                category_name VARCHAR(255) NOT NULL UNIQUE
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE asset_type (
                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             category_id BIGINT NOT NULL,
                             name VARCHAR(255) NOT NULL,
-                            CONSTRAINT fk_assettype_category FOREIGN KEY (category_id) REFERENCES asset_category(category_id)
+                            CONSTRAINT fk_assettype_category FOREIGN KEY (category_id) REFERENCES asset_category(id)
 );
 
 CREATE TABLE asset (
@@ -50,7 +50,7 @@ CREATE TABLE asset (
                        warranty_end_date DATETIME NOT NULL,
                        status ENUM('Available', 'Assigned', 'UNDER_MAINTENANCE', 'RETIRED') NOT NULL,
                        image_path VARCHAR(255),
-                       CONSTRAINT fk_asset_category FOREIGN KEY (category_id) REFERENCES asset_category(category_id),
+                       CONSTRAINT fk_asset_category FOREIGN KEY (category_id) REFERENCES asset_category(id),
                        CONSTRAINT fk_asset_type FOREIGN KEY (type_id) REFERENCES asset_type(id)
 );
 

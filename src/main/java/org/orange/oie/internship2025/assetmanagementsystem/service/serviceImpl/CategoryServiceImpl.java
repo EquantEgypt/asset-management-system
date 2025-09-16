@@ -1,7 +1,8 @@
-package org.orange.oie.internship2025.assetmanagementsystem.service;
+package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

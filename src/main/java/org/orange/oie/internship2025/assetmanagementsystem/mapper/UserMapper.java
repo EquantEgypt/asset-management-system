@@ -22,9 +22,9 @@ public class UserMapper {
         userDTO.setId(user.getId());
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole().getRoleName());
-        userDTO.setDepartmentName(user.getDepartment().getDepartmentName());
-        userDTO.setDepartmentId(user.getDepartment().getDepartmentId());
+        userDTO.setRole(user.getRole().getName());
+        userDTO.setDepartmentName(user.getDepartment().getName());
+        userDTO.setDepartmentId(user.getDepartment().getId());
 
         return userDTO;
     }
