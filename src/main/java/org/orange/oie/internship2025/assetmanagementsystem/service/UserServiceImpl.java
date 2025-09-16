@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public Page<UserDTO> searchUsers(String searchWord, String role, Long departmentId, Pageable pageable) {
         User user = validateUser();
 
-        String userRole = user.getRole().getRoleType();
+        String userRole = user.getRole().getRoleName();
 
         if ("Department_Manager".equals(userRole))
             departmentId = user.getDepartment().getDepartmentId();

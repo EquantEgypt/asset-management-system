@@ -1,7 +1,8 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 public enum AssetStatus {
-    ACTIVE,
+    Avaialble,
+    Assigned,
     UNDER_MAINTENANCE,
     RETIRED
 }

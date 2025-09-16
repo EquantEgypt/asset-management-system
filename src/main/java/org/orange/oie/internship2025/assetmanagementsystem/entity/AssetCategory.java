@@ -1,5 +1,4 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,12 +7,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "asset_type")
-public class Type {
+@Table(name = "asset_category")
+public class AssetCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long typeId;
+    private Long categoryId;
 
-    @Column(name = "type_name", nullable = false, unique = true)
-    private String typeName;
+    @Column(name = "category_name", nullable = false, unique = true)
+    private String categoryName;
 }

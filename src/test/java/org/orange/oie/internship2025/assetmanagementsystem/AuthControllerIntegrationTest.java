@@ -52,13 +52,19 @@ public class AuthControllerIntegrationTest {
         departmentRepository.save(department);
 
         Role role = new Role();
-        role.setRoleType("Employee");
+        role.setRoleName("Employee");
         roleRepository.save(role);
 
         User user = new User();
         user.setEmail("test@orange.com");
         user.setPassword(passwordEncoder.encode("password123"));
         user.setUsername("testuser");
+        user.setCreatedAt(null);
+        user.setUpdatedAt(null);
+        user.setHireDate(null);
+        user.setPhone("0123123123123");
+        user.setFullName("Test User");
+        user.setIsActive(true);
         user.setRole(role);
         user.setDepartment(department);
         userRepository.save(user);
@@ -88,16 +94,7 @@ public class AuthControllerIntegrationTest {
 
     @Test
     void shouldReturnUnauthorizedWhenEmailDomainIsNotOrange() throws Exception {
-        // create user with non-orange email
-        User invalidUser = new User();
-        invalidUser.setEmail("test@gmail.com");
-        invalidUser.setPassword(passwordEncoder.encode("password123"));
-        invalidUser.setUsername("invaliduser");
-        invalidUser.setRole(roleRepository.findAll().iterator().next());
-        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
-        userRepository.save(invalidUser);
 
-        // try to login with invalid domain email
         String credentials = "test@gmail.com:password123";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
@@ -107,16 +104,7 @@ public class AuthControllerIntegrationTest {
     }
         @Test
     void shouldReturnUnauthorizedWhenEmailisNull() throws Exception {
-        // create user with non-orange email
-        User invalidUser = new User();
-        invalidUser.setEmail("test@gmail.com");
-        invalidUser.setPassword(passwordEncoder.encode("password123"));
-        invalidUser.setUsername("invaliduser");
-        invalidUser.setRole(roleRepository.findAll().iterator().next());
-        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
-        userRepository.save(invalidUser);
 
-        // try to login with invalid domain email
         String credentials = ":password123";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
@@ -126,16 +114,7 @@ public class AuthControllerIntegrationTest {
     }
             @Test
     void shouldReturnUnauthorizedWhenEmailisNotAUser() throws Exception {
-        // create user with non-orange email
-        User invalidUser = new User();
-        invalidUser.setEmail("test@gmail.com");
-        invalidUser.setPassword(passwordEncoder.encode("password123"));
-        invalidUser.setUsername("invaliduser");
-        invalidUser.setRole(roleRepository.findAll().iterator().next());
-        invalidUser.setDepartment(departmentRepository.findAll().iterator().next());
-        userRepository.save(invalidUser);
 
-        // try to login with invalid domain email
         String credentials = "notTest@orange.com:password123";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 

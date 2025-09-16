@@ -1,6 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.service.CategoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,7 @@ public class CategoryController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('Admin')")
-    public List<Category> getAllCategories() {
+    public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
 }

@@ -1,6 +1,8 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -13,22 +15,34 @@ import java.time.LocalDateTime;
 public class AssetRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long requestId;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User requester;
-
-    @ManyToOne
-    @JoinColumn(name = "asset_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
-    @Column(name = "request_date", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "type_id", nullable = false)
+    private AssetType assetType;
+
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "requester_id", nullable = false)
+    private User requester;
+
+    @Column(name="request_date")
     private LocalDateTime requestDate;
 
-    @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 
-    @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private RequestType requestType;
+
+    @ManyToOne
+    @JoinColumn(name = "approved_by_id")
+    private User approvedBy;
+
+    @Column(name="approved_date")
+    private LocalDateTime approvedDate;
 }
