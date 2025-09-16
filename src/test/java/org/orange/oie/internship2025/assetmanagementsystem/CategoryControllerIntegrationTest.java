@@ -86,39 +86,4 @@
 //                 .andExpect(status().isForbidden());
 //     }
 
-//     // Helper methods
-
-//     private Department createDepartment(String name) {
-//         Department department = new Department();
-//         department.setDepartmentName(name);
-//         return departmentRepository.save(department);
-//     }
-
-//     private Role createRole(String type) {
-//         Role role = new Role();
-//         role.setRoleName(type);
-//         return roleRepository.save(role);
-//     }
-
-//     private AssetCategory createCategory(String name) {
-//         AssetCategory category = new AssetCategory();
-//         category.setCategoryName(name);
-//         return categoryRepository.save(category);
-//     }
-
-//     private User createUser(String email, String rawPassword, String username,
-//                             Role role, Department department) {
-//         User user = new User();
-//         user.setEmail(email);
-//         user.setPassword(passwordEncoder.encode(rawPassword));
-//         user.setUsername(username);
-//         user.setRole(role);
-//         user.setDepartment(department);
-//         return userRepository.save(user);
-//     }
-
-//     private String buildBasicAuthHeader(String email, String password) {
-//         String credentials = email + ":" + password;
-//         return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
-//     }
 // }
