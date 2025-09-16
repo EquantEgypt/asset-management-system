@@ -1,13 +1,13 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "assets")
+@Table(name = "asset")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,30 +16,43 @@ public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long assetId;
+    private Long id;
 
-    @NotBlank(message = "Asset name cannot be blank")
-    @Column(nullable = false)
-    private String assetName;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private AssetCategory category;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private AssetType type;
 
     @NotBlank(message = "Brand cannot be blank")
     @Column(nullable = false)
     private String brand;
 
     @Column(columnDefinition = "TEXT")
-    private String assetDescription;
+    private String description;
 
-    @ManyToOne
-    @NotNull(message = "Asset category is required")
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @NotBlank(message = "Asset name cannot be blank")
+    @Column(nullable = false)
+    private String name;
 
-    @ManyToOne
-    @NotNull(message = "Asset type is required")
-    @JoinColumn(name = "type_id", nullable = false)
-    private Type type;
+    private String location;
+
+    @Column(unique = true,name = "serial_number")
+    private String serialNumber;
+
+    @Column(nullable = false,name = "purchase_date")
+    private LocalDateTime purchaseDate;
+
+    @Column(nullable = false,name = "warranty_end_date")
+    private LocalDateTime warrantyEndDate;
 
     @NotNull
-    @Min(0)
-    private Integer quantity;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AssetStatus status;
+
+    @Column(name="image_path")
+    private String imagePath;
 }

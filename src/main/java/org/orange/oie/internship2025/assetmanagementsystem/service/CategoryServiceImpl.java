@@ -1,6 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service;
 
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<AssetCategory> getAllCategories() {
         return categoryRepository.findAll();
     }
 }

@@ -3,9 +3,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.service;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
-import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 

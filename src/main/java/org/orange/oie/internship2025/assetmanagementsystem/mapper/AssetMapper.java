@@ -3,8 +3,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,12 @@ public class AssetMapper {
         }
 
         AssetDto assetDto = new AssetDto();
-        assetDto.setAssetId(asset.getAssetId());
-        assetDto.setAssetName(asset.getAssetName());
+        assetDto.setAssetId(asset.getId());
+        assetDto.setAssetName(asset.getName());
         assetDto.setBrand(asset.getBrand());
-        assetDto.setAssetDescription(asset.getAssetDescription());
+        assetDto.setAssetDescription(asset.getDescription());
         assetDto.setCategory(asset.getCategory());
         assetDto.setType(asset.getType());
-        assetDto.setQuantity(asset.getQuantity());
 
         return assetDto;
     }
@@ -42,14 +41,13 @@ public class AssetMapper {
         }
 
         Asset asset = new Asset();
-        asset.setAssetName(assetDto.getAssetName());
+        asset.setName(assetDto.getAssetName());
         asset.setBrand(assetDto.getBrand());
-        asset.setAssetDescription(assetDto.getAssetDescription());
-        asset.setQuantity(assetDto.getQuantity());
+        asset.setDescription(assetDto.getAssetDescription());
 
-        Category category = categoryRepository.findById(assetDto.getCategoryId())
+        AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        Type type = typeRepository.findById(assetDto.getTypeId())
+        AssetType type = typeRepository.findById(assetDto.getTypeId())
                 .orElseThrow(() -> new RuntimeException("Type not found"));
 
         asset.setCategory(category);

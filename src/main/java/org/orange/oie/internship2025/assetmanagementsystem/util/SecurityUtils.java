@@ -39,6 +39,6 @@ public final class SecurityUtils {
             return -1;
         }
 
-        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserId();
+        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getId();
     }
 }
