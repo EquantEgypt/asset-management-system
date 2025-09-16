@@ -19,6 +19,6 @@ public class AssetType {
     @JoinColumn(name = "category_id", nullable = false)
     private AssetCategory category;
 
-    @Column(nullable = false,name = "type_name", unique = true)
+    @Column(nullable = false,name = "name", unique = true)
     private String name;
 }

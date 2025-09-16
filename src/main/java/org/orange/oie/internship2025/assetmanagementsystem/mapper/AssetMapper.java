@@ -27,6 +27,12 @@ public class AssetMapper {
         AssetDto assetDto = new AssetDto();
         assetDto.setAssetId(asset.getId());
         assetDto.setAssetName(asset.getName());
+        assetDto.setImagePath(asset.getImagePath());
+        assetDto.setLocation(asset.getLocation());
+        assetDto.setSerialNumber(asset.getSerialNumber());
+        assetDto.setPurchaseDate(asset.getPurchaseDate().toString());
+        assetDto.setWarrantyEndDate(asset.getWarrantyEndDate().toString());
+        assetDto.setStatus(asset.getStatus().toString());
         assetDto.setBrand(asset.getBrand());
         assetDto.setAssetDescription(asset.getDescription());
         assetDto.setCategory(asset.getCategory());
@@ -52,6 +58,13 @@ public class AssetMapper {
 
         asset.setCategory(category);
         asset.setType(type);
+
+        asset.setLocation(assetDto.getLocation());
+        asset.setSerialNumber(assetDto.getSerialNumber());
+        asset.setPurchaseDate(assetDto.getPurchaseDate());
+        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate());
+        asset.setStatus(assetDto.getStatus());
+        asset.setImagePath(assetDto.getImagePath());
         return asset;
     }
 }

@@ -15,5 +15,10 @@ public class AssetDto {
     private String assetDescription;
     private AssetCategory category;
     private AssetType type;
-    private Integer quantity;
+    private String location;
+    private String serialNumber;
+    private String purchaseDate;
+    private String warrantyEndDate;
+    private String status;
+    private String imagePath;
 }

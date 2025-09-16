@@ -20,7 +20,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
