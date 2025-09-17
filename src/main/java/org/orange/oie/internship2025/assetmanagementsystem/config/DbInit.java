@@ -66,9 +66,10 @@ public class DbInit implements CommandLineRunner {
         }
         if (userRepository.count() == 0) {
             Role adminRole = roleRepository.findByName("ADMIN");
+            Department dept = departmentRepository.findByName("T1");
             User user = new User(null, "ADMIN", "ahmed", "admin@orange.com",
-             passwordEncoder.encode("admin123"),null ,adminRole,"012456789"
-             ,LocalDate.of(2000, 12, 12),true 
+                 passwordEncoder.encode("admin123"),dept ,adminRole,"012456789"
+             ,LocalDate.of(2000, 12, 12),true
              ,LocalDate.of(2000, 12, 13),LocalDate.of(2000, 12, 14));
 
 
