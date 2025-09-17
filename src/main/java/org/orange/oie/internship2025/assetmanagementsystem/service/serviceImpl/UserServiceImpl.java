@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         Specification<User> spec = Specification.allOf();
 
         if (searchWord != null && !searchWord.trim().isEmpty()) {
-            spec = spec.and(UserSpecifications.hasNameOrEmail(searchWord));
+            spec = spec.and(UserSpecifications.hasusername(searchWord));
         }
         if (role != null && !role.trim().isEmpty()) {
             spec = spec.and(UserSpecifications.hasRole(role));
