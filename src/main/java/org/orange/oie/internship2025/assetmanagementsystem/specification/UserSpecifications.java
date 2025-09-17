@@ -5,7 +5,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class UserSpecifications {
 
-    public static Specification<User> hasusername(String searchWord) {
+    public static Specification<User> hasusername
+            (String searchWord) {
         return (root, query, cb) ->{
 return  cb.or(
         cb.like(cb.lower(root.get("username")), "%" + searchWord.toLowerCase() + "%")

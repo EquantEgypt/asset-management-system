@@ -1,17 +1,14 @@
 package org.orange.oie.internship2025.assetmanagementsystem.config;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.DepartmentRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.RoleRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -36,10 +33,15 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private final DepartmentRepository departmentRepository;
     @Autowired
+    private final AssetRepository assetRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
+        userRepository.deleteAll();
+
+
         if(roleRepository.count() == 0) {
             roleRepository.save(new Role(null,"ADMIN"));
             roleRepository.save(new Role(null,"EMPLOYEE"));
@@ -67,13 +69,26 @@ public class DbInit implements CommandLineRunner {
         if (userRepository.count() == 0) {
             Role adminRole = roleRepository.findByName("ADMIN");
             Department dept = departmentRepository.findByName("T1");
-            User user = new User(null, "ADMIN", "ahmed", "admin@orange.com",
+            User user1 = new User(null, "ADMIN", "ahmed", "admin@orange.com",
                  passwordEncoder.encode("admin123"),dept ,adminRole,"012456789"
              ,LocalDate.of(2000, 12, 12),true
              ,LocalDate.of(2000, 12, 13),LocalDate.of(2000, 12, 14));
 
+//            if (!userRepository.existsByEmail("admin@orange.com")) {
+                userRepository.save(user1);
+//            }
 
-            userRepository.save(user);
+            Role managerRole = roleRepository.findByName("DEPARTMENT_MANAGER");
+            Department dept2 = departmentRepository.findByName("T2");
+            User user2 = new User(null, "DEPARTMENT_MANAGER", "Malak", "manager1@orange.com",
+                passwordEncoder.encode("admin123"), dept2, managerRole, "01092115422",
+            LocalDate.of(2001, 3, 13), true,
+             LocalDate.of(2001, 3, 15), LocalDate.of(2001, 3, 17));
+
+//            if (!userRepository.existsByEmail("manager1@orange.com")) {
+                userRepository.save(user2);
+//            }
+//                userRepository.saveAll(List.of(user1, user2));
 
         }
     }

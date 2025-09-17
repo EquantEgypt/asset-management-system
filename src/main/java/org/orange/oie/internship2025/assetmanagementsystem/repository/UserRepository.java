@@ -13,4 +13,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     User findByEmail(String email);
     Page<User> findByDepartment_Id(Long departmentId, Pageable pageable);
+    boolean existsByEmail(String email);
 }
