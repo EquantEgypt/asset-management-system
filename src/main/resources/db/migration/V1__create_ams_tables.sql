@@ -48,7 +48,7 @@ CREATE TABLE asset (
                        serial_number VARCHAR(255) UNIQUE,
                        purchase_date DATETIME NOT NULL,
                        warranty_end_date DATETIME NOT NULL,
-                       status ENUM('Available', 'Assigned', 'UNDER_MAINTENANCE', 'RETIRED') NOT NULL,
+                       status ENUM('AVAILABLE', 'ASSIGNED', 'UNDER_MAINTENANCE', 'RETIRED') NOT NULL,
                        image_path VARCHAR(255),
                        CONSTRAINT fk_asset_category FOREIGN KEY (category_id) REFERENCES asset_category(id),
                        CONSTRAINT fk_asset_type FOREIGN KEY (type_id) REFERENCES asset_type(id)

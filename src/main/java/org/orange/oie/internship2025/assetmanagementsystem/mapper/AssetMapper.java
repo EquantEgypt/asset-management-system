@@ -9,7 +9,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRe
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import java.time.LocalDate;
 @Component
 public class AssetMapper {
 
@@ -61,8 +61,8 @@ public class AssetMapper {
 
         asset.setLocation(assetDto.getLocation());
         asset.setSerialNumber(assetDto.getSerialNumber());
-        asset.setPurchaseDate(assetDto.getPurchaseDate());
-        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate());
+        asset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
+        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
         asset.setStatus(assetDto.getStatus());
         asset.setImagePath(assetDto.getImagePath());
         return asset;

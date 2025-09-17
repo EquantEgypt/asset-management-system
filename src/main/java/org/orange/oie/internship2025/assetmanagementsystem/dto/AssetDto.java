@@ -2,8 +2,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import lombok.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
 @Setter
 @Getter

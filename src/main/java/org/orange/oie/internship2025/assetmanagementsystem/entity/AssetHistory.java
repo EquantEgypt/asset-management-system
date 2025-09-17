@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
+
 @Entity
 @Table(name = "asset_history")
 @Getter

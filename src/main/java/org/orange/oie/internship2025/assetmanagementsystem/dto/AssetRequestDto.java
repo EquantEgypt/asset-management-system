@@ -2,7 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import java.time.LocalDateTime;
 
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetStatus;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
