@@ -73,7 +73,7 @@ CREATE TABLE asset_history (
                                user_id BIGINT NOT NULL,
                                note TEXT,
                                timestamp DATETIME,
-                               status ENUM('Available', 'Assigned', 'UNDER_MAINTENANCE', 'RETIRED'),
+                               status ENUM('AVAILABLE', 'ASSIGNED', 'UNDER_MAINTENANCE', 'RETIRED'),
                                CONSTRAINT fk_history_asset FOREIGN KEY (asset_id) REFERENCES asset(id),
                                CONSTRAINT fk_history_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
