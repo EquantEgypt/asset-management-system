@@ -40,12 +40,6 @@ public class AssetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    // @GetMapping
-    // @PreAuthorize("hasAuthority('ADMIN')")
-    // public ResponseEntity<List<AssetDto>> getAllAssets() {
-    //     List<AssetDto> assets = assetService.getAllAssets();
-    //     return ResponseEntity.ok(assets);
-    // }
 
     @GetMapping("/types")
     @PreAuthorize("hasAuthority('ADMIN')")
