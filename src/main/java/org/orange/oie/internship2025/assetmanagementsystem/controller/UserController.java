@@ -22,13 +22,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('Admin') or hasAuthority('Department_Manager')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENT_MANAGER')")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
             Pageable pageable,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String role,
             @RequestParam(required = false) Long departmentId
     ) {
+        //System.out.println("search=" + search + ", role=" + role + ", deptId=" + departmentId);
 
         Page<UserDTO> userDTOPage = userService.searchUsers(search, role, departmentId, pageable);
         return ResponseEntity.ok(userDTOPage);
