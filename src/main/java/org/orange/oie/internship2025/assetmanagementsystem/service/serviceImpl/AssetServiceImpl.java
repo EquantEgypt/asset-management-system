@@ -13,14 +13,11 @@ import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepos
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.specification.AssetSpecification;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +32,9 @@ public class AssetServiceImpl implements AssetService {
     private final MiniAssetMapper mapper;
 
     public AssetServiceImpl(AssetRepository assetRepository,
-            AssetMapper assetMapper,
-            AssetAssignmentRepository assetAssingnmentRepository,
-            MiniAssetMapper miniAssetMapper) {
+                            AssetMapper assetMapper,
+                            AssetAssignmentRepository assetAssingnmentRepository,
+                            MiniAssetMapper miniAssetMapper) {
         this.assetRepository = assetRepository;
         this.assetMapper = assetMapper;
         this.assetAssingnmentRepository = assetAssingnmentRepository;
