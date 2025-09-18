@@ -15,9 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode.USER_NOT_EXISTS;
-
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
