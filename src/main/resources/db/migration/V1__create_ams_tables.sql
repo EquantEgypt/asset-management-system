@@ -1,3 +1,8 @@
+CREATE SCHEMA IF NOT EXISTS ams;
+
+-- Switch to the schema
+USE ams;
+
 CREATE TABLE department (
                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             name VARCHAR(255) NOT NULL UNIQUE
