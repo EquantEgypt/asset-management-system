@@ -53,8 +53,8 @@ public class Asset {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AssetStatus status;
+    @Column(nullable = false, name = "status")
+    private AssetStatus status = AssetStatus.AVAILABLE;
 
     @Column(name="image_path")
     private String imagePath;//details
