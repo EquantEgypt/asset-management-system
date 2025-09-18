@@ -4,9 +4,11 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetTypeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class AssetTypeServiceImpl implements AssetTypeService {
 

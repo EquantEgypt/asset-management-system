@@ -14,6 +14,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterf
 import org.orange.oie.internship2025.assetmanagementsystem.specification.AssetSpecification;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class AssetServiceImpl implements AssetService {
 
