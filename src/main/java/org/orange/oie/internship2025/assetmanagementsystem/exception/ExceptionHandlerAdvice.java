@@ -1,9 +1,8 @@
-package org.orange.oie.internship2025.assetmanagementsystem.api;
+package org.orange.oie.internship2025.assetmanagementsystem.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
-import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiResponse;
-import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode;
+import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiResponse;
+import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

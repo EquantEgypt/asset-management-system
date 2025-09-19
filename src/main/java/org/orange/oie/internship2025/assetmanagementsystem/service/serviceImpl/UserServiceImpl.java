@@ -3,7 +3,6 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.UserMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AuthService;
@@ -16,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode.USER_NOT_EXISTS;
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,11 +26,11 @@ public class UserServiceImpl implements UserService {
 
 
     public Page<UserDTO> searchUsers(String searchWord, String role, Long departmentId, Pageable pageable) {
-        User user = validateUser();
+        User user = SecurityUtils.getCurrentUser();
 
         String userRole = user.getRole().getName();
 
-        if ("Department_Manager".equals(userRole))
+        if ("DEPARTMENT_MANAGER".equals(userRole))
             departmentId = user.getDepartment().getId();
 
 
@@ -52,13 +49,5 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(spec, pageable);
         return UserMapper.toDtoPage(users);
 
-    }
-
-    private User validateUser() {
-        User user = SecurityUtils.getCurrentUser();
-        if (user == null) {
-            throw new BusinessException(USER_NOT_EXISTS, "user is not authenticated");
-        }
-        return user;
     }
 }
