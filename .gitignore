@@ -32,5 +32,5 @@ target/
 src/.idea/
 *.iml
 out/
-
+config/
 

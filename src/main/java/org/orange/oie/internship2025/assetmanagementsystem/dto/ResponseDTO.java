@@ -1,5 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.dto;
-import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
@@ -8,14 +9,16 @@ import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 
 import java.time.LocalDateTime;
 
-public class ResponseDto {
+@Setter
+@Getter
+public class ResponseDTO {
     private Long id;
     private Asset asset;
-    private AssetType assetType;
-    private User requester;
+    private String assetType;
+    private String requester;
     private LocalDateTime requestDate;
     private RequestStatus status;
     private RequestType requestType;
-    private User approvedBy;
+    private String approvedBy;
     private LocalDateTime approvedDate;
 }
