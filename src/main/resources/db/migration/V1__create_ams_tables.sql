@@ -85,7 +85,7 @@ CREATE TABLE asset_history (
 
 CREATE TABLE asset_request (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    asset_id BIGINT NOT NULL,
+    asset_id BIGINT,
     type_id BIGINT NOT NULL,
     requester_id BIGINT NOT NULL,
     request_date DATETIME,
