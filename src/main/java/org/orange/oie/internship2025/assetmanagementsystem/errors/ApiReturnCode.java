@@ -1,4 +1,4 @@
-package org.orange.oie.internship2025.assetmanagementsystem.model.errors;
+package org.orange.oie.internship2025.assetmanagementsystem.errors;
 
 import org.springframework.http.HttpStatus;
 import org.slf4j.event.Level;
