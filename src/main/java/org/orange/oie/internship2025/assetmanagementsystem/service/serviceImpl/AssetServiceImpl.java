@@ -19,9 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Transactional
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -46,14 +43,6 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
         return assetMapper.toDto(savedAsset);
-    }
-
-    @Override
-    public List<AssetDto> getAllAssets() {
-        List<Asset> assets = assetRepository.findAll();
-        return assets.stream()
-                .map(assetMapper::toDto)
-                .collect(Collectors.toList());
     }
 
     @Override
