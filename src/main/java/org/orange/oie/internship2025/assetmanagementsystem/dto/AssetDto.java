@@ -1,9 +1,9 @@
 package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import lombok.*;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
 @Setter
 @Getter
@@ -14,7 +14,12 @@ public class AssetDto {
     private String assetName;
     private String brand;
     private String assetDescription;
-    private Category category;
-    private Type type;
-    private Integer quantity;
+    private AssetCategory category;
+    private AssetType type;
+    private String location;
+    private String serialNumber;
+    private String purchaseDate;
+    private String warrantyEndDate;
+    private AssetStatus status;
+    private String imagePath;
 }

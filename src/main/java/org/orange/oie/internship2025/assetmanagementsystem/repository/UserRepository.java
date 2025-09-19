@@ -11,6 +11,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+    User findByUsername(String email);
     User findByEmail(String email);
-    Page<User> findByDepartment_DepartmentId(Long departmentId, Pageable pageable);
+    Page<User> findByDepartment_Id(Long departmentId, Pageable pageable);
+    boolean existsByEmail(String email);
 }
