@@ -1,33 +1,29 @@
 package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 
 import java.time.LocalDateTime;
 
-public class RequestDto {
+@Setter
+@Getter
+public class RequestDTO {
 
-    @NotBlank(message = "asset id cannot be empty")
     private Long assetId;
 
     @NotBlank(message = "asset type cannot be empty")
-    private AssetType assetType;
+    private String assetType;
 
-    @NotBlank(message = "requester id cannot be empty")
     private Long requesterId;
 
-    @NotBlank(message = "request date cannot be empty")
-    private LocalDateTime requestDate;
-
-    @NotBlank(message = "status cannot be empty")
-    private RequestStatus status;
-
-    @NotBlank(message = "request type cannot be empty")
+    @NotNull(message = "request type cannot be empty")
+    @Enumerated(EnumType.STRING)
     private RequestType requestType;
-
-    private Long approvedById;
-
-    private LocalDateTime approvedDate;
 }

@@ -32,6 +32,5 @@ target/
 src/.idea/
 *.iml
 out/
-V2__insert_reference_data.sql
-
+config/
 
