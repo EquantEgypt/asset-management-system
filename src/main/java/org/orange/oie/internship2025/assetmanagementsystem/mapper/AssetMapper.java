@@ -2,14 +2,22 @@ package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @Component
 public class AssetMapper {
 
@@ -18,8 +26,7 @@ public class AssetMapper {
 
     @Autowired
     private TypeRepository typeRepository;
-
-    public AssetDto toDto(Asset asset) {
+    public static AssetDto toDto(Asset asset) {
         if (asset == null) {
             return null;
         }
@@ -66,5 +73,17 @@ public class AssetMapper {
         asset.setStatus(assetDto.getStatus());
         asset.setImagePath(assetDto.getImagePath());
         return asset;
+    }
+
+    public static List<AssetDto> toDtoList(List<Asset> assetsList) {
+        if (assetsList == null) {
+            return Collections.emptyList();
+        }
+
+        List<AssetDto> dtoList = new ArrayList<>();
+        for (Asset asset : assetsList) {
+            dtoList.add(toDto(asset));
+        }
+           return dtoList;
     }
 }
