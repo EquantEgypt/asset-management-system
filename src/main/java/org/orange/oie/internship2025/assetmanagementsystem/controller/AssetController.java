@@ -58,4 +58,10 @@ public class AssetController {
         Page<MiniAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
+    @GetMapping("/available")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    public List<AssetDto> getAvailableAsset() {
+
+        return assetService.getAvailableAsset();
+    }
 }
