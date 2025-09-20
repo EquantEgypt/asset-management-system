@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
 @Entity
 @Table(name = "asset")
@@ -31,7 +33,7 @@ public class Asset {
     private String brand;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String description;//details
 
     @NotBlank(message = "Asset name cannot be blank")
     @Column(nullable = false)
@@ -40,20 +42,20 @@ public class Asset {
     private String location;
 
     @Column(unique = true,name = "serial_number")
-    private String serialNumber;
+    private String serialNumber;//details
     
 
     @Column(nullable = false,name = "purchase_date")
-    private LocalDateTime purchaseDate;
+    private LocalDate purchaseDate;//details
 
     @Column(nullable = false,name = "warranty_end_date")
-    private LocalDateTime warrantyEndDate;
+    private LocalDate warrantyEndDate;//details
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AssetStatus status;
+    @Column(nullable = false, name = "status")
+    private AssetStatus status = AssetStatus.AVAILABLE;
 
     @Column(name="image_path")
-    private String imagePath;
+    private String imagePath;//details
 }

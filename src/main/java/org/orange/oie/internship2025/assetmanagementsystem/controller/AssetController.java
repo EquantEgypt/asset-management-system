@@ -3,11 +3,15 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetTypeService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.CategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +27,7 @@ public class AssetController {
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
 
-    public AssetController(AssetService assetService , AssetTypeService typeService, CategoryService categoryService) {
+    public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
@@ -36,12 +40,6 @@ public class AssetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<AssetDto>> getAllAssets(){
-        List<AssetDto> assets = assetService.getAllAssets();
-        return ResponseEntity.ok(assets);
-    }
 
     @GetMapping("/types")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -55,4 +53,9 @@ public class AssetController {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping
+    public ResponseEntity<Page<MiniAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO,Pageable pageable) {
+        Page<MiniAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
+        return ResponseEntity.ok(assets);
+    }
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatus;
 
 @Entity
 @Table(name = "asset_assignment")
@@ -28,15 +30,16 @@ public class AssetAssignment {
 
     @NotNull
     @Column(nullable = false,name = "assignment_date")
-    private LocalDateTime assignmentDate;
+    private LocalDate assignmentDate;
 
     @NotNull
     @Column(nullable = false,name = "status")
+    @Enumerated(EnumType.STRING)
     private AssignmentStatus status;
 
 
     @Column(name="return_date")
-    private LocalDateTime returnDate;
+    private LocalDate returnDate;
 
     @Column(columnDefinition = "TEXT")
     private String note;
