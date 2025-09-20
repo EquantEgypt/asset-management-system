@@ -2,8 +2,6 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 public class ResponseDTO {
     private Long id;
     private Asset asset;
-    private String assetType;
+    private Long assetTypeId;
     private String requester;
     private LocalDateTime requestDate;
     private RequestStatus status;
