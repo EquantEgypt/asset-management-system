@@ -1,15 +1,11 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
 
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,10 +22,8 @@ public class AssetRequest {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "type_id", nullable = false)
-    private AssetType assetType;
-
+    @Column(name = "type_id", nullable = false)
+    private Long assetTypeId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "requester_id", nullable = false)
