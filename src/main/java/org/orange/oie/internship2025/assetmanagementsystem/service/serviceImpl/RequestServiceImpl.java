@@ -15,6 +15,11 @@ import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.access.AccessDeniedException;
+
+import java.util.Objects;
+
+
 @Service
 public class RequestServiceImpl implements RequestService {
     @Autowired
@@ -31,7 +36,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ResponseDTO addRequest(RequestDTO requestDTO) {
-        if(requestDTO.getRequesterId() == null){
+        if (requestDTO.getRequesterId() == null) {
             requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
         }
 
@@ -48,6 +53,14 @@ public class RequestServiceImpl implements RequestService {
         // Validate requesterId
         if (requestDTO.getRequesterId() != null && !userRepository.existsById(requestDTO.getRequesterId())) {
             throw new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User with id " + requestDTO.getRequesterId() + " not found");
+        }
+        if (requestDTO.getRequesterId() != SecurityUtils.getCurrentUserId()) {
+            if (SecurityUtils.getCurrentUser().getRole().getName().equals("EMPLOYEE")) {
+                throw new AccessDeniedException("You are not allowed to perform this operation");
+            } else if (SecurityUtils.getCurrentUser().getRole().getName().equals("DEPARTMENT_MANAGER") &&
+                       !Objects.equals(SecurityUtils.getCurrentUser().getDepartment().getId(), userRepository.findById(requestDTO.getRequesterId()).get().getDepartment().getId())) {
+                throw new AccessDeniedException("You are not allowed to perform this operation");
+            }
         }
 
         AssetRequest assetRequest = mapper.toEntity(requestDTO);

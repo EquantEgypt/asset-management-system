@@ -1,0 +1,40 @@
+<dataset>
+    <department id="10" name="IT"/>
+
+    <role id="2" name="EMPLOYEE"/>
+
+    <!-- Logged-in employee -->
+    <users
+        id="1"
+        username="EmployeeUser"
+        full_name="Employee One"
+        email="emp1@example.com"
+        password="secret"
+        department_id="10"
+        role_id="2"
+        phone="1111111111"
+        hire_date="2023-02-01"
+        is_active="1"
+        created_at="2023-02-01"
+        updated_at="2023-02-01"
+    />
+
+    <!-- Different employee -->
+    <users
+        id="2"
+        username="EmployeeUser2"
+        full_name="Employee Two"
+        email="emp2@example.com"
+        password="secret"
+        department_id="10"
+        role_id="2"
+        phone="2222222222"
+        hire_date="2023-02-10"
+        is_active="1"
+        created_at="2023-02-10"
+        updated_at="2023-02-10"
+    />
+
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" category_id="1" name="Laptop"/>
+</dataset>

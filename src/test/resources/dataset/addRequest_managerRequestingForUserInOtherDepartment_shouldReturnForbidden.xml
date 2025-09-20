@@ -1,0 +1,42 @@
+<dataset>
+    <department id="10" name="IT"/>
+    <department id="20" name="HR"/>
+
+    <role id="2" name="EMPLOYEE"/>
+    <role id="3" name="DEPARTMENT_MANAGER"/>
+
+    <!-- Manager in IT -->
+    <users
+        id="4"
+        username="ManagerUser"
+        full_name="Manager IT"
+        email="manager.it@example.com"
+        password="secret"
+        department_id="10"
+        role_id="3"
+        phone="3333333333"
+        hire_date="2023-03-01"
+        is_active="1"
+        created_at="2023-03-01"
+        updated_at="2023-03-01"
+    />
+
+    <!-- Employee in HR -->
+    <users
+        id="3"
+        username="UserInHR"
+        full_name="User HR"
+        email="user.hr@example.com"
+        password="secret"
+        department_id="20"
+        role_id="2"
+        phone="5555555555"
+        hire_date="2023-04-01"
+        is_active="1"
+        created_at="2023-04-01"
+        updated_at="2023-04-01"
+    />
+
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" category_id="1" name="Laptop"/>
+</dataset>
