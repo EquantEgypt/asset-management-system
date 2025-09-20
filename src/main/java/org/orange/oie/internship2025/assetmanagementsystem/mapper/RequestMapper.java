@@ -15,33 +15,33 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Component
 public class RequestMapper {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    TypeRepository typeRepository;
-    @Autowired
     AssetRepository assetRepository;
 
     public AssetRequest toEntity(RequestDTO dto) {
-        AssetType type = typeRepository.findByName(dto.getAssetType());
-        Optional<User> user = userRepository.findById(dto.getRequesterId());
         if (dto == null) {
             return null;
         }
+        User user = userRepository.findById(dto.getRequesterId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getRequesterId()));
+
         AssetRequest entity = new AssetRequest();
+
         if (dto.getAssetId() != null) {
-            Optional<Asset> asset = assetRepository.findById(dto.getAssetId());
-            entity.setAsset(asset.get());
+            Asset asset = assetRepository.findById(dto.getAssetId())
+                    .orElseThrow(() -> new RuntimeException("Asset not found with id: " + dto.getAssetId()));
+            entity.setAsset(asset);
         }
-        entity.setRequester(user.get());
+        entity.setAssetTypeId(dto.getAssetTypeId());
+        entity.setRequester(user);
         entity.setRequestDate(LocalDateTime.now());
-        entity.setAssetType(type);
         entity.setRequestType(dto.getRequestType());
         entity.setStatus(RequestStatus.PENDING);
-
-
         return entity;
     }
 
@@ -58,7 +58,7 @@ public class RequestMapper {
             dto.setApprovedDate(entity.getApprovedDate());
         }
         dto.setId(entity.getId());
-        dto.setAssetType(entity.getAssetType().getName());
+        dto.setAssetTypeId(entity.getAssetTypeId());
         dto.setRequester(entity.getRequester().getUsername());
         dto.setRequestDate(entity.getRequestDate());
         dto.setStatus(entity.getStatus());
