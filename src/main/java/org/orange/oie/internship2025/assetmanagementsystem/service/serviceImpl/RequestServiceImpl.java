@@ -3,6 +3,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.RequestMapper;
@@ -13,11 +15,15 @@ import org.orange.oie.internship2025.assetmanagementsystem.repository.UserReposi
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.access.AccessDeniedException;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -58,7 +64,7 @@ public class RequestServiceImpl implements RequestService {
             if (SecurityUtils.getCurrentUser().getRole().getName().equals("EMPLOYEE")) {
                 throw new AccessDeniedException("You are not allowed to perform this operation");
             } else if (SecurityUtils.getCurrentUser().getRole().getName().equals("DEPARTMENT_MANAGER") &&
-                       !Objects.equals(SecurityUtils.getCurrentUser().getDepartment().getId(), userRepository.findById(requestDTO.getRequesterId()).get().getDepartment().getId())) {
+                    !Objects.equals(SecurityUtils.getCurrentUser().getDepartment().getId(), userRepository.findById(requestDTO.getRequesterId()).get().getDepartment().getId())) {
                 throw new AccessDeniedException("You are not allowed to perform this operation");
             }
         }
@@ -67,5 +73,22 @@ public class RequestServiceImpl implements RequestService {
         AssetRequest req = requestRepository.save(assetRequest);
         ResponseDTO response = mapper.toDTO(req);
         return response;
+    }
+
+    @Override
+    public Page<ResponseDTO> getRequests(Pageable pageable) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        String role = currentUser.getRole().getName();
+
+        switch (role) {
+            case "ADMIN":
+                return requestRepository.findAll(pageable).map(mapper::toDTO);
+            case "DEPARTMENT_MANAGER":
+                List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
+                        .stream().map(User::getId).collect(Collectors.toList());
+                return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
+            default: // EMPLOYEE and other roles
+                return requestRepository.findAllByRequesterId(currentUser.getId(), pageable).map(mapper::toDTO);
+        }
     }
 }
