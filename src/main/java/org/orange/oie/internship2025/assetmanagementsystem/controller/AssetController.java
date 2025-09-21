@@ -22,20 +22,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
+
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
+
     public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
         AssetDto dto = assetService.addAsset(assetRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
+
+
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
@@ -44,10 +49,10 @@ public class AssetController {
         return typeService.getAllTypes(categoryId);
     }
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);

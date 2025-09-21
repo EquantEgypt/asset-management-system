@@ -4,7 +4,9 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.Requ
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 public interface RequestService {
 
      ResponseDTO addRequest(RequestDTO requestDTO);
+     Page<ResponseDTO> getRequests(Pageable pageable);
 }

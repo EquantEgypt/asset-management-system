@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -72,5 +73,22 @@ public class RequestServiceImpl implements RequestService {
         req.setRequester(user.get());
         ResponseDTO response = mapper.toDTO(req);
         return response;
+    }
+
+    @Override
+    public Page<ResponseDTO> getRequests(Pageable pageable) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        String role = currentUser.getRole().getName();
+
+        switch (role) {
+            case "ADMIN":
+                return requestRepository.findAll(pageable).map(mapper::toDTO);
+            case "DEPARTMENT_MANAGER":
+                List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
+                        .stream().map(User::getId).collect(Collectors.toList());
+                return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
+            default: // EMPLOYEE and other roles
+                return requestRepository.findAllByRequesterId(currentUser.getId(), pageable).map(mapper::toDTO);
+        }
     }
 }

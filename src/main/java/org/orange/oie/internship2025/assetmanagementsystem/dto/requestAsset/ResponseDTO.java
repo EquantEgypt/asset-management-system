@@ -1,4 +1,4 @@
-package org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset;
+package org.orange.oie.internship2025.assetmanagementsystem.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
