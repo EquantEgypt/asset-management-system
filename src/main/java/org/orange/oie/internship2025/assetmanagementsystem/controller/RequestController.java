@@ -5,11 +5,10 @@ import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/request")
@@ -21,9 +20,14 @@ public class RequestController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO> addRequest(@Valid @RequestBody RequestDTO requestDTO) {
-       ResponseDTO response =  requestService.addRequest(requestDTO);
+        ResponseDTO response =  requestService.addRequest(requestDTO);
         return ResponseEntity.ok(response);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ResponseDTO>> getRequests(Pageable pageable) {
+        return ResponseEntity.ok(requestService.getRequests(pageable));
     }
 
 }

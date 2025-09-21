@@ -13,6 +13,7 @@ public class ResponseDTO {
     private Long id;
     private Asset asset;
     private Long assetTypeId;
+    private String assetTypeName;
     private String requester;
     private LocalDateTime requestDate;
     private RequestStatus status;

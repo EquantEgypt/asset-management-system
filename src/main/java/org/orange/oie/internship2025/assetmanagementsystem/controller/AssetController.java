@@ -42,13 +42,11 @@ public class AssetController {
 
 
     @GetMapping("/types")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetType> getAllTypes() {
         return typeService.getAllTypes();
     }
 
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }

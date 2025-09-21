@@ -1,5 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,5 +62,6 @@ public class Asset {
     private String imagePath;//details
 
     @OneToMany(mappedBy = "asset", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<AssetAssignment> assignments;
 }
