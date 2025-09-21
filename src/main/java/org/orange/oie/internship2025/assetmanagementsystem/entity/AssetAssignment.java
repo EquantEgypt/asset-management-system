@@ -14,7 +14,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatu
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssetAssignment {
+public class    AssetAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
