@@ -60,6 +60,7 @@ public class Asset {
 
     @Column(name="image_path")
     private String imagePath;//details
+}
 
     @OneToMany(mappedBy = "asset", fetch = FetchType.LAZY)
     @JsonManagedReference
