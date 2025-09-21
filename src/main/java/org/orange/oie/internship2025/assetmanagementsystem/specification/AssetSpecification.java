@@ -92,7 +92,7 @@ public class AssetSpecification {
     }
 
     private static Specification<AssetAssignment> assignedUserContains(String value) {
-        return (root, query, cb) -> cb.like(root.join("assignedUser").get("username"), "%" + value + "%");
+        return (root, query, cb) -> cb.like(root.join("assignedTo").get("username"), "%" + value + "%");
     }
 
     private static Specification<AssetAssignment> departmentEquals(String value) {
