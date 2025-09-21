@@ -19,6 +19,8 @@ public class RequestMapper {
     UserRepository userRepository;
     @Autowired
     AssetRepository assetRepository;
+    @Autowired
+    TypeRepository typeRepository; // Added repository
 
     public AssetRequest toEntity(RequestDTO dto) {
         if (dto == null) {
@@ -57,6 +59,13 @@ public class RequestMapper {
         }
         dto.setId(entity.getId());
         dto.setAssetTypeId(entity.getAssetTypeId());
+
+        // Find and set the asset type name
+        if (entity.getAssetTypeId() != null) {
+            Optional<AssetType> assetType = typeRepository.findById(entity.getAssetTypeId());
+            assetType.ifPresent(type -> dto.setAssetTypeName(type.getName()));
+        }
+
         dto.setRequester(entity.getRequester().getUsername());
         dto.setRequestDate(entity.getRequestDate());
         dto.setStatus(entity.getStatus());

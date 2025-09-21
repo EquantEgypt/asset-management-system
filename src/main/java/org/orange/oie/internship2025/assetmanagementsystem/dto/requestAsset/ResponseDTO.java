@@ -1,4 +1,4 @@
-package org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset;
+package org.orange.oie.internship2025.assetmanagementsystem.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
@@ -13,6 +13,7 @@ public class ResponseDTO {
     private Long id;
     private Asset asset;
     private Long assetTypeId;
+    private String assetTypeName;
     private String requester;
     private LocalDateTime requestDate;
     private RequestStatus status;
