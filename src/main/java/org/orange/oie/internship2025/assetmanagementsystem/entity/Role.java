@@ -12,8 +12,8 @@ import lombok.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    private Long id;
 
-    @Column(name = "role_type", nullable = false, unique = true)
-    private String roleType; // No enum, plain String
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 }

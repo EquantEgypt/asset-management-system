@@ -33,4 +33,5 @@ src/.idea/
 *.iml
 out/
 
+src/main/resources/db/migration/V2__insert_reference_data.sql
 

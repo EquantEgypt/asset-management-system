@@ -19,12 +19,14 @@ public class UserMapper {
         }
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getUserId());
+        userDTO.setId(user.getId());
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole().getRoleType());
-        userDTO.setDepartmentName(user.getDepartment().getDepartmentName());
-        userDTO.setDepartmentId(user.getDepartment().getDepartmentId());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setRole(user.getRole().getName());
+        System.out.println(user.getDepartment());
+        userDTO.setDepartmentName(user.getDepartment().getName());
+        userDTO.setDepartmentId(user.getDepartment().getId());
 
         return userDTO;
     }

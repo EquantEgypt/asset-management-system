@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <!-- Asset Categories -->
+    <asset_category id="1" name="Electronics"/>
+    <asset_category id="2" name="Furniture"/>
+
+    <!-- Asset Types -->
+    <asset_type id="1" name="Laptop" category_id="1"/>
+    <asset_type id="2" name="Chair" category_id="2"/>
+
+    <!-- Assets -->
+    <asset id="1" category_id="1" type_id="1" brand="Dell" description="Dell Laptop" name="Asset 1" location="Office" serial_number="SN123" purchase_date="2023-01-15" warranty_end_date="2023-01-15" status="AVAILABLE" image_path="images/dell.png"/>
+    <asset id="2" category_id="2" type_id="2" brand="Ikea" description="Office Chair" name="Asset 2" location="Conference Room" serial_number="SN456" purchase_date="2023-01-15" warranty_end_date="2023-01-15" status="ASSIGNED" image_path="images/chair.png"/>
+
+
+</dataset>

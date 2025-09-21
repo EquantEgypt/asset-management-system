@@ -1,7 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.service.UserService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('Admin') or hasAuthority('Department_Manager')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENT_MANAGER')")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
             Pageable pageable,
             @RequestParam(required = false) String search,
