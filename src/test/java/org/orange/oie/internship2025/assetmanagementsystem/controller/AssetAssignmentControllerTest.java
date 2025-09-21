@@ -65,7 +65,7 @@ public class AssetAssignmentControllerTest extends AbstractIntegrationTest {
             mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUserByRole("IT"));
 
             AssetAssignmentRequest request = new AssetAssignmentRequest();
-            request.setAssetId(2L);  // Asset ID 2 is already assigned according to dataset
+            request.setAssetId(2L);
             request.setUserId(2L);
             request.setAssignmentDate(LocalDate.now());
             request.setStatus(AssignmentStatus.ACTIVE);
