@@ -21,8 +21,7 @@ public class AssignmentMapper {
         if (request == null) {
             return null;
         }
-        asset.setStatus(AssetStatus.ASSIGNED);
-        assetRepository.save(asset);
+
         AssetAssignment assignment = new AssetAssignment();
         assignment.setAsset(asset);
         assignment.setAssignedTo(user);

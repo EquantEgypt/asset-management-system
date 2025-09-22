@@ -16,7 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import java.time.LocalDate;
 
 import static org.mockito.Mockito.mockStatic;
@@ -51,10 +51,7 @@ public class AssetAssignmentControllerTest extends AbstractIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.data").isEmpty())
-                    .andExpect(jsonPath("$.code").value(0))
-                    .andExpect(jsonPath("$.message").value("Asset assigned successfully"));
-        }
+                    .andExpect(content().string("Asset Assigned Successfully"));        }
     }
     @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
     @Test
