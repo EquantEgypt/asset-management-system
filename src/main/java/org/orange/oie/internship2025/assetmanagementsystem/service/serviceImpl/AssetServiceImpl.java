@@ -61,7 +61,6 @@ public class AssetServiceImpl implements AssetService {
     public List<AssetDto> getAvailableAsset() {
         List<Asset> availableAssets = assetRepository.findByStatus(AssetStatus.AVAILABLE);
         List<AssetDto> availableAssetsDto = assetMapper.toDtoList(availableAssets);
-
         return availableAssetsDto;
     }
 }
