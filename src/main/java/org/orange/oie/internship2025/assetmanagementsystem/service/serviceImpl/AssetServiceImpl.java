@@ -52,10 +52,10 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Page<MiniAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
-        Specification<AssetAssignment> spec = AssetSpecification.buildSpecification(filterDTO,
+        Specification<Asset> spec = AssetSpecification.buildSpecification(filterDTO,
                 SecurityUtils.getCurrentUser());
-        Page<AssetAssignment> assignedAssets = assetAssingnmentRepository.findAll(spec, pageable);
-        return assignedAssets.map(mapper::toDto);
+        Page<Asset> assets = assetRepository.findAll(spec, pageable);
+        return assets.map(mapper::toDto);
     }
 
     @Override
