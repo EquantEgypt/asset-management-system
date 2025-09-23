@@ -1,7 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.ResponseDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;

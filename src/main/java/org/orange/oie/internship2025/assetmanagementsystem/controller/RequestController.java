@@ -2,8 +2,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 
 import jakarta.validation.Valid;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.ResponseDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
