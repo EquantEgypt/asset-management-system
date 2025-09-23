@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MiniAssetDTO {
     private Long id;
+    private String serialNumber;
     private String name;
     private String type;
     private String category;

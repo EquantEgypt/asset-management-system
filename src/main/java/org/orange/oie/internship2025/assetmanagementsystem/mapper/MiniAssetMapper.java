@@ -18,6 +18,7 @@ public class MiniAssetMapper {
         }
         MiniAssetDTO miniAssetDTO = new MiniAssetDTO();
         miniAssetDTO.setId(asset.getId());
+        miniAssetDTO.setSerialNumber(asset.getSerialNumber());
         miniAssetDTO.setName(asset.getName());
         miniAssetDTO.setType(asset.getType().getName());
         miniAssetDTO.setCategory(asset.getCategory().getName());
