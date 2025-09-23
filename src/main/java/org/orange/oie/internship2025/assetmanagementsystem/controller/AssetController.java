@@ -30,29 +30,32 @@ public class AssetController {
         this.typeService = typeService;
         this.categoryService = categoryService;
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
         AssetDto dto = assetService.addAsset(assetRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
+
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
-
     ) {
         return typeService.getAllTypes(categoryId);
     }
+
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
+
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public List<AssetDto> getAvailableAsset(
