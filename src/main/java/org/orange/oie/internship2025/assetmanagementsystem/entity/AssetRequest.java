@@ -44,4 +44,7 @@ public class AssetRequest {
 
     @Column(name="approved_date")
     private LocalDateTime approvedDate;
+
+    @Column(name="note")
+    private String note;
 }

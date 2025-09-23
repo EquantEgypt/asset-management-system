@@ -39,6 +39,7 @@ public class RequestMapper {
         entity.setRequestDate(LocalDateTime.now());
         entity.setRequestType(dto.getRequestType());
         entity.setStatus(RequestStatus.PENDING);
+        entity.setNote(dto.getNote());
         return entity;
     }
 
@@ -60,6 +61,7 @@ public class RequestMapper {
         dto.setRequestDate(entity.getRequestDate());
         dto.setStatus(entity.getStatus());
         dto.setRequestType(entity.getRequestType());
+        dto.setNote(entity.getNote());
         return dto;
     }
 }
