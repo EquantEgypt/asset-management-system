@@ -19,7 +19,10 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     }
 
     @Override
-    public List<AssetType> getAllTypes() {
-        return typeRepository.findAll();
+    public List<AssetType> getAllTypes(Long categoryId) {
+        return (categoryId == null)
+                ? typeRepository.findAll()
+                : typeRepository.findByCategoryId(categoryId);
     }
+
 }

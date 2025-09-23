@@ -6,6 +6,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilt
 import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.MiniAssetMapper;
@@ -58,9 +59,9 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public List<AssetDto> getAvailableAsset() {
-        List<Asset> availableAssets = assetRepository.findByStatus(AssetStatus.AVAILABLE);
-        List<AssetDto> availableAssetsDto = assetMapper.toDtoList(availableAssets);
-        return availableAssetsDto;
+    public List<AssetDto> getAvailableAsset(String type) {
+        Specification<Asset> spec = AssetSpecification.availableByType(type);
+        List<Asset> availableAssets = assetRepository.findAll(spec);
+        return assetMapper.toDtoList(availableAssets);
     }
 }
