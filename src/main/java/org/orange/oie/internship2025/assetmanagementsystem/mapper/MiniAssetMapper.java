@@ -1,37 +1,46 @@
 package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
 import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Component
 public class MiniAssetMapper {
-    public MiniAssetDTO toDto(AssetAssignment assetAssignment) {
-        if (assetAssignment == null) {
+    public MiniAssetDTO toDto(Asset asset) {
+        if (asset == null) {
             return null;
         }
         MiniAssetDTO miniAssetDTO = new MiniAssetDTO();
-        miniAssetDTO.setId(assetAssignment.getId());
-        miniAssetDTO.setName(assetAssignment.getAsset().getName());
-        miniAssetDTO.setType(assetAssignment.getAsset().getType().getName());
-        miniAssetDTO.setCategory(assetAssignment.getAsset().getCategory().getName());
-        miniAssetDTO.setBrand(assetAssignment.getAsset().getBrand());
-        miniAssetDTO.setStatus(assetAssignment.getStatus().name());
-        miniAssetDTO.setAssignedUser(assetAssignment.getAssignedTo().getUsername());
-        miniAssetDTO.setDepartment(assetAssignment.getAssignedTo().getDepartment().getName());
+        miniAssetDTO.setId(asset.getId());
+        miniAssetDTO.setName(asset.getName());
+        miniAssetDTO.setType(asset.getType().getName());
+        miniAssetDTO.setCategory(asset.getCategory().getName());
+        miniAssetDTO.setBrand(asset.getBrand());
+        miniAssetDTO.setStatus(asset.getStatus().name());
+
+        if (asset.getAssignments() != null && !asset.getAssignments().isEmpty()) {
+            Optional<AssetAssignment> mostRecentAssignment = asset.getAssignments().stream()
+                    .max(Comparator.comparing(AssetAssignment::getAssignmentDate));
+
+            mostRecentAssignment.ifPresent(assignment -> {
+                miniAssetDTO.setAssignedUser(assignment.getAssignedTo().getUsername());
+                miniAssetDTO.setDepartment(assignment.getAssignedTo().getDepartment().getName());
+            });
+        }
+
         return miniAssetDTO;
     }
-    public List<MiniAssetDTO> toDtoList(List<AssetAssignment> assetAssignments) {
-        if (assetAssignments == null) {
+
+    public List<MiniAssetDTO> toDtoList(List<Asset> assets) {
+        if (assets == null) {
             return List.of();
         }
-        List<MiniAssetDTO> dtoList = new ArrayList<>();
-        for (AssetAssignment assetAssignment : assetAssignments) {
-            dtoList.add(toDto(assetAssignment));
-        }
-        return dtoList;
+        return assets.stream().map(this::toDto).collect(Collectors.toList());
     }
-    
 }
