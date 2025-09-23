@@ -39,6 +39,7 @@ public class AssetServiceImpl implements AssetService {
         this.assetRepository = assetRepository;
         this.assetMapper = assetMapper;
         this.mapper = listAssetDTOMapper;
+        this.assetHistoryRepository = assetHistoryRepository;
         this.categoryRepository = categoryRepository;
         this.typeRepository = typeRepository;
     }
