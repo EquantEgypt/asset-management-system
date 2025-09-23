@@ -6,8 +6,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilt
 import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
-import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.MiniAssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetAssignmentRepository;
