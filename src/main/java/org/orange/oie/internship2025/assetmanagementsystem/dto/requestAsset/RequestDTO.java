@@ -23,4 +23,6 @@ public class RequestDTO {
     @NotNull(message = "request type cannot be empty")
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
+
+    private String note;
 }

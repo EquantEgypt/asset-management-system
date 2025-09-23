@@ -19,4 +19,5 @@ public class ResponseDTO {
     private RequestType requestType;
     private String approvedBy;
     private LocalDateTime approvedDate;
+    private String note;
 }
