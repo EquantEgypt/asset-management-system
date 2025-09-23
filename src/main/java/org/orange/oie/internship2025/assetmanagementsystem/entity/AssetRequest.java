@@ -1,23 +1,11 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
+
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -34,10 +22,8 @@ public class AssetRequest {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "type_id", nullable = false)
-    private AssetType assetType;
-
+    @Column(name = "type_id", nullable = false)
+    private Long assetTypeId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "requester_id", nullable = false)

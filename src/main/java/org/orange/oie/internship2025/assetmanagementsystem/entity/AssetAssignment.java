@@ -1,5 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,7 +15,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatu
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AssetAssignment {
+public class    AssetAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,7 @@ public class AssetAssignment {
 
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
+    @JsonBackReference
     private Asset asset;
 
     @ManyToOne(optional = false,fetch = FetchType.LAZY)

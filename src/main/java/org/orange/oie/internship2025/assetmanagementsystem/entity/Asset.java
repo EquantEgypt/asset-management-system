@@ -1,10 +1,12 @@
 package org.orange.oie.internship2025.assetmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
@@ -43,7 +45,7 @@ public class Asset {
 
     @Column(unique = true,name = "serial_number")
     private String serialNumber;//details
-    
+
 
     @Column(nullable = false,name = "purchase_date")
     private LocalDate purchaseDate;//details
@@ -58,4 +60,8 @@ public class Asset {
 
     @Column(name="image_path")
     private String imagePath;//details
+
+    @OneToMany(mappedBy = "asset", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<AssetAssignment> assignments;
 }
