@@ -1,20 +1,17 @@
 package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.ResponseDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 public class RequestMapper {
