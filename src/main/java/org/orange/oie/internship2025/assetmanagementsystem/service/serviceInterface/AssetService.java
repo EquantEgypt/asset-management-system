@@ -3,7 +3,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceInter
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +14,6 @@ public interface AssetService {
     Page<MiniAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
     List<AssetDto> getAvailableAsset(String type);
 
+
+    Page<ListAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
 }

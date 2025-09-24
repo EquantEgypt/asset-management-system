@@ -3,11 +3,10 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
-import org.orange.oie.internship2025.assetmanagementsystem.mapper.MiniAssetMapper;
+import org.orange.oie.internship2025.assetmanagementsystem.mapper.ListAssetDTOMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetAssignmentRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
@@ -29,16 +28,16 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final AssetMapper assetMapper;
     private final AssetAssignmentRepository assetAssingnmentRepository;
-    private final MiniAssetMapper mapper;
+    private final ListAssetDTOMapper mapper;
 
     public AssetServiceImpl(AssetRepository assetRepository,
                             AssetMapper assetMapper,
                             AssetAssignmentRepository assetAssingnmentRepository,
-                            MiniAssetMapper miniAssetMapper) {
+                            ListAssetDTOMapper listAssetDTOMapper) {
         this.assetRepository = assetRepository;
         this.assetMapper = assetMapper;
         this.assetAssingnmentRepository = assetAssingnmentRepository;
-        this.mapper = miniAssetMapper;
+        this.mapper = listAssetDTOMapper;
     }
 
     @Override
@@ -49,17 +48,10 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Page<MiniAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
-        Specification<AssetAssignment> spec = AssetSpecification.buildSpecification(filterDTO,
+    public Page<ListAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
+        Specification<Asset> spec = AssetSpecification.buildSpecification(filterDTO,
                 SecurityUtils.getCurrentUser());
-        Page<AssetAssignment> assignedAssets = assetAssingnmentRepository.findAll(spec, pageable);
-        return assignedAssets.map(mapper::toDto);
-    }
-
-    @Override
-    public List<AssetDto> getAvailableAsset(String type) {
-        Specification<Asset> spec = AssetSpecification.availableByType(type);
-        List<Asset> availableAssets = assetRepository.findAll(spec);
-        return assetMapper.toDtoList(availableAssets);
+        Page<Asset> assets = assetRepository.findAll(spec, pageable);
+        return assets.map(mapper::toDto);
     }
 }

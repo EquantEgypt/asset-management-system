@@ -29,18 +29,17 @@ public class RequestMapper {
         if (dto == null) {
             return null;
         }
-        User user = userRepository.findById(dto.getRequesterId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getRequesterId()));
-
         AssetRequest entity = new AssetRequest();
 
-        if (dto.getAssetId() != null) {
-            Asset asset = assetRepository.findById(dto.getAssetId())
-                    .orElseThrow(() -> new RuntimeException("Asset not found with id: " + dto.getAssetId()));
-            entity.setAsset(asset);
-        }
-        entity.setAssetTypeId(dto.getAssetTypeId());
+        User user = new User();
+        user.setId(dto.getRequesterId());
         entity.setRequester(user);
+        Asset asset = new Asset();
+        asset.setId(dto.getAssetId());
+        entity.setAsset(asset);
+        AssetType type = new AssetType();
+        type.setId(dto.getAssetTypeId());
+        entity.setAssetType(type);
         entity.setRequestDate(LocalDateTime.now());
         entity.setRequestType(dto.getRequestType());
         entity.setStatus(RequestStatus.PENDING);
@@ -61,11 +60,11 @@ public class RequestMapper {
             dto.setApprovedDate(entity.getApprovedDate());
         }
         dto.setId(entity.getId());
-        dto.setAssetTypeId(entity.getAssetTypeId());
+        dto.setAssetTypeId(entity.getAssetType().getId());
 
         // Find and set the asset type name
-        if (entity.getAssetTypeId() != null) {
-            Optional<AssetType> assetType = typeRepository.findById(entity.getAssetTypeId());
+        if (entity.getAssetType().getId() != null) {
+            Optional<AssetType> assetType = typeRepository.findById(entity.getAssetType().getId());
             assetType.ifPresent(type -> dto.setAssetTypeName(type.getName()));
         }
 
