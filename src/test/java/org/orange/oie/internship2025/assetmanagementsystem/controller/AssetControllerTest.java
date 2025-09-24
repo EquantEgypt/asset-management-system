@@ -159,6 +159,14 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         assertThat(categories.get(0).getName()).isEqualTo("Hardware");
         assertThat(categories.get(1).getName()).isEqualTo("Software");
     }
+    @DatabaseSetup(value = "/dataset/getAllAssets_withExistingAssets_shouldReturnList.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void getAvailableAssets_withExistingAssets_shouldReturnList() throws Exception {
 
+        mockMvc.perform(get("/assets/available"))
+                .andExpect(status().isOk());
+    }
 }
 

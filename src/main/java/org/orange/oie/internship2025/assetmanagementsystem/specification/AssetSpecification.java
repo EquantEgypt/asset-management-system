@@ -1,9 +1,12 @@
 package org.orange.oie.internship2025.assetmanagementsystem.specification;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
 
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Set;
@@ -40,6 +43,18 @@ public class AssetSpecification {
         }
 
         return spec;
+    }
+
+    public static Specification<Asset> availableByType(String type) {
+        return (root, query, cb) -> {
+            if (type == null || type.isBlank()) {
+                return cb.equal(root.get("status"), AssetStatus.AVAILABLE);
+            }
+            return cb.and(
+                    cb.equal(root.get("status"), AssetStatus.AVAILABLE),
+                    cb.equal(root.join("type").get("name"), type)
+            );
+        };
     }
 
     private static Specification<AssetAssignment> roleBasedSpec(User user) {

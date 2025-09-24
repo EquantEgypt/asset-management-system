@@ -5,12 +5,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class UserSpecifications {
 
-    public static Specification<User> hasusername
-            (String searchWord) {
+    public static Specification<User> hasNameOrEmail(String searchWord) {
         return (root, query, cb) ->{
-return  cb.or(
-        cb.like(cb.lower(root.get("username")), "%" + searchWord.toLowerCase() + "%")
-);
+            return  cb.or(
+                    cb.like(cb.lower(root.get("username")), "%" + searchWord.toLowerCase() + "%"),
+                    cb.like(cb.lower(root.get("email")), "%" + searchWord.toLowerCase() + "%")
+            );
         };
 
     }

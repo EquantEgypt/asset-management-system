@@ -7,8 +7,11 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface AssetService {
     AssetDto addAsset(AssetRequestDto assetDto);
-
     Page<MiniAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
+    List<AssetDto> getAvailableAsset(String type);
+
 }
