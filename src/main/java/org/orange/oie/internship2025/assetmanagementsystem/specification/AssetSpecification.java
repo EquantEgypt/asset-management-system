@@ -4,6 +4,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilt
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class AssetSpecification {
                     break;
                 case "EMPLOYEE":
                     predicates.add(cb.equal(userJoin.get("id"), currentUser.getId()));
+                    break;
+                case "IT":
+                    predicates.add(cb.equal(root.get("status"), AssetStatus.UNDER_MAINTENANCE.name()));
                     break;
             }
 
