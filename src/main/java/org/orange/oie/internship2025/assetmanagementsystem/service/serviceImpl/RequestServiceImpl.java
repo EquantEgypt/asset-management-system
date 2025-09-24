@@ -2,7 +2,9 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
@@ -45,18 +47,23 @@ public class RequestServiceImpl implements RequestService {
         if (requestDTO.getRequesterId() == null) {
             requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
         }
+        User user = userRepository.findById(requestDTO.getRequesterId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + requestDTO.getRequesterId()));
 
-        // Validate assetId
+        AssetType type = typeRepository.findById(requestDTO.getAssetTypeId())
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.INVALID_ASSET, "type not found with id: " + requestDTO.getAssetId()));
+
+        if (requestDTO.getAssetId() == null && requestDTO.getRequestType().name().equals(RequestType.MAINTENANCE.name())) {
+            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "can't be maintenance without an asset");
+        }
         if (requestDTO.getAssetId() != null && !assetRepository.existsById(requestDTO.getAssetId())) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset with id " + requestDTO.getAssetId() + " not found");
         }
 
-        // Validate assetTypeId
         if (requestDTO.getAssetTypeId() != null && !typeRepository.existsById(requestDTO.getAssetTypeId())) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "AssetType with id " + requestDTO.getAssetTypeId() + " not found");
         }
 
-        // Validate requesterId
         if (requestDTO.getRequesterId() != null && !userRepository.existsById(requestDTO.getRequesterId())) {
             throw new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User with id " + requestDTO.getRequesterId() + " not found");
         }
@@ -87,7 +94,7 @@ public class RequestServiceImpl implements RequestService {
                 List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
                         .stream().map(User::getId).collect(Collectors.toList());
                 return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
-            default: // EMPLOYEE and other roles
+            default:
                 return requestRepository.findAllByRequesterId(currentUser.getId(), pageable).map(mapper::toDTO);
         }
     }
