@@ -22,8 +22,9 @@ public class AssetRequest {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
-    @Column(name = "type_id", nullable = false)
-    private Long assetTypeId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "type_id", nullable = false)
+    private AssetType assetType;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "requester_id", nullable = false)
