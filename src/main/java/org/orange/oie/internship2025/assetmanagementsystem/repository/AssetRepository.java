@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AssetRepository extends JpaRepository<Asset, Long> , JpaSpecificationExecutor<Asset> {
 public Asset findByName(String name);
-List<Asset> findByStatus(AssetStatus status);
-
+Optional<Asset> findByIdAndTypeIdAndCategoryId(Long assetId, Long typeId, Long categoryId);
 }

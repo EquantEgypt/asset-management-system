@@ -37,7 +37,6 @@ public class AssetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
     @GetMapping("/types")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
 

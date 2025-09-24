@@ -6,6 +6,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatu
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -27,9 +28,7 @@ public class AssignmentMapper {
         assignment.setAssignedTo(user);
         assignment.setStatus(AssignmentStatus.ACTIVE);
         assignment.setAssignmentDate(
-                request.getAssignmentDate()
-        );
-        assignment.setReturnDate(request.getReturnDate());
+                LocalDate.now()        );
         assignment.setNote(request.getNote());
 
         return assignment;

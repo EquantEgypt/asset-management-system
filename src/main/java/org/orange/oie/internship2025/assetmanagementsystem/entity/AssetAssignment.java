@@ -30,16 +30,12 @@ public class AssetAssignment {
 
     @NotNull
     @Column(nullable = false,name = "assignment_date")
-    private LocalDate assignmentDate;
+    private LocalDate assignmentDate; //how to make the mapper make todays date by default
 
     @NotNull
     @Column(nullable = false,name = "status")
     @Enumerated(EnumType.STRING)
     private AssignmentStatus status;
-
-
-    @Column(name="return_date")
-    private LocalDate returnDate;
 
     @Column(columnDefinition = "TEXT")
     private String note;
