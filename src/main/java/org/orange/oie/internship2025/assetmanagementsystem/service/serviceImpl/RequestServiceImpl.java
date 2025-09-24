@@ -47,11 +47,6 @@ public class RequestServiceImpl implements RequestService {
         if (requestDTO.getRequesterId() == null) {
             requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
         }
-        User user = userRepository.findById(requestDTO.getRequesterId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + requestDTO.getRequesterId()));
-
-        AssetType type = typeRepository.findById(requestDTO.getAssetTypeId())
-                .orElseThrow(() -> new BusinessException(ApiReturnCode.INVALID_ASSET, "type not found with id: " + requestDTO.getAssetId()));
 
         if (requestDTO.getAssetId() == null && requestDTO.getRequestType().name().equals(RequestType.MAINTENANCE.name())) {
             throw new BusinessException(ApiReturnCode.BAD_REQUEST, "can't be maintenance without an asset");
