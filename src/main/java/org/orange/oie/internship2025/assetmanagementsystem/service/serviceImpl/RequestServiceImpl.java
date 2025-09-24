@@ -2,7 +2,9 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
@@ -44,10 +46,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ResponseDTO addRequest(RequestDTO requestDTO) {
-
-        if (requestDTO.getAssetId() == null && requestDTO.getRequestType().name().equals(RequestType.MAINTENANCE.name())) {
-            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "can't be maintenance without an asset");
+        if (requestDTO.getRequesterId() == null) {
+            requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
         }
+
+        // Validate assetId
         if (requestDTO.getAssetId() != null && !assetRepository.existsById(requestDTO.getAssetId())) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset with id " + requestDTO.getAssetId() + " not found");
         }
@@ -55,8 +58,9 @@ public class RequestServiceImpl implements RequestService {
         if (requestDTO.getAssetTypeId() != null && !typeRepository.existsById(requestDTO.getAssetTypeId())) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "AssetType with id " + requestDTO.getAssetTypeId() + " not found");
         }
-        Optional<User> user = userRepository.findById(requestDTO.getRequesterId());
-        if (requestDTO.getRequesterId() != null && !user.isPresent()) {
+
+        // Validate requesterId
+        if (requestDTO.getRequesterId() != null && !userRepository.existsById(requestDTO.getRequesterId())) {
             throw new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User with id " + requestDTO.getRequesterId() + " not found");
         }
         if (requestDTO.getRequesterId() != SecurityUtils.getCurrentUserId()) {
