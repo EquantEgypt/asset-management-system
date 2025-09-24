@@ -1,10 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetHistory;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiResponse;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
@@ -41,7 +38,9 @@ public class AssetAssignmentServiceImpl implements AssetAssignmentService {
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User not found"));
-        validateAssetAssignable(asset);
+        Long typeId=request.getTypeId();
+        Long categoryId=request.getCategoryId();
+        validateAssetAssignable(asset,categoryId,typeId);
         asset.setStatus(AssetStatus.ASSIGNED);
         assetRepository.save(asset);
         AssetAssignment assignment = assignmentMapper.toAssignAsset(request, asset, user);
@@ -50,10 +49,17 @@ public class AssetAssignmentServiceImpl implements AssetAssignmentService {
         assetHistoryRepository.save(history);
         return assignment;
     }
-    private void validateAssetAssignable(Asset asset) {
+    private void validateAssetAssignable(Asset asset,Long categoryId ,Long typeId) {
         if (asset.getStatus() != AssetStatus.AVAILABLE) {
             throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Asset is not available");
         }
-    }
+        boolean exists = assetRepository
+                .findByIdAndTypeIdAndCategoryId(asset.getId(), typeId, categoryId)
+                .isPresent();
+
+        if (!exists) {
+            throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND,
+                    "Asset does not match the selected category and type");
+        }    }
 }
 

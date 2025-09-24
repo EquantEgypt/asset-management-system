@@ -9,7 +9,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRe
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
-import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,8 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import java.time.LocalDate;
-
 import static org.mockito.Mockito.mockStatic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,10 +40,9 @@ public class AssetAssignmentControllerTest extends AbstractIntegrationTest {
             AssetAssignmentRequest request = new AssetAssignmentRequest();
             request.setAssetId(1L);
             request.setUserId(2L);
-            request.setAssignmentDate(LocalDate.now());
-            request.setStatus(AssignmentStatus.ACTIVE);
+request.setCategoryId(1L);
+request.setTypeId(1L);
             request.setNote("Assigning Laptop to maryiam");
-
             mockMvc.perform(post("/asset-assignments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
@@ -64,8 +60,8 @@ public class AssetAssignmentControllerTest extends AbstractIntegrationTest {
             AssetAssignmentRequest request = new AssetAssignmentRequest();
             request.setAssetId(2L);
             request.setUserId(2L);
-            request.setAssignmentDate(LocalDate.now());
-            request.setStatus(AssignmentStatus.ACTIVE);
+            request.setCategoryId(1L);
+            request.setTypeId(1L);
             request.setNote("Assigning Chair to maryiam");
 
             mockMvc.perform(post("/asset-assignments")

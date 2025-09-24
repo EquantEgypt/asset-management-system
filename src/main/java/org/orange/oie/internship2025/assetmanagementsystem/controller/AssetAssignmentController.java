@@ -1,4 +1,5 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
+import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class AssetAssignmentController {
     @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public ResponseEntity assignAsset(
-            @RequestBody AssetAssignmentRequest request
+            @Valid  @RequestBody AssetAssignmentRequest request
     ) {
       assetAssignmentService.assignAsset(request);
         return ResponseEntity.ok("Asset Assigned Successfully");

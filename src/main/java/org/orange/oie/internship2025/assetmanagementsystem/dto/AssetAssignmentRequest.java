@@ -2,6 +2,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatus;
 
 import java.time.LocalDate;
@@ -15,9 +17,10 @@ public class AssetAssignmentRequest {
     private Long assetId;
     @NotNull
     private Long userId;
-    private LocalDate assignmentDate;
     private String note;
-    private LocalDate returnDate;
-private  AssignmentStatus status;
+    @NotNull
+    private Long typeId;
+    @NotNull
+    private Long categoryId;
 
 }
