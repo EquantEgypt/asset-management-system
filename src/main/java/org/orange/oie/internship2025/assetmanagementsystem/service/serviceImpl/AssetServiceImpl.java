@@ -66,7 +66,6 @@ public class AssetServiceImpl implements AssetService {
 
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
-
         return assetMapper.toDto(savedAsset);
     }
 

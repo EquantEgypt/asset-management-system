@@ -62,15 +62,13 @@ public class RequestMapper {
             dto.setApprovedDate(entity.getApprovedDate());
         }
         dto.setId(entity.getId());
-        dto.setAssetTypeId(entity.getAssetTypeId());
+        dto.setAssetTypeId(entity.getAssetType().getId());
 
         // Find and set the asset type name
-        if (entity.getAssetTypeId() != null) {
-            Optional<AssetType> assetType = typeRepository.findById(entity.getAssetTypeId());
+        if (entity.getAssetType().getId() != null) {
+            Optional<AssetType> assetType = typeRepository.findById(entity.getAssetType().getId());
             assetType.ifPresent(type -> dto.setAssetTypeName(type.getName()));
         }
-
-        dto.setAssetTypeId(entity.getAssetType().getId());
 
         dto.setRequester(entity.getRequester().getUsername());
         dto.setRequestDate(entity.getRequestDate());
