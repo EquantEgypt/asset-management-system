@@ -10,7 +10,7 @@ VALUES (
    'admin',
    'System Administrator',
    'admin@orange.com',
-   '$2a$12$QGAysO8P4/rHSRfbN7wVFuRC58yxVnfSqBYb6Dam5qDe2kRyWyZAq',
+   '$2a$12$iRQs9PmUSBZVM2.OA9yx.ugSVK1Z7ZPhlsaDLw0zWIpcDjJnLiJgi',
    1,                 -- IT department
    1,                 -- ADMIN role
    '01000000001',
@@ -26,7 +26,7 @@ VALUES (
    'it_user',
    'IT Support',
    'it@orange.com',
-   '$2a$12$QGAysO8P4/rHSRfbN7wVFuRC58yxVnfSqBYb6Dam5qDe2kRyWyZAq',
+   '$2a$12$iRQs9PmUSBZVM2.OA9yx.ugSVK1Z7ZPhlsaDLw0zWIpcDjJnLiJgi',
    1,                 -- IT department
    2,                 -- IT role
    '01000000002',
@@ -42,7 +42,7 @@ VALUES (
    'employee1',
    'John Employee',
    'employee1@orange.com',
-   '$2a$12$QGAysO8P4/rHSRfbN7wVFuRC58yxVnfSqBYb6Dam5qDe2kRyWyZAq',
+   '$2a$12$iRQs9PmUSBZVM2.OA9yx.ugSVK1Z7ZPhlsaDLw0zWIpcDjJnLiJgi',
    2,
    3,
    '01000000003',
