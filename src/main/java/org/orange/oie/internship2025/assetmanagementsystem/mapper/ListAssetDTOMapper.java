@@ -21,7 +21,7 @@ public class ListAssetDTOMapper {
         listAssetDTO.setSerialNumber(asset.getSerialNumber());
         listAssetDTO.setName(asset.getName());
         listAssetDTO.setType(asset.getType().getName());
-        listAssetDTO.setCategory(asset.getCategory().getName());
+        listAssetDTO.setCategory(asset.getCategory());
         listAssetDTO.setBrand(asset.getBrand());
         listAssetDTO.setStatus(asset.getStatus().name());
 
