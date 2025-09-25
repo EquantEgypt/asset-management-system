@@ -52,4 +52,22 @@ public class User {
 
     @Column(name= "updated_at")
     private LocalDate updatedAt;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", department=" + department +
+                ", role=" + role +
+                ", phone='" + phone + '\'' +
+                ", hireDate=" + hireDate +
+                ", isActive=" + isActive +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

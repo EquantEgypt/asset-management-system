@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.MiniAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
@@ -49,8 +49,8 @@ public class AssetController {
         return categoryService.getAllCategories();
     }
     @GetMapping
-    public ResponseEntity<Page<MiniAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO,Pageable pageable) {
-        Page<MiniAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
+    public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
+        Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
     @GetMapping("/available")

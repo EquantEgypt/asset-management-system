@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MiniAssetDTO {
+public class ListAssetDTO {
     private Long id;
+    private String serialNumber;
     private String name;
     private String type;
     private String category;
