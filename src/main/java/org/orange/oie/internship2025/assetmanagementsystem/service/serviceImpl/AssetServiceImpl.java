@@ -28,8 +28,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.List;
-
 @Transactional
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -61,6 +59,11 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public AssetDto addAsset(AssetRequestDto assetDto) {
+
+        if (assetRepository.existsBySerialNumber(assetDto.getSerialNumber())) {
+            throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Another asset with this serial number already exists.");
+        }
+
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
 

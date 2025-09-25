@@ -1,0 +1,7 @@
+<dataset>
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" category_id="1" name="Laptops"/>
+    <asset_type id="2" category_id="1" name="Monitors"/>
+    <asset id="1" name="Laptop" brand="Dell" serial_number="SN-LAP-001" category_id="1" type_id="1" purchase_date="2023-01-15" warranty_end_date="2026-01-15" status="AVAILABLE"/>
+    <asset id="2" name="Monitor" brand="HP" serial_number="SN-MON-002" category_id="1" type_id="2" purchase_date="2023-03-10" warranty_end_date="2026-03-10" status="ASSIGNED"/>
+</dataset>

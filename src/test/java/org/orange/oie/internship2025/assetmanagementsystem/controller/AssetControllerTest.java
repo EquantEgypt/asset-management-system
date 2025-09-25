@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,7 +82,7 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getAllAssets_withExistingAssets_shouldReturnList() throws Exception {
 
-        mockMvc.perform(get("/assets"))
+        mockMvc.perform(get("/assets/all"))
                 .andExpect(status().isOk());
     }
 
@@ -159,14 +161,37 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         assertThat(categories.get(0).getName()).isEqualTo("Hardware");
         assertThat(categories.get(1).getName()).isEqualTo("Software");
     }
-    @DatabaseSetup(value = "/dataset/getAllAssets_withExistingAssets_shouldReturnList.xml", type = DatabaseOperation.CLEAN_INSERT)
+
     @Test
     @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void getAvailableAssets_withExistingAssets_shouldReturnList() throws Exception {
+    @DatabaseSetup(value = "/dataset/updateAsset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withValidRequest_shouldReturnUpdatedAsset() throws Exception {
+        UpdateAssetDto updateDto = new UpdateAssetDto();
+        updateDto.setName("New Laptop Name");
+        updateDto.setBrand("HP");
+        updateDto.setSerialNumber("SN-LAP-003");
 
-        mockMvc.perform(get("/assets/available"))
-                .andExpect(status().isOk());
+        mockMvc.perform(put("/assets/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.assetName", is("New Laptop Name")))
+                .andExpect(jsonPath("$.brand", is("HP")))
+                .andExpect(jsonPath("$.serialNumber", is("SN-LAP-003")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withDuplicateSerialNumber_shouldReturnConflict() throws Exception {
+        UpdateAssetDto updateDto = new UpdateAssetDto();
+        updateDto.setSerialNumber("SN-MON-002");
+
+        mockMvc.perform(put("/assets/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDto)))
+                .andExpect(status().isConflict());
     }
 }
-
