@@ -25,6 +25,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +49,7 @@ public class RequestServiceImpl implements RequestService {
             requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
         }
 
+
         if (requestDTO.getAssetId() == null && requestDTO.getRequestType().name().equals(RequestType.MAINTENANCE.name())) {
             throw new BusinessException(ApiReturnCode.BAD_REQUEST, "can't be maintenance without an asset");
         }
@@ -58,8 +60,8 @@ public class RequestServiceImpl implements RequestService {
         if (requestDTO.getAssetTypeId() != null && !typeRepository.existsById(requestDTO.getAssetTypeId())) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "AssetType with id " + requestDTO.getAssetTypeId() + " not found");
         }
-
-        if (requestDTO.getRequesterId() != null && !userRepository.existsById(requestDTO.getRequesterId())) {
+        Optional<User> user = userRepository.findById(requestDTO.getRequesterId());
+        if (requestDTO.getRequesterId() != null && !user.isPresent()) {
             throw new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User with id " + requestDTO.getRequesterId() + " not found");
         }
         if (requestDTO.getRequesterId() != SecurityUtils.getCurrentUserId()) {
@@ -73,6 +75,7 @@ public class RequestServiceImpl implements RequestService {
 
         AssetRequest assetRequest = mapper.toEntity(requestDTO);
         AssetRequest req = requestRepository.save(assetRequest);
+        req.setRequester(user.get());
         ResponseDTO response = mapper.toDTO(req);
         return response;
     }
