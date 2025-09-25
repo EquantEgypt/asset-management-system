@@ -1,6 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.exception;
 
-import org.orange.oie.internship2025.assetmanagementsystem.model.errors.ApiReturnCode;
+import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 
 public class BusinessException extends RuntimeException {
 

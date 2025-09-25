@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    <!-- Asset Categories -->
+    <asset_category id="1" name="Electronics"/>
+
+    <!-- Asset Types -->
+    <asset_type id="1" name="Laptop" category_id="1"/>
+    <asset_type id="2" name="Monitor" category_id="1"/>
+
+</dataset>

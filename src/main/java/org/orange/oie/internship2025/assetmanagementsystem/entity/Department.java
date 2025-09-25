@@ -11,8 +11,8 @@ import lombok.*;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long departmentId;
+    private Long id;
 
-    @Column(name = "department_name", nullable = false, unique = true)
-    private String departmentName;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 }
