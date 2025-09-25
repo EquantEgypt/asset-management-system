@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecificationExecutor<Asset> {
     Asset findByName(String name);
-        List<Asset> findByStatus(AssetStatus status);
+    List<Asset> findByStatus(AssetStatus status);
+    Asset findAssetById(Long id);
+
 }

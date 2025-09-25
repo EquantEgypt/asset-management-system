@@ -1,26 +1,26 @@
-package org.orange.oie.internship2025.assetmanagementsystem.controller;
-
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiResponse;
-import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequestMapping("/asset-assignments")
-
-public class AssetAssignmentController {
-    private final AssetAssignmentService assetAssignmentService;
-    public AssetAssignmentController( AssetAssignmentService assetAssignmentService) {
-        this.assetAssignmentService=assetAssignmentService;
-    }
-    @PostMapping()
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    public ResponseEntity<ApiResponse> assignAsset(
-            @RequestBody AssetAssignmentRequest request
-    ) {
-        return assetAssignmentService.assignAsset(request);
-    }
-}
+//package org.orange.oie.internship2025.assetmanagementsystem.controller;
+//
+//import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
+//import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiResponse;
+//import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
+//
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.web.bind.annotation.*;
+//
+//@RestController
+//@RequestMapping("/asset-assignments")
+//
+//public class AssetAssignmentController {
+//    private final AssetAssignmentService assetAssignmentService;
+//    public AssetAssignmentController( AssetAssignmentService assetAssignmentService) {
+//        this.assetAssignmentService=assetAssignmentService;
+//    }
+//    @PostMapping()
+//    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+//    public ResponseEntity<ApiResponse> assignAsset(
+//            @RequestBody AssetAssignmentRequest request
+//    ) {
+//        return assetAssignmentService.assignAsset(request);
+//    }
+//}
