@@ -156,6 +156,7 @@
                     <excludes>
                         <exclude>org/orange/oie/internship2025/assetmanagementsystem/App.*</exclude>
                         <exclude>**/util/**</exclude>
+                        <exclude>**/entity/**</exclude>
                         <exclude>**/security/**</exclude>
                         <exclude>**/specification/**</exclude>
                         <exclude>**/mapper/**</exclude>

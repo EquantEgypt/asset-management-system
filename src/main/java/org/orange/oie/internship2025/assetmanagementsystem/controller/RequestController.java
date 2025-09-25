@@ -24,10 +24,4 @@ public class RequestController {
         return ResponseEntity.ok(response);
 
     }
-
-    @GetMapping
-    public ResponseEntity<Page<ResponseDTO>> getRequests(Pageable pageable) {
-        return ResponseEntity.ok(requestService.getRequests(pageable));
-    }
-
 }

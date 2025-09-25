@@ -123,6 +123,98 @@ public class RequestControllerTest extends AbstractIntegrationTest {
                     .andExpect(status().isForbidden());
         }
     }
+@Test
+@Transactional
+@WithMockUser(username = "Hoto", authorities = {"ADMIN"})
+@DatabaseSetup(value = "/dataset/addRequest_withValidRequest_shouldReturnCreatedRequest.xml",
+        type = DatabaseOperation.CLEAN_INSERT)
+void addRequest_whenMaintenanceWithoutAsset_shouldReturnBadRequest() throws Exception {
+    RequestDTO dto = new RequestDTO();
+    dto.setRequesterId(1L);
+    dto.setRequestType(RequestType.MAINTENANCE);
+    dto.setAssetId(null); // invalid: maintenance requires asset
+
+    try (MockedStatic<SecurityUtils> mocked = Mockito.mockStatic(SecurityUtils.class)) {
+        mocked.when(SecurityUtils::getCurrentUser)
+              .thenReturn(getLoggedInUser("ADMIN", 1L, "Hoto", 10L));
+        mocked.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+
+        mockMvc.perform(post("/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+}
+
+@Test
+@Transactional
+@WithMockUser(username = "Hoto", authorities = {"ADMIN"})
+@DatabaseSetup(value = "/dataset/addRequest_withValidRequest_shouldReturnCreatedRequest.xml",
+        type = DatabaseOperation.CLEAN_INSERT)
+void addRequest_whenAssetDoesNotExist_shouldReturnNotFound() throws Exception {
+    RequestDTO dto = new RequestDTO();
+    dto.setRequesterId(1L);
+    dto.setRequestType(RequestType.NEW);
+    dto.setAssetId(999L); // non-existent
+    dto.setAssetTypeId(1L);
+
+    try (MockedStatic<SecurityUtils> mocked = Mockito.mockStatic(SecurityUtils.class)) {
+        mocked.when(SecurityUtils::getCurrentUser)
+              .thenReturn(getLoggedInUser("ADMIN", 1L, "Hoto", 10L));
+        mocked.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+
+        mockMvc.perform(post("/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isNotFound());
+    }
+}
+
+@Test
+@Transactional
+@WithMockUser(username = "Hoto", authorities = {"ADMIN"})
+@DatabaseSetup(value = "/dataset/addRequest_withValidRequest_shouldReturnCreatedRequest.xml",
+        type = DatabaseOperation.CLEAN_INSERT)
+void addRequest_whenAssetTypeDoesNotExist_shouldReturnNotFound() throws Exception {
+    RequestDTO dto = new RequestDTO();
+    dto.setRequesterId(1L);
+    dto.setRequestType(RequestType.NEW);
+    dto.setAssetTypeId(999L); // non-existent
+
+    try (MockedStatic<SecurityUtils> mocked = Mockito.mockStatic(SecurityUtils.class)) {
+        mocked.when(SecurityUtils::getCurrentUser)
+              .thenReturn(getLoggedInUser("ADMIN", 1L, "Hoto", 10L));
+        mocked.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+
+        mockMvc.perform(post("/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isNotFound());
+    }
+}
+
+@Test
+@Transactional
+@WithMockUser(username = "Hoto", authorities = {"ADMIN"})
+@DatabaseSetup(value = "/dataset/addRequest_withValidRequest_shouldReturnCreatedRequest.xml",
+        type = DatabaseOperation.CLEAN_INSERT)
+void addRequest_whenUserDoesNotExist_shouldReturnNotFound() throws Exception {
+    RequestDTO dto = new RequestDTO();
+    dto.setRequesterId(999L); // user not in DB
+    dto.setRequestType(RequestType.NEW);
+    dto.setAssetTypeId(1L);
+
+    try (MockedStatic<SecurityUtils> mocked = Mockito.mockStatic(SecurityUtils.class)) {
+        mocked.when(SecurityUtils::getCurrentUser)
+              .thenReturn(getLoggedInUser("ADMIN", 1L, "Hoto", 10L));
+        mocked.when(SecurityUtils::getCurrentUserId).thenReturn(1L);
+
+        mockMvc.perform(post("/request")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isNotFound());
+    }
+}
 
     // --- helpers ---
 

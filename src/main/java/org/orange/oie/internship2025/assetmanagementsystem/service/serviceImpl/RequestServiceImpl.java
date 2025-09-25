@@ -2,9 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
@@ -45,10 +43,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ResponseDTO addRequest(RequestDTO requestDTO) {
-        if (requestDTO.getRequesterId() == null) {
-            requestDTO.setRequesterId(SecurityUtils.getCurrentUserId());
-        }
-
 
         if (requestDTO.getAssetId() == null && requestDTO.getRequestType().name().equals(RequestType.MAINTENANCE.name())) {
             throw new BusinessException(ApiReturnCode.BAD_REQUEST, "can't be maintenance without an asset");
@@ -78,22 +72,5 @@ public class RequestServiceImpl implements RequestService {
         req.setRequester(user.get());
         ResponseDTO response = mapper.toDTO(req);
         return response;
-    }
-
-    @Override
-    public Page<ResponseDTO> getRequests(Pageable pageable) {
-        User currentUser = SecurityUtils.getCurrentUser();
-        String role = currentUser.getRole().getName();
-
-        switch (role) {
-            case "ADMIN":
-                return requestRepository.findAll(pageable).map(mapper::toDTO);
-            case "DEPARTMENT_MANAGER":
-                List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
-                        .stream().map(User::getId).collect(Collectors.toList());
-                return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
-            default:
-                return requestRepository.findAllByRequesterId(currentUser.getId(), pageable).map(mapper::toDTO);
-        }
     }
 }

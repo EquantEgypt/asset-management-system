@@ -7,5 +7,4 @@ import org.springframework.data.domain.Pageable;
 public interface RequestService {
 
      ResponseDTO addRequest(RequestDTO requestDTO);
-     Page<ResponseDTO> getRequests(Pageable pageable);
 }
