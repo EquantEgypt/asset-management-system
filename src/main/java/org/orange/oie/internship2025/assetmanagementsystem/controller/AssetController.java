@@ -5,6 +5,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
@@ -38,6 +39,21 @@ public class AssetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> updateAsset(@PathVariable Long id, @Valid @RequestBody UpdateAssetDto Dto) {
+        AssetDto dto = assetService.updateAsset(id, Dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> getAssetById(@PathVariable Long id) {
+        AssetDto dto = assetService.getAssetById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
@@ -48,6 +64,13 @@ public class AssetController {
     @GetMapping("/categories")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<AssetDto>> getAllAssets() {
+        List<AssetDto> assets = assetService.getAllAssets();
+        return ResponseEntity.ok(assets);
     }
 
     @GetMapping
