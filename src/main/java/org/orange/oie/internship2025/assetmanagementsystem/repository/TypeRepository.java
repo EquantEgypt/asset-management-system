@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface TypeRepository extends JpaRepository<AssetType, Long> {
     public AssetType findByName(String name);
-
     List<AssetType> findByCategoryId(Long categoryId);
 }
