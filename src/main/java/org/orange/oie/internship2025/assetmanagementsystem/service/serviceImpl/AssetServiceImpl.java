@@ -5,7 +5,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignment;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.ListAssetDTOMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetAssignmentRepository;
@@ -55,7 +54,6 @@ public class AssetServiceImpl implements AssetService {
         Page<Asset> assets = assetRepository.findAll(spec, pageable);
         return assets.map(mapper::toDto);
     }
-
     @Override
     public List<AssetDto> getAvailableAsset(String type) {
         Specification<Asset> spec = AssetSpecification.availableByType(type);

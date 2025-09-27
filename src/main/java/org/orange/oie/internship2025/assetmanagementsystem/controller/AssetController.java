@@ -52,7 +52,6 @@ public class AssetController {
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
-
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);

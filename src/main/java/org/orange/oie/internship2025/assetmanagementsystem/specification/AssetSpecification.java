@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AssetSpecification {
-        public static Specification<Asset> availableByType(String type) {
+    public static Specification<Asset> availableByType(String type) {
         return (root, query, cb) -> {
             if (type == null || type.isBlank()) {
                 return cb.equal(root.get("status"), AssetStatus.AVAILABLE);
@@ -27,6 +27,7 @@ public class AssetSpecification {
         };
     }
     public static Specification<Asset> buildSpecification(
+
             AssignedAssetFilterDTO filter, User currentUser) {
 
         return (root, query, cb) -> {

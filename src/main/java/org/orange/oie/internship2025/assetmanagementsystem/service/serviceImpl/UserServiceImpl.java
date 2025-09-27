@@ -27,22 +27,17 @@ public class UserServiceImpl implements UserService {
 
     public Page<UserDTO> searchUsers(String searchWord, String role, Long departmentId, Pageable pageable) {
         User user = SecurityUtils.getCurrentUser();
-
         String userRole = user.getRole().getName();
-
         if ("DEPARTMENT_MANAGER".equals(userRole))
             departmentId = user.getDepartment().getId();
 
-
         Specification<User> spec = Specification.allOf();
-
         if (searchWord != null && !searchWord.trim().isEmpty()) {
             spec = spec.and(UserSpecifications.hasNameOrEmail(searchWord));
         }
         if (role != null && !role.trim().isEmpty()) {
             spec = spec.and(UserSpecifications.hasRole(role));
         }
-
         if (departmentId != null) {
             spec = spec.and(UserSpecifications.inDepartment(departmentId));
         }
