@@ -54,4 +54,10 @@ public class AssetServiceImpl implements AssetService {
         Page<Asset> assets = assetRepository.findAll(spec, pageable);
         return assets.map(mapper::toDto);
     }
+    @Override
+    public List<AssetDto> getAvailableAsset(String type) {
+        Specification<Asset> spec = AssetSpecification.availableByType(type);
+        List<Asset> availableAssets = assetRepository.findAll(spec);
+        return assetMapper.toDtoList(availableAssets);
+    }
 }

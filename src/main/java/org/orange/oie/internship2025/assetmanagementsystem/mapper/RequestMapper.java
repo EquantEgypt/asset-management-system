@@ -53,7 +53,8 @@ public class RequestMapper {
         }
         ResponseDTO dto = new ResponseDTO();
         if (entity.getAsset() != null) {
-            dto.setAsset(entity.getAsset());
+            dto.setAssetId(entity.getAsset().getId());
+            dto.setAssetName(entity.getAsset().getName());
         }
         if (entity.getApprovedBy() != null) {
             dto.setApprovedBy(entity.getApprovedBy().getUsername());
@@ -66,9 +67,16 @@ public class RequestMapper {
         if (entity.getAssetType().getId() != null) {
             Optional<AssetType> assetType = typeRepository.findById(entity.getAssetType().getId());
             assetType.ifPresent(type -> dto.setAssetTypeName(type.getName()));
+
+
+            if (entity.getAssetType().getCategory() != null) {
+                dto.setCategoryId(entity.getAssetType().getCategory().getId());
+                dto.setCategoryName(entity.getAssetType().getCategory().getName());
+            }
         }
 
         dto.setRequester(entity.getRequester().getUsername());
+        dto.setRequesterId(entity.getRequester().getId());
         dto.setRequestDate(entity.getRequestDate());
         dto.setStatus(entity.getStatus());
         dto.setRequestType(entity.getRequestType());

@@ -11,9 +11,6 @@ import java.util.List;
 
 public interface AssetService {
     AssetDto addAsset(AssetRequestDto assetDto);
-    Page<MiniAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
     List<AssetDto> getAvailableAsset(String type);
-
-
     Page<ListAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
 }
