@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -193,5 +194,83 @@ public class AssetControllerTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getAssetById_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAssetById_withExistingAsset_shouldReturnAsset() throws Exception {
+        mockMvc.perform(get("/assets/{id}", 101L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.assetId", is(101)))
+                .andExpect(jsonPath("$.assetName", is("Test Laptop")))
+                .andExpect(jsonPath("$.brand", is("Dell")))
+                .andExpect(jsonPath("$.serialNumber", is("SN-TEST-101")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getAssetById_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAssetById_withNonExistentAsset_shouldReturnNotFound() throws Exception {
+        mockMvc.perform(get("/assets/{id}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getFilteredAsset_byStatus_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets")
+                        .param("status", "AVAILABLE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].name", is("HR Monitor")))
+                .andExpect(jsonPath("$.content[1].name", is("Guest Chair")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getFilteredAsset_byType_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets")
+                        .param("type", "Laptop")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].name", is("Dev Laptop")))
+                .andExpect(jsonPath("$.content[1].name", is("Maintenance Laptop")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "IT"})
+    @DatabaseSetup(value = "/dataset/getAvailableAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAvailableAsset_noType_shouldReturnAllAvailable() throws Exception {
+        mockMvc.perform(get("/assets/available")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].assetName", is("Available Laptop")))
+                .andExpect(jsonPath("$[1].assetName", is("Available Monitor")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "it_user", authorities = {"IT"})
+    @DatabaseSetup(value = "/dataset/getAvailableAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAvailableAsset_byType_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets/available")
+                        .param("type", "Monitor")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].assetName", is("Available Monitor")));
     }
 }

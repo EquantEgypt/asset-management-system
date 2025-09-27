@@ -1,0 +1,14 @@
+<dataset>
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" category_id="1" name="Laptop"/>
+    <asset id="101"
+           name="Test Laptop"
+           brand="Dell"
+           serial_number="SN-TEST-101"
+           category_id="1"
+           type_id="1"
+           purchase_date="2024-01-10"
+           warranty_end_date="2027-01-10"
+           status="AVAILABLE"
+    />
+</dataset>
