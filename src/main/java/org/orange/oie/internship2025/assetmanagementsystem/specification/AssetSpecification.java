@@ -55,6 +55,7 @@ public class AssetSpecification {
                         break;
                 }
             }
+
             // Add normal filters
             if (filter.getAssetName() != null && !filter.getAssetName().isBlank()) {
                 predicates.add(cb.like(root.get("name"), "%" + filter.getAssetName() + "%"));
