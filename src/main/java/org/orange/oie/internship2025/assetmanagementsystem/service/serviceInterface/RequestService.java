@@ -12,6 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 public interface RequestService {
 
      ResponseDTO addRequest(RequestDTO requestDTO);
-     Page<ResponseDTO> getRequests(RequestStatus status, RequestType type, Pageable pageable);
+     Page<ResponseDTO> getRequests(RequestStatus status, RequestType type, String search, Pageable pageable);
      ResponseDTO  respondToRequest(ResponseDTO response);
 }
