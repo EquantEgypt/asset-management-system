@@ -25,6 +25,7 @@ public class RequestMapper {
     @Autowired
     TypeRepository typeRepository; // Added repository
 
+
     public AssetRequest toEntity(RequestDTO dto) {
         if (dto == null) {
             return null;
@@ -34,9 +35,11 @@ public class RequestMapper {
         User user = new User();
         user.setId(dto.getRequesterId());
         entity.setRequester(user);
-        Asset asset = new Asset();
-        asset.setId(dto.getAssetId());
-        entity.setAsset(asset);
+        if(dto.getAssetId()!=null) {
+            Asset asset = new Asset();
+            asset.setId(dto.getAssetId());
+            entity.setAsset(asset);
+        }
         AssetType type = new AssetType();
         type.setId(dto.getAssetTypeId());
         entity.setAssetType(type);
@@ -45,6 +48,7 @@ public class RequestMapper {
         entity.setStatus(RequestStatus.PENDING);
         entity.setNote(dto.getNote());
         return entity;
+
     }
 
     public ResponseDTO toDTO(AssetRequest entity) {

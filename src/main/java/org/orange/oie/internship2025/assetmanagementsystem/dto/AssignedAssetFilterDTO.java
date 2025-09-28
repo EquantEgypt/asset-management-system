@@ -17,4 +17,21 @@ public class AssignedAssetFilterDTO {
     private int size = 10;
     private String sortBy = "id";
     private boolean ascending = true;
+
+    @Override
+    public String toString() {
+        return "AssignedAssetFilterDTO{" +
+                "assetName='" + assetName + '\'' +
+                ", status='" + status + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", assignedUser='" + assignedUser + '\'' +
+                ", department='" + department + '\'' +
+                ", page=" + page +
+                ", size=" + size +
+                ", sortBy='" + sortBy + '\'' +
+                ", ascending=" + ascending +
+                '}';
+    }
 }

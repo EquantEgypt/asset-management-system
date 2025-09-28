@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ResponseDTO {
     @NotNull(message = "ID cannot be null")
     private Long id;
+    private Asset asset;
     private Long assetId;
     private String assetName;
     private Long assetTypeId;

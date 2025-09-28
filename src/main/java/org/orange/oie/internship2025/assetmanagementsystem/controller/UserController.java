@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAuthority('DEPARTMENT_MANAGER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENT_MANAGER')")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
             Pageable pageable,
             @RequestParam(required = false) String search,

@@ -21,10 +21,10 @@ public class RequestSpecifications {
             String likePattern = "%" + search.trim().toLowerCase() + "%";
             return cb.or(
                     cb.like(cb.lower(root.get("assetType").get("name")), likePattern),
-                    cb.and(
-                            cb.isNotNull(root.get("asset")),
-                            cb.like(cb.lower(root.get("asset").get("name")), likePattern)
-                    ),
+//                    cb.and(
+//                            cb.isNotNull(root.get("asset")),
+//                            cb.like(cb.lower(root.get("asset").get("name")), likePattern)
+//                    ),
                     cb.like(cb.lower(root.get("requester").get("email")), likePattern)
             );
         };

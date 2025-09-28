@@ -21,4 +21,19 @@ public class ListAssetDTO {
     private String status;
     private String assignedUser;
     private String department;
+
+    @Override
+    public String toString() {
+        return "ListAssetDTO{" +
+                "id=" + id +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", category=" + category +
+                ", brand='" + brand + '\'' +
+                ", status='" + status + '\'' +
+                ", assignedUser='" + assignedUser + '\'' +
+                ", department='" + department + '\'' +
+                '}';
+    }
 }
