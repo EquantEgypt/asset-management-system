@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,32 +84,42 @@ public class AssetServiceImpl implements AssetService {
         Asset existingAsset = assetRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
 
-        if(assetDto.getName() != null){
+        List<String> updatedFields = new ArrayList<>();
+
+        if (assetDto.getName() != null && !assetDto.getName().equals(existingAsset.getName())) {
             existingAsset.setName(assetDto.getName());
+            updatedFields.add("name");
         }
 
-        if(assetDto.getBrand() != null){
+        if (assetDto.getBrand() != null && !assetDto.getBrand().equals(existingAsset.getBrand())) {
             existingAsset.setBrand(assetDto.getBrand());
+            updatedFields.add("brand");
         }
 
-        if(assetDto.getAssetDescription() != null){
+        if (assetDto.getAssetDescription() != null && !assetDto.getAssetDescription().equals(existingAsset.getDescription())) {
             existingAsset.setDescription(assetDto.getAssetDescription());
+            updatedFields.add("description");
         }
 
-        if(assetDto.getLocation() != null){
+        if (assetDto.getLocation() != null && !assetDto.getLocation().equals(existingAsset.getLocation())) {
             existingAsset.setLocation(assetDto.getLocation());
+            updatedFields.add("location");
         }
 
-        if (assetDto.getCategoryId() != null) {
+        if (assetDto.getCategoryId() != null &&
+                (existingAsset.getCategory() == null || !assetDto.getCategoryId().equals(existingAsset.getCategory().getId()))) {
             AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
                     .orElseThrow(() -> new BusinessException(ApiReturnCode.BAD_REQUEST, "Category not found"));
             existingAsset.setCategory(category);
+            updatedFields.add("category");
         }
 
-        if (assetDto.getTypeId() != null) {
+        if (assetDto.getTypeId() != null &&
+                (existingAsset.getType() == null || !assetDto.getTypeId().equals(existingAsset.getType().getId()))) {
             AssetType type = typeRepository.findById(assetDto.getTypeId())
                     .orElseThrow(() -> new BusinessException(ApiReturnCode.BAD_REQUEST, "Type not found"));
             existingAsset.setType(type);
+            updatedFields.add("type");
         }
 
         if (assetDto.getSerialNumber() != null && !assetDto.getSerialNumber().equals(existingAsset.getSerialNumber())) {
@@ -116,25 +127,46 @@ public class AssetServiceImpl implements AssetService {
                 throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Another asset with this serial number already exists.");
             }
             existingAsset.setSerialNumber(assetDto.getSerialNumber());
+            updatedFields.add("serialNumber");
         }
 
-        if(assetDto.getPurchaseDate() != null){
+        if (assetDto.getPurchaseDate() != null && !assetDto.getPurchaseDate().toLocalDate().equals(existingAsset.getPurchaseDate())) {
             existingAsset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
+            updatedFields.add("purchaseDate");
         }
 
-        if(assetDto.getWarrantyEndDate() != null){
+        if (assetDto.getWarrantyEndDate() != null && !assetDto.getWarrantyEndDate().toLocalDate().equals(existingAsset.getWarrantyEndDate())) {
             existingAsset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
+            updatedFields.add("warrantyEndDate");
         }
 
-        if(assetDto.getStatus() != null){
+        if (assetDto.getStatus() != null && !assetDto.getStatus().equals(existingAsset.getStatus())) {
             existingAsset.setStatus(assetDto.getStatus());
+            updatedFields.add("status");
         }
 
-        if(assetDto.getImagePath() != null){
+        if (assetDto.getImagePath() != null && !assetDto.getImagePath().equals(existingAsset.getImagePath())) {
             existingAsset.setImagePath(assetDto.getImagePath());
+            updatedFields.add("imagePath");
         }
 
         Asset updatedAsset = assetRepository.save(existingAsset);
+
+        // Save history with updated fields
+        AssetHistory assetHistory = new AssetHistory();
+        assetHistory.setAsset(updatedAsset);
+        assetHistory.setStatus(updatedAsset.getStatus());
+        assetHistory.setTimestamp(LocalDateTime.now());
+        assetHistory.setUser(SecurityUtils.getCurrentUser());
+
+        if (updatedFields.isEmpty()) {
+            assetHistory.setNote("No changes made");
+        } else {
+            assetHistory.setNote("Updated fields: " + String.join(", ", updatedFields));
+        }
+
+        assetHistoryRepository.save(assetHistory);
+
         return assetMapper.toDto(updatedAsset);
     }
 
