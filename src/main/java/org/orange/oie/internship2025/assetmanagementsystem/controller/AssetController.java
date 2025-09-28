@@ -22,23 +22,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
-
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
-
     public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
     }
-
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
         AssetDto dto = assetService.addAsset(assetRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> updateAsset(@PathVariable Long id, @Valid @RequestBody UpdateAssetDto Dto) {
+        AssetDto dto = assetService.updateAsset(id, Dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> getAssetById(@PathVariable Long id) {
+        AssetDto dto = assetService.getAssetById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+
 
 
     @GetMapping("/types")
@@ -52,6 +65,14 @@ public class AssetController {
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<AssetDto>> getAllAssets() {
+        List<AssetDto> assets = assetService.getAllAssets();
+        return ResponseEntity.ok(assets);
+    }
+
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);

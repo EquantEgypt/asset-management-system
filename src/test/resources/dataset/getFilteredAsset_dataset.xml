@@ -1,0 +1,13 @@
+<dataset>
+    <asset_category id="1" name="Electronics"/>
+    <asset_category id="2" name="Furniture"/>
+
+    <asset_type id="1" name="Laptop" category_id="1"/>
+    <asset_type id="2" name="Monitor" category_id="1"/>
+    <asset_type id="3" name="Chair" category_id="2"/>
+
+    <asset id="201" name="Dev Laptop" brand="Dell" serial_number="SN-DEV-001" category_id="1" type_id="1" purchase_date="2023-01-15" warranty_end_date="2026-01-15" status="ASSIGNED"/>
+    <asset id="202" name="HR Monitor" brand="HP" serial_number="SN-HR-002" category_id="1" type_id="2" purchase_date="2023-03-10" warranty_end_date="2026-03-10" status="AVAILABLE"/>
+    <asset id="203" name="Guest Chair" brand="Ikea" serial_number="SN-GUEST-003" category_id="2" type_id="3" purchase_date="2022-05-20" warranty_end_date="2025-05-20" status="AVAILABLE"/>
+    <asset id="204" name="Maintenance Laptop" brand="Lenovo" serial_number="SN-MAINT-004" category_id="1" type_id="1" purchase_date="2021-11-11" warranty_end_date="2024-11-11" status="UNDER_MAINTENANCE"/>
+</dataset>
