@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecificationExecutor<Asset> {
     Asset findByName(String name);
     List<Asset> findByStatus(AssetStatus status);
     Asset findAssetById(Long id);
+    Optional<Asset> findByIdAndTypeIdAndCategoryId(Long assetId, Long typeId, Long categoryId);
+
 
 }
