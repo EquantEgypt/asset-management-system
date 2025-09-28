@@ -29,10 +29,12 @@ public class RequestController {
     public Page<ResponseDTO> getRequests(
             @RequestParam(required = false) RequestStatus status,
             @RequestParam(required = false) RequestType type,
+            @RequestParam(required = false) String search,
+
             Pageable pageable) {
 
         // just pass params as-is, no specs
-        return requestService.getRequests(status, type, pageable);
+        return requestService.getRequests(status, type,search, pageable);
     }
 
 
