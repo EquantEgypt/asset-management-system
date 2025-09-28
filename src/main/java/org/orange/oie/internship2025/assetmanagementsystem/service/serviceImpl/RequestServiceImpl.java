@@ -88,7 +88,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Page<ResponseDTO> getRequests(RequestStatus status, RequestType type, Pageable pageable) {
+    public Page<ResponseDTO> getRequests(RequestStatus status, RequestType type,String search, Pageable pageable) {
         User currentUser = SecurityUtils.getCurrentUser();
         String role = currentUser.getRole().getName();
         Specification<AssetRequest> spec = Specification.where(null);
@@ -98,6 +98,9 @@ public class RequestServiceImpl implements RequestService {
         }
         if (type != null) {
             spec = spec.and(RequestSpecifications.byReqType(type));
+        }
+        if (search != null) {
+            spec = spec.and(RequestSpecifications.byAssetTypeOrAssetNameOrRequesterSimple(search));
         }
 
         switch (role) {
