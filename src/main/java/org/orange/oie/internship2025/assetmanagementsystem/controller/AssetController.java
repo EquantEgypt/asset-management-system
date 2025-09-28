@@ -1,10 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import jakarta.validation.Valid;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
@@ -66,12 +63,7 @@ public class AssetController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<AssetDto>> getAllAssets() {
-        List<AssetDto> assets = assetService.getAllAssets();
-        return ResponseEntity.ok(assets);
-    }
+
 
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
