@@ -19,8 +19,7 @@ public class UserDetailsServiceImp implements UsersDetailsService {
     public UserDetailsDTO getUserDetailsById(long id) {
         User user = userDetailsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-
-        // نستخدم الـ Mapper علشان نرجع DTO
+        
         return UserDetailsMapper.toDto(user);
     }
 }
