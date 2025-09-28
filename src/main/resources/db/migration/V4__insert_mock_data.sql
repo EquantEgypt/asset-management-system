@@ -84,7 +84,27 @@ INSERT INTO asset (id, category_id, type_id, brand, description, name, location,
  (12, 3, 7, 'Epson', 'Full HD office projector', 'Epson Projector X500', 'Cairo HQ', 'SN-PRJ-001', '2022-09-01', '2025-09-01', 'AVAILABLE', NULL),
  (13, 3, 8, 'Canon', 'Professional DSLR camera', 'Canon EOS 90D', 'Alex Branch', 'SN-CAM-001', '2023-01-25', '2026-01-25', 'ASSIGNED', NULL),
  (14, 3, 9, 'Fujitsu', 'High-speed document scanner', 'ScanSnap iX1500', 'Cairo HQ', 'SN-SCN-001', '2023-04-15', '2026-04-15', 'AVAILABLE', NULL),
- (15, 3, 10, 'Dell', 'Enterprise rack server', 'PowerEdge R740', 'Cairo Data Center', 'SN-SRV-001', '2023-07-10', '2028-07-10', 'ASSIGNED', NULL);
+ (15, 3, 10, 'Dell', 'Enterprise rack server', 'PowerEdge R740', 'Cairo Data Center', 'SN-SRV-001', '2023-07-10', '2028-07-10', 'ASSIGNED', NULL),
+ (16, 1, 1, 'Apple', 'MacBook Pro 16-inch', 'MacBook Pro 2021', 'Cairo HQ', 'SN-LAP-016', '2023-02-15', '2026-02-15', 'AVAILABLE', NULL),
+ (17, 1, 1, 'Dell', 'XPS ultrabook', 'Dell XPS 13', 'Alex Branch', 'SN-LAP-017', '2023-03-20', '2027-03-20', 'ASSIGNED', NULL),
+ (18, 1, 3, 'LG', '27-inch 4K monitor', 'LG UltraFine 27', 'Cairo HQ', 'SN-MON-018', '2023-04-05', '2026-04-05', 'AVAILABLE', NULL),
+ (19, 1, 3, 'Samsung', '32-inch curved monitor', 'Samsung Odyssey G7', 'Alex Branch', 'SN-MON-019', '2023-04-12', '2027-04-12', 'UNDER_MAINTENANCE', NULL),
+ (20, 1, 4, 'Cisco', 'Desk phone', 'Cisco IP Phone 8845', 'Cairo HQ', 'SN-PHN-020', '2022-11-01', '2025-11-01', 'AVAILABLE', NULL),
+ (21, 1, 2, 'Epson', 'All-in-one printer', 'Epson EcoTank L3150', 'Alex Branch', 'SN-PRT-021', '2023-05-18', '2026-05-18', 'ASSIGNED', NULL),
+ (22, 2, 5, 'Steelcase', 'Adjustable office desk', 'Steelcase Ology', 'Cairo HQ', 'SN-DSK-022', '2023-06-20', '2028-06-20', 'AVAILABLE', NULL),
+ (23, 2, 6, 'IKEA', 'Ergonomic chair', 'IKEA Flintan', 'Alex Branch', 'SN-CHR-023', '2023-07-01', '2029-07-01', 'ASSIGNED', NULL),
+ (24, 2, 6, 'HermanMiller', 'Executive office chair', 'Embody Chair', 'Cairo HQ', 'SN-CHR-024', '2023-07-15', '2030-07-15', 'AVAILABLE', NULL),
+ (25, 3, 7, 'Sony', '4K projector for meetings', 'Sony VPL-VW270', 'Cairo HQ', 'SN-PRJ-025', '2023-02-10', '2027-02-10', 'AVAILABLE', NULL),
+ (26, 3, 8, 'Nikon', 'Mirrorless camera', 'Nikon Z6 II', 'Alex Branch', 'SN-CAM-026', '2023-03-12', '2026-03-12', 'ASSIGNED', NULL),
+ (27, 3, 9, 'Brother', 'Compact scanner', 'Brother ADS-2200', 'Cairo HQ', 'SN-SCN-027', '2023-04-08', '2026-04-08', 'RETIRED', NULL),
+ (28, 3, 10, 'HP', 'Blade server system', 'HP ProLiant DL380', 'Cairo Data Center', 'SN-SRV-028', '2023-01-25', '2028-01-25', 'AVAILABLE', NULL),
+ (29, 1, 1, 'Lenovo', 'ThinkPad business laptop', 'ThinkPad X1 Carbon', 'Cairo HQ', 'SN-LAP-029', '2023-05-10', '2026-05-10', 'ASSIGNED', NULL),
+ (30, 1, 2, 'Brother', 'Office laser printer', 'Brother HL-L8360CDW', 'Alex Branch', 'SN-PRT-030', '2023-06-02', '2026-06-02', 'AVAILABLE', NULL),
+ (31, 1, 3, 'AOC', 'Gaming monitor', 'AOC 24G2', 'Cairo HQ', 'SN-MON-031', '2023-06-20', '2027-06-20', 'AVAILABLE', NULL),
+ (32, 2, 5, 'IKEA', 'Corner desk', 'IKEA Bekant Corner', 'Cairo HQ', 'SN-DSK-032', '2023-07-05', '2028-07-05', 'ASSIGNED', NULL),
+ (33, 2, 6, 'Steelcase', 'Premium chair', 'Steelcase Gesture', 'Alex Branch', 'SN-CHR-033', '2023-07-18', '2029-07-18', 'AVAILABLE', NULL),
+ (34, 3, 7, 'BenQ', 'Conference projector', 'BenQ MH733', 'Cairo HQ', 'SN-PRJ-034', '2023-08-01', '2026-08-01', 'AVAILABLE', NULL),
+ (35, 3, 10, 'IBM', 'Mainframe server', 'IBM z15 T02', 'Cairo Data Center', 'SN-SRV-035', '2023-08-15', '2033-08-15', 'ASSIGNED', NULL);
 
 -- ========================
 -- Asset Assignments

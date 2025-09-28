@@ -19,14 +19,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
+
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
+
     public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
@@ -62,8 +65,6 @@ public class AssetController {
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
-
-
 
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {

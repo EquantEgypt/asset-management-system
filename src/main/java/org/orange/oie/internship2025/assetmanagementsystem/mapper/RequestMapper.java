@@ -25,7 +25,6 @@ public class RequestMapper {
     @Autowired
     TypeRepository typeRepository; // Added repository
 
-
     public AssetRequest toEntity(RequestDTO dto) {
         if (dto == null) {
             return null;

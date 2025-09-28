@@ -163,9 +163,7 @@ public class AssetServiceImpl implements AssetService {
         } else {
             assetHistory.setNote("Updated fields: " + String.join(", ", updatedFields));
         }
-
         assetHistoryRepository.save(assetHistory);
-
         return assetMapper.toDto(updatedAsset);
     }
 
