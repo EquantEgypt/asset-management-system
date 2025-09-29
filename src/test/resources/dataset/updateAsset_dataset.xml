@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" name="Laptop" category_id="1"/>
+    <asset id="1" category_id="1" type_id="1" brand="Dell" description="Dell Laptop" name="Asset 1" location="Office" serial_number="SN-VALID-001" purchase_date="2023-01-15" warranty_end_date="2026-01-15" status="AVAILABLE" image_path="images/dell.png"/>
+    <asset id="2" category_id="1" type_id="1" brand="HP" description="HP Laptop" name="Asset 2" location="Office" serial_number="SN-VALID-002" purchase_date="2023-01-15" warranty_end_date="2026-01-15" status="AVAILABLE" image_path="images/hp.png"/>
+</dataset>

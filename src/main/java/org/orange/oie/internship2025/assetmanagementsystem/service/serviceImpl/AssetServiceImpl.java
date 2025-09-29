@@ -56,9 +56,6 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
 
-        // Create and save asset history
-        assetHistoryRepository.save(createAssetHistory(savedAsset, "Asset Created"));
-
         return assetMapper.toDto(savedAsset);
     }
 
@@ -67,79 +64,39 @@ public class AssetServiceImpl implements AssetService {
         Asset existingAsset = assetRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
 
-        // validate the unique data in db before update the asset (serial number)
+        // validation
         validateUpdateAssetDTO(assetDto, existingAsset);
 
-        // apply the updates
-        applyUpdatesToAsset(existingAsset, assetDto);
+        Asset assetToUpdate = assetMapper.toEntity(assetDto);
 
-        Asset updatedAsset = assetRepository.save(existingAsset);
+        //  set the id to ensure an update not an insert
+        assetToUpdate.setId(id);
 
-        // create and save a history record for the update
-        assetHistoryRepository.save(createAssetHistory(updatedAsset, "Asset Updated"));
+        Asset updatedAsset = assetRepository.save(assetToUpdate);
 
         return assetMapper.toDto(updatedAsset);
     }
 
     private void validateUpdateAssetDTO(UpdateAssetDto assetDto, Asset existingAsset) {
+        // Validate serial number
         if (assetDto.getSerialNumber() != null && !assetDto.getSerialNumber().equals(existingAsset.getSerialNumber())) {
             if (assetRepository.existsBySerialNumber(assetDto.getSerialNumber())) {
                 throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Another asset with this serial number already exists.");
             }
         }
-    }
 
-    private void applyUpdatesToAsset(Asset existingAsset, UpdateAssetDto assetDto) {
-        if (assetDto.getName() != null) {
-            existingAsset.setName(assetDto.getName());
-        }
-        if (assetDto.getBrand() != null) {
-            existingAsset.setBrand(assetDto.getBrand());
-        }
-        if (assetDto.getAssetDescription() != null) {
-            existingAsset.setDescription(assetDto.getAssetDescription());
-        }
-        if (assetDto.getLocation() != null) {
-            existingAsset.setLocation(assetDto.getLocation());
-        }
-        if (assetDto.getSerialNumber() != null) {
-            existingAsset.setSerialNumber(assetDto.getSerialNumber());
-        }
-        if (assetDto.getPurchaseDate() != null) {
-            existingAsset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
-        }
-        if (assetDto.getWarrantyEndDate() != null) {
-            existingAsset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
-        }
-        if (assetDto.getStatus() != null) {
-            existingAsset.setStatus(assetDto.getStatus());
-        }
-        if (assetDto.getImagePath() != null) {
-            existingAsset.setImagePath(assetDto.getImagePath());
-        }
+        // Validate category existence
+            if (!categoryRepository.existsById(assetDto.getCategoryId())) {
+                throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Category not found");
+            }
 
-        if (assetDto.getCategoryId() != null) {
-            AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
-                    .orElseThrow(() -> new BusinessException(ApiReturnCode.BAD_REQUEST, "Category not found"));
-            existingAsset.setCategory(category);
-        }
-
-        if (assetDto.getTypeId() != null) {
+        // Validate type existence and related to category
             AssetType type = typeRepository.findById(assetDto.getTypeId())
                     .orElseThrow(() -> new BusinessException(ApiReturnCode.BAD_REQUEST, "Type not found"));
-            existingAsset.setType(type);
-        }
-    }
 
-
-    private AssetHistory createAssetHistory(Asset asset, String note) {
-        AssetHistory assetHistory = new AssetHistory();
-        assetHistory.setAsset(asset);
-        assetHistory.setStatus(asset.getStatus());
-        assetHistory.setTimestamp(LocalDateTime.now());
-        assetHistory.setUser(SecurityUtils.getCurrentUser());
-        assetHistory.setNote(note);
-        return assetHistory;
+            if (!type.getCategory().getId().equals(assetDto.getCategoryId())) {
+                throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Type does not belong to the specified category.");
+            }
     }
 
     @Override

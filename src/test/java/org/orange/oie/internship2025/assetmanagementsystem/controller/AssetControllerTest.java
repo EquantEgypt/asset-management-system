@@ -166,39 +166,6 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     @Test
     @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    @DatabaseSetup(value = "/dataset/updateAsset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    void updateAsset_withValidRequest_shouldReturnUpdatedAsset() throws Exception {
-        UpdateAssetDto updateDto = new UpdateAssetDto();
-        updateDto.setName("New Laptop Name");
-        updateDto.setBrand("HP");
-        updateDto.setSerialNumber("SN-LAP-003");
-
-        mockMvc.perform(put("/assets/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.assetName", is("New Laptop Name")))
-                .andExpect(jsonPath("$.brand", is("HP")))
-                .andExpect(jsonPath("$.serialNumber", is("SN-LAP-003")));
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    @DatabaseSetup(value = "/dataset/updateAsset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    void updateAsset_withDuplicateSerialNumber_shouldReturnConflict() throws Exception {
-        UpdateAssetDto updateDto = new UpdateAssetDto();
-        updateDto.setSerialNumber("SN-MON-002");
-
-        mockMvc.perform(put("/assets/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateDto)))
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     void getFilteredAsset_byStatus_shouldReturnMatchingAssets() throws Exception {
         mockMvc.perform(get("/assets")
@@ -249,4 +216,91 @@ public class AssetControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].assetName", is("Available Monitor")));
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withExistingSerialNumber_shouldReturnConflict() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setSerialNumber("SN-VALID-002"); // Existing serial number from asset 2
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withInvalidSerialNumberFormat_shouldReturnBadRequest() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setSerialNumber("INVALID-FORMAT");
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    private UpdateAssetDto createUpdateAssetDto() {
+        UpdateAssetDto dto = new UpdateAssetDto();
+        dto.setName("New Laptop Name");
+        dto.setBrand("New Brand");
+        dto.setAssetDescription("New Description");
+        dto.setCategoryId(1L);
+        dto.setTypeId(1L);
+        dto.setLocation("New Location");
+        dto.setSerialNumber("SN-NEW-123");
+        dto.setPurchaseDate(LocalDateTime.of(2024, 1, 1, 10, 0));
+        dto.setWarrantyEndDate(LocalDateTime.of(2027, 1, 1, 10, 0));
+        dto.setImagePath("images/new.png");
+        return dto;
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withValidRequest_shouldReturnOk() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.assetName", is("New Laptop Name")))
+                .andExpect(jsonPath("$.brand", is("New Brand")))
+                .andExpect(jsonPath("$.serialNumber", is("SN-NEW-123")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withNonExistentAsset_shouldReturnNotFound() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+
+        mockMvc.perform(put("/assets/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withInvalidData_shouldReturnBadRequest() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setName(""); // Invalid name
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isBadRequest());
+    }
+
 }
