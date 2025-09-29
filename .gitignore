@@ -39,3 +39,5 @@ config/
 /src/main/resources/db/migration/V5__asset_history_mock.sql
 /src/main/resources/db/migration/V4__insert_mock_data.sql
 /src/main/resources/db/migration/V7__.sql
+/src/main/resources/db/migration/V2__insert_mock_data.sql
+/src/main/resources/db/migration/V5__add_return_date_back.sql
