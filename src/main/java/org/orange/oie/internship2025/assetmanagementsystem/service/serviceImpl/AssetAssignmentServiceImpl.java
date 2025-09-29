@@ -1,36 +1,44 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssignmentStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiResponse;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
+import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssetMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssignmentMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetAssignmentRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetHistoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
+import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 
 @Transactional
 @Service
 public class AssetAssignmentServiceImpl implements AssetAssignmentService {
-   @Autowired
-    private  UserRepository userRepository;
     @Autowired
-    private  AssetRepository assetRepository;
+    private UserRepository userRepository;
     @Autowired
-    private  AssetAssignmentRepository assetAssignmentRepository;
+    private AssetRepository assetRepository;
     @Autowired
-    private  AssetHistoryRepository assetHistoryRepository;
+    private AssetAssignmentRepository assetAssignmentRepository;
     @Autowired
-    private  AssignmentMapper assignmentMapper;
+    private AssetHistoryRepository assetHistoryRepository;
+    @Autowired
+    private AssignmentMapper assignmentMapper;
+    @Autowired
+    private AssetMapper assetMapper;
 
     @Override
     public AssetAssignment assignAsset(AssetAssignmentRequest request) {
@@ -38,18 +46,19 @@ public class AssetAssignmentServiceImpl implements AssetAssignmentService {
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.USER_NOT_EXISTS, "User not found"));
-        Long typeId=request.getTypeId();
-        Long categoryId=request.getCategoryId();
-        validateAssetAssignable(asset,categoryId,typeId);
+        Long typeId = request.getTypeId();
+        Long categoryId = request.getCategoryId();
+        validateAssetAssignable(asset, categoryId, typeId);
         asset.setStatus(AssetStatus.ASSIGNED);
         assetRepository.save(asset);
         AssetAssignment assignment = assignmentMapper.toAssignAsset(request, asset, user);
         assetAssignmentRepository.save(assignment);
-        AssetHistory history=assignmentMapper.toCreateAssetHistory(asset, user, AssetStatus.ASSIGNED,request.getNote());
+        AssetHistory history = assignmentMapper.toCreateAssetHistory(asset, user, AssetStatus.ASSIGNED, request.getNote());
         assetHistoryRepository.save(history);
         return assignment;
     }
-    private void validateAssetAssignable(Asset asset,Long categoryId ,Long typeId) {
+
+    private void validateAssetAssignable(Asset asset, Long categoryId, Long typeId) {
         if (asset.getStatus() != AssetStatus.AVAILABLE) {
             throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Asset is not available");
         }
@@ -60,6 +69,28 @@ public class AssetAssignmentServiceImpl implements AssetAssignmentService {
         if (!exists) {
             throw new BusinessException(ApiReturnCode.ASSET_NOT_FOUND,
                     "Asset does not match the selected category and type");
-        }    }
+        }
+    }
+
+    @Override
+    public AssetDto unassignAsset(Long id) {
+        Asset asset = assetRepository.findById(id).orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
+        asset.setStatus(AssetStatus.AVAILABLE);
+        assetRepository.save(asset);
+        AssetAssignment assignment = assetAssignmentRepository.findByAssetAndStatus(asset, AssignmentStatus.ACTIVE);
+        if(assignment ==null){
+            throw new BusinessException(ApiReturnCode.ASSET_NOT_ASSIGNED, "Asset is not assigned to anyone");
+        }
+        assignment.setStatus(AssignmentStatus.CLOSED);
+        assetAssignmentRepository.save(assignment);
+        AssetHistory history = new AssetHistory();
+        history.setAsset(asset);
+        history.setUser(SecurityUtils.getCurrentUser());
+        history.setNote("Unassigned");
+        history.setTimestamp(LocalDateTime.now());
+        history.setStatus(AssetStatus.AVAILABLE);
+        assetHistoryRepository.save(history);
+        return assetMapper.toDto(asset);
+    }
 }
 

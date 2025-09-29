@@ -10,6 +10,6 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignmen
 public interface AssetAssignmentRepository extends JpaRepository<AssetAssignment, Long>, JpaSpecificationExecutor<AssetAssignment> {
 
     boolean existsByAssetAndAssignedToAndStatus(Asset asset, User user, AssignmentStatus assignmentStatus);
-
+    AssetAssignment findByAssetAndStatus(Asset asset,AssignmentStatus status);
     boolean existsByAssetAndStatus(Asset asset, AssignmentStatus assignmentStatus);
 }
