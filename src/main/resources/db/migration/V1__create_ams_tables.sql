@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS ams;
+    CREATE SCHEMA IF NOT EXISTS ams;
 
 -- Switch to the schema
 USE ams;

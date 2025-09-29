@@ -34,3 +34,5 @@ src/.idea/
 out/
 config/
 
+/src/main/resources/db/migration/V2__insert_mock_data.sql
+/src/main/resources/db/migration/V5__add_return_date_back.sql
