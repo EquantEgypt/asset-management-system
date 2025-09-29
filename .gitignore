@@ -34,3 +34,8 @@ src/.idea/
 out/
 config/
 
+# Ignore Flyway migration versions v4, v5, v6
+/src/main/resources/db/migration/V6__zft.sql
+/src/main/resources/db/migration/V5__asset_history_mock.sql
+/src/main/resources/db/migration/V4__insert_mock_data.sql
+/src/main/resources/db/migration/V7__.sql

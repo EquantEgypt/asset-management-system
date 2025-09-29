@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AssetSpecification {
-        public static Specification<Asset> availableByType(String type) {
+    public static Specification<Asset> availableByType(String type) {
         return (root, query, cb) -> {
             if (type == null || type.isBlank()) {
                 return cb.equal(root.get("status"), AssetStatus.AVAILABLE);
@@ -26,6 +26,7 @@ public class AssetSpecification {
             );
         };
     }
+
     public static Specification<Asset> buildSpecification(
             AssignedAssetFilterDTO filter, User currentUser) {
 
@@ -33,21 +34,23 @@ public class AssetSpecification {
             List<Predicate> predicates = new ArrayList<>();
             Join<Asset, AssetAssignment> assignmentJoin = root.join("assignments", JoinType.LEFT);
             Join<AssetAssignment, User> userJoin = assignmentJoin.join("assignedTo", JoinType.LEFT);
-
-            // Role-based filtering
             String role = currentUser.getRole().getName();
-            switch (role) {
-                case "DEPARTMENT_MANAGER":
-                    predicates.add(cb.equal(userJoin.get("department").get("id"), currentUser.getDepartment().getId()));
-                    break;
-                case "EMPLOYEE":
-                    predicates.add(cb.equal(userJoin.get("id"), currentUser.getId()));
-                    break;
-                case "IT":
-                    predicates.add(cb.equal(root.get("status"), AssetStatus.UNDER_MAINTENANCE.name()));
-                    break;
+            if (filter.isMyAssetsFlag()) {
+                predicates.add(cb.equal(userJoin.get("id"), currentUser.getId()));
+                filter.setDepartment(null);
+                filter.setAssignedUser(null);
+            }else {
+                switch (role) {
+                    case "DEPARTMENT_MANAGER":
+                        predicates.add(cb.equal(userJoin.get("department").get("id"), currentUser.getDepartment().getId()));
+                        filter.setDepartment(null);
+                        break;
+                    case "IT":
+                        predicates.add(cb.equal(root.get("status"), AssetStatus.UNDER_MAINTENANCE.name()));
+                        filter.setStatus(null);
+                        break;
+                }
             }
-
             // Add normal filters
             if (filter.getAssetName() != null && !filter.getAssetName().isBlank()) {
                 predicates.add(cb.like(root.get("name"), "%" + filter.getAssetName() + "%"));
