@@ -27,21 +27,21 @@ INSERT INTO role (id, name) VALUES
 -- Password: 12345678 (bcrypt hash)
 -- ========================
 INSERT INTO users (id, username, full_name, email, password, department_id, role_id, phone, hire_date, is_active, created_at, updated_at) VALUES
- (1, 'ahmedsaad_admin', 'Ahmed Saad', 'ahmed.s.elkholy@orange.com',  '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 1, '01010000001', '2024-01-01', TRUE, '2024-01-01', '2024-01-01'),
- (2, 'maryiamreda_emp', 'Maryiam Reda', 'maryiam.reda@orange.com',     '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 4, '01010000002', '2024-01-02', TRUE, '2024-01-02', '2024-01-02'),
- (3, 'ahmedeldera_it', 'Ahmed Elder3', 'hotoeldera@orange.com',       '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 3, '01010000003', '2024-01-03', TRUE, '2024-01-03', '2024-01-03'),
- (4, 'ahmedsamir_emp', 'Ahmed Samir', 'ahmed.samiralsayed@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 4, '01010000004', '2024-01-04', TRUE, '2024-01-04', '2024-01-04'),
- (5, 'nourhanhisham_admin', 'Nourhan Hisham', 'nourhan.hisham@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 1, '01010000005', '2024-01-05', TRUE, '2024-01-05', '2024-01-05'),
- (6, 'wafaaabdelhafez_it', 'Wafaa Abdelhafez', 'wafaa.abdelhafez.ext@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 3, '01010000006', '2024-01-06', TRUE, '2024-01-06', '2024-01-06'),
- (7, 'zeyademam_emp', 'Zeyad Emam', 'farghly.zeyad@orange.com',       '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 4, 4, '01010000007', '2024-01-07', TRUE, '2024-01-07', '2024-01-07'),
- (8, 'mohamedgawad_admin', 'Mohamed Abdelgawad', 'mohamed1.abdelgawad@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 1, '01010000008', '2024-01-08', TRUE, '2024-01-08', '2024-01-08'),
- (9, 'mohamedmagdy_mgr', 'Mohamed Magdy', 'mohamed.essa@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 2, '01010000009', '2024-01-09', TRUE, '2024-01-09', '2024-01-09'),
- (10, 'nadinenasr_emp', 'Nadine Nasr', 'nadeen.nasr@orange.com',      '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 5, 4, '01010000010', '2024-01-10', TRUE, '2024-01-10', '2024-01-10'),
- (11, 'seifallaehab_emp', 'Seifalla Ehab', 'seifalla.ehab@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 4, '01010000011', '2024-01-11', TRUE, '2024-01-11', '2024-01-11'),
- (12, 'fatmahesham_emp', 'Fatma Hesham', 'fatma.hesham@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 4, '01010000012', '2024-01-12', TRUE, '2024-01-12', '2024-01-12'),
- (13, 'marimmohamed_emp', 'Marim Mohamed', 'marim.elakhe@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 4, '01010000013', '2024-01-13', TRUE, '2024-01-13', '2024-01-13'),
- (14, 'malakshehab_emp', 'Malak Shehab-Eldin', 'malak.ziad@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 5, 4, '01010000014', '2024-01-14', TRUE, '2024-01-14', '2024-01-14'),
- (15, 'omarnabil_emp', 'Omar Nabil', 'omer.nabil@orange.com',     '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 4, 4, '01010000015', '2024-01-15', TRUE, '2024-01-15', '2024-01-15');
+ (1, 'ahmedsaad_admin', 'Ahmed Saad', 'ahmed_admin@orange.com',  '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 1, '01010000001', '2024-01-01', TRUE, '2024-01-01', '2024-01-01'),
+ (2, 'maryiamreda_emp', 'Maryiam Reda', 'maryiam.reda_empolyee@orange.com',     '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 4, '01010000002', '2024-01-02', TRUE, '2024-01-02', '2024-01-02'),
+ (3, 'ahmedeldera_it', 'Ahmed Elder3', 'hotoeldera_IT@orange.com',       '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 3, '01010000003', '2024-01-03', TRUE, '2024-01-03', '2024-01-03'),
+ (4, 'ahmedsamir_emp', 'Ahmed Samir', 'ahmed.samir_employee@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 4, '01010000004', '2024-01-04', TRUE, '2024-01-04', '2024-01-04'),
+ (5, 'nourhanhisham_admin', 'Nourhan Hisham', 'nourhan.hisham_admin@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 1, '01010000005', '2024-01-05', TRUE, '2024-01-05', '2024-01-05'),
+ (6, 'wafaaabdelhafez_it', 'Wafaa Abdelhafez', 'wafaa.abdelhafez_IT@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 3, '01010000006', '2024-01-06', TRUE, '2024-01-06', '2024-01-06'),
+ (7, 'zeyademam_emp', 'Zeyad Emam', 'farghly.zeyad_employee@orange.com',       '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 4, 4, '01010000007', '2024-01-07', TRUE, '2024-01-07', '2024-01-07'),
+ (8, 'mohamedgawad_admin', 'Mohamed Abdelgawad', 'mohamed1.abdelgawad_admin@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 1, '01010000008', '2024-01-08', TRUE, '2024-01-08', '2024-01-08'),
+ (9, 'mohamedmagdy_mgr', 'Mohamed Magdy', 'mohamed.essa_manager@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 2, '01010000009', '2024-01-09', TRUE, '2024-01-09', '2024-01-09'),
+ (10, 'nadinenasr_emp', 'Nadine Nasr', 'nadeen.nasr_employee@orange.com',      '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 5, 4, '01010000010', '2024-01-10', TRUE, '2024-01-10', '2024-01-10'),
+ (11, 'seifallaehab_emp', 'Seifalla Ehab', 'seifalla.ehab_employee@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 1, 4, '01010000011', '2024-01-11', TRUE, '2024-01-11', '2024-01-11'),
+ (12, 'fatmahesham_emp', 'Fatma Hesham', 'fatma.hesham_employee@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 3, 4, '01010000012', '2024-01-12', TRUE, '2024-01-12', '2024-01-12'),
+ (13, 'marimmohamed_emp', 'Marim Mohamed', 'marim.elakhe_employee@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 2, 4, '01010000013', '2024-01-13', TRUE, '2024-01-13', '2024-01-13'),
+ (14, 'malakshehab_emp', 'Malak Shehab-Eldin', 'malak.ziad_employee@orange.com','$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 5, 4, '01010000014', '2024-01-14', TRUE, '2024-01-14', '2024-01-14'),
+ (15, 'omarnabil_emp', 'Omar Nabil', 'omer.nabil_employee@orange.com',     '$2a$12$g18cvUm4OKwpN67qbxKIPecR90LNkORI6m/ZCGjFrGzW6bPO63BvC', 4, 4, '01010000015', '2024-01-15', TRUE, '2024-01-15', '2024-01-15');
 
 -- ========================
 -- Asset Categories
