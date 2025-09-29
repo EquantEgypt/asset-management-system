@@ -109,8 +109,7 @@ public class RequestServiceImpl implements RequestService {
                 return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
             default:
                 Specification<AssetRequest> userSpec =
-                        (root, query, cb) -> cb.equal(root.get("requesterId"), currentUser.getId());
-
+                        (root, query, cb) -> cb.equal(root.get("requester").get("id"), currentUser.getId());
                 return requestRepository.findAll(userSpec.and(spec), pageable).map(mapper::toDTO);        }
     }
 
