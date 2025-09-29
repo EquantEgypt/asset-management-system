@@ -9,7 +9,6 @@ import java.util.List;
 public interface AssetService {
     AssetDto addAsset(AssetRequestDto assetDto);
     AssetDto updateAsset(Long id, UpdateAssetDto assetDto);
-    AssetDto getAssetById(Long id);
     List<AssetDto> getAllAssets();
     List<AssetDto> getAvailableAsset(String type);
     Page<ListAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);

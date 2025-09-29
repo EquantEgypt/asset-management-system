@@ -199,30 +199,6 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     @Test
     @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    @DatabaseSetup(value = "/dataset/getAssetById_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    void getAssetById_withExistingAsset_shouldReturnAsset() throws Exception {
-        mockMvc.perform(get("/assets/{id}", 101L)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.assetId", is(101)))
-                .andExpect(jsonPath("$.assetName", is("Test Laptop")))
-                .andExpect(jsonPath("$.brand", is("Dell")))
-                .andExpect(jsonPath("$.serialNumber", is("SN-TEST-101")));
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    @DatabaseSetup(value = "/dataset/getAssetById_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
-    void getAssetById_withNonExistentAsset_shouldReturnNotFound() throws Exception {
-        mockMvc.perform(get("/assets/{id}", 999L)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     void getFilteredAsset_byStatus_shouldReturnMatchingAssets() throws Exception {
         mockMvc.perform(get("/assets")

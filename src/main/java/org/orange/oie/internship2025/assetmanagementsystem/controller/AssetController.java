@@ -46,14 +46,6 @@ public class AssetController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AssetDto> getAssetById(@PathVariable Long id) {
-        AssetDto dto = assetService.getAssetById(id);
-        return ResponseEntity.ok(dto);
-    }
-
-
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
