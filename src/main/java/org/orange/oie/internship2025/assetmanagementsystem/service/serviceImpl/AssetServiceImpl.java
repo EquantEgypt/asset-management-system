@@ -53,6 +53,19 @@ public class AssetServiceImpl implements AssetService {
             throw new BusinessException(ApiReturnCode.ASSET_ALREADY_EXISTS, "Another asset with this serial number already exists.");
         }
 
+        // Validate category existence
+        if (!categoryRepository.existsById(assetDto.getCategoryId())) {
+            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Category not found");
+        }
+
+        // Validate type existence and related to category
+        AssetType type = typeRepository.findById(assetDto.getTypeId())
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.BAD_REQUEST, "Type not found"));
+
+        if (!type.getCategory().getId().equals(assetDto.getCategoryId())) {
+            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Type does not belong to the specified category.");
+        }
+
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
 

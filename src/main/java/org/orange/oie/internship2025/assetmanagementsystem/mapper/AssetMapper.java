@@ -59,10 +59,8 @@ public class AssetMapper {
         asset.setBrand(assetDto.getBrand());
         asset.setDescription(assetDto.getAssetDescription());
 
-        AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        AssetType type = typeRepository.findById(assetDto.getTypeId())
-                .orElseThrow(() -> new RuntimeException("Type not found"));
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
 
         asset.setCategory(category);
         asset.setType(type);
@@ -85,10 +83,8 @@ public class AssetMapper {
         asset.setBrand(assetDto.getBrand());
         asset.setDescription(assetDto.getAssetDescription());
 
-        AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        AssetType type = typeRepository.findById(assetDto.getTypeId())
-                .orElseThrow(() -> new RuntimeException("Type not found"));
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
 
         asset.setCategory(category);
         asset.setType(type);
