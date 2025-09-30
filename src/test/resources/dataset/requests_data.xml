@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <!-- Categories -->
+    <asset_category id="1" name="Electronics"/>
+
+    <!-- Types -->
+    <asset_type id="1" name="Laptop" category_id="1"/>
+
+    <!-- Departments -->
+    <department id="1" name="IT"/>
+
+    <!-- Roles -->
+    <role id="1" name="ADMIN"/>
+    <role id="2" name="IT"/>
+    <role id="3" name="USER"/>
+
+    <!-- Users -->
+    <users id="1" username="admin" full_name="Admin User" email="admin@test.com"
+           role_id="1" department_id="1" password="{noop}password"
+           is_active="true" created_at="2025-01-01" updated_at="2025-01-01"/>
+
+    <users id="2" username="it_user" full_name="IT User" email="it@test.com"
+           role_id="2" department_id="1" password="{noop}password"
+           is_active="true" created_at="2025-01-01" updated_at="2025-01-01"/>
+
+    <users id="3" username="regular_user" full_name="Regular User" email="user@test.com"
+           role_id="3" department_id="1" password="{noop}password"
+           is_active="true" created_at="2025-01-01" updated_at="2025-01-01"/>
+
+    <!-- Assets -->
+    <asset id="1" category_id="1" type_id="1" brand="Dell" name="Dell XPS"
+           description="Laptop" serial_number="SN001" location="HQ"
+           purchase_date="2023-01-01" warranty_end_date="2026-01-01" status="AVAILABLE"/>
+
+    <asset id="2" category_id="1" type_id="1" brand="HP" name="HP ProBook"
+           description="Laptop" serial_number="SN002" location="HQ"
+           purchase_date="2023-01-01" warranty_end_date="2026-01-01" status="AVAILABLE"/>
+
+    <!-- Asset Requests -->
+    <asset_request id="1" asset_id="1" type_id="1" requester_id="3"
+                   request_date="2025-09-25 10:00:00" status="PENDING"
+                   request_type="MAINTENANCE" note="Keyboard issue"/>
+
+    <asset_request id="2" asset_id="2" type_id="1" requester_id="3"
+                   request_date="2025-09-26 11:00:00" status="PENDING"
+                   request_type="NEW" note="Need laptop"/>
+
+    <asset_request id="3" asset_id="1" type_id="1" requester_id="3"
+                   request_date="2025-09-20 09:00:00" status="APPROVED"
+                   request_type="MAINTENANCE" approved_by_id="2"
+                   approved_date="2025-09-21 14:00:00" note="Fixed"/>
+
+    <asset_request id="4" asset_id="2" type_id="1" requester_id="3"
+                   request_date="2025-09-15 08:00:00" status="REJECTED"
+                   request_type="NEW" approved_by_id="1"
+                   approved_date="2025-09-16 10:00:00" note="Request"
+                   rejection_note="Not available"/>
+
+</dataset>

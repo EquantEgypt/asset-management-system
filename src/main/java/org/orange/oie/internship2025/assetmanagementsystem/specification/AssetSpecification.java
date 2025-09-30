@@ -1,5 +1,4 @@
 package org.orange.oie.internship2025.assetmanagementsystem.specification;
-
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -9,10 +8,8 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetAssignmen
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.springframework.data.jpa.domain.Specification;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class AssetSpecification {
     public static Specification<Asset> availableByType(String type) {
@@ -48,7 +45,6 @@ public class AssetSpecification {
                     predicates.add(cb.equal(root.get("status"), AssetStatus.UNDER_MAINTENANCE.name()));
                     break;
             }
-
             // Add normal filters
             if (filter.getAssetName() != null && !filter.getAssetName().isBlank()) {
                 predicates.add(cb.like(root.get("name"), "%" + filter.getAssetName() + "%"));
@@ -71,7 +67,6 @@ public class AssetSpecification {
             if (filter.getDepartment() != null && !filter.getDepartment().isBlank()) {
                 predicates.add(cb.equal(userJoin.get("department").get("name"), filter.getDepartment()));
             }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

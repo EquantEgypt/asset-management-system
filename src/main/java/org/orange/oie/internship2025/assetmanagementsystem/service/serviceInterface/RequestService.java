@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 public interface RequestService {
 
      ResponseDTO addRequest(RequestDTO requestDTO);
-     Page<ResponseDTO> getRequests(RequestStatus status, RequestType type, String search, Pageable pageable);
-     ResponseDTO  respondToRequest(ResponseDTO response);
+     Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type, String search, Pageable pageable, boolean personal);
+    ResponseDTO  respondToRequest(ResponseDTO response);
 }

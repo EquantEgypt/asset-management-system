@@ -28,4 +28,6 @@ public class ResponseDTO {
     private String approvedBy;
     private LocalDateTime approvedDate;
     private String note;
+    private String rejectionNote;
+
 }
