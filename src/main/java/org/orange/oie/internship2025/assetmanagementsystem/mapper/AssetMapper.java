@@ -2,6 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
@@ -58,10 +59,8 @@ public class AssetMapper {
         asset.setBrand(assetDto.getBrand());
         asset.setDescription(assetDto.getAssetDescription());
 
-        AssetCategory category = categoryRepository.findById(assetDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        AssetType type = typeRepository.findById(assetDto.getTypeId())
-                .orElseThrow(() -> new RuntimeException("Type not found"));
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
 
         asset.setCategory(category);
         asset.setType(type);
@@ -71,6 +70,29 @@ public class AssetMapper {
         asset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
         asset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
         asset.setStatus(assetDto.getStatus());
+        asset.setImagePath(assetDto.getImagePath());
+        return asset;
+    }
+
+    public Asset toEntity(UpdateAssetDto assetDto) {
+        if (assetDto == null) {
+            return null;
+        }
+        Asset asset = new Asset();
+        asset.setName(assetDto.getName());
+        asset.setBrand(assetDto.getBrand());
+        asset.setDescription(assetDto.getAssetDescription());
+
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
+
+        asset.setCategory(category);
+        asset.setType(type);
+
+        asset.setLocation(assetDto.getLocation());
+        asset.setSerialNumber(assetDto.getSerialNumber());
+        asset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
+        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
         asset.setImagePath(assetDto.getImagePath());
         return asset;
     }

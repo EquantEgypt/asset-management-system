@@ -5,6 +5,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
@@ -30,29 +31,46 @@ public class AssetController {
         this.typeService = typeService;
         this.categoryService = categoryService;
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
         AssetDto dto = assetService.addAsset(assetRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> updateAsset(@PathVariable Long id, @Valid @RequestBody UpdateAssetDto Dto) {
+        AssetDto dto = assetService.updateAsset(id, Dto);
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
-
     ) {
         return typeService.getAllTypes(categoryId);
     }
+
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<AssetDto>> getAllAssets() {
+        List<AssetDto> assets = assetService.getAllAssets();
+        return ResponseEntity.ok(assets);
+    }
+
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
+
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public List<AssetDto> getAvailableAsset(

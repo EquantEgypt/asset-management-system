@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
@@ -27,9 +28,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,7 +83,7 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getAllAssets_withExistingAssets_shouldReturnList() throws Exception {
 
-        mockMvc.perform(get("/assets"))
+        mockMvc.perform(get("/assets/all"))
                 .andExpect(status().isOk());
     }
 
@@ -159,14 +162,145 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         assertThat(categories.get(0).getName()).isEqualTo("Hardware");
         assertThat(categories.get(1).getName()).isEqualTo("Software");
     }
-    @DatabaseSetup(value = "/dataset/getAllAssets_withExistingAssets_shouldReturnList.xml", type = DatabaseOperation.CLEAN_INSERT)
+
     @Test
     @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void getAvailableAssets_withExistingAssets_shouldReturnList() throws Exception {
-
-        mockMvc.perform(get("/assets/available"))
-                .andExpect(status().isOk());
+    @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getFilteredAsset_byStatus_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets")
+                        .param("status", "AVAILABLE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].name", is("HR Monitor")))
+                .andExpect(jsonPath("$.content[1].name", is("Guest Chair")));
     }
-}
 
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getFilteredAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getFilteredAsset_byType_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets")
+                        .param("type", "Laptop")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].name", is("Dev Laptop")))
+                .andExpect(jsonPath("$.content[1].name", is("Maintenance Laptop")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "IT"})
+    @DatabaseSetup(value = "/dataset/getAvailableAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAvailableAsset_noType_shouldReturnAllAvailable() throws Exception {
+        mockMvc.perform(get("/assets/available")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].assetName", is("Available Laptop")))
+                .andExpect(jsonPath("$[1].assetName", is("Available Monitor")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "it_user", authorities = {"IT"})
+    @DatabaseSetup(value = "/dataset/getAvailableAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAvailableAsset_byType_shouldReturnMatchingAssets() throws Exception {
+        mockMvc.perform(get("/assets/available")
+                        .param("type", "Monitor")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].assetName", is("Available Monitor")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withExistingSerialNumber_shouldReturnConflict() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setSerialNumber("SN-VALID-002"); // Existing serial number from asset 2
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withInvalidSerialNumberFormat_shouldReturnBadRequest() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setSerialNumber("INVALID-FORMAT");
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    private UpdateAssetDto createUpdateAssetDto() {
+        UpdateAssetDto dto = new UpdateAssetDto();
+        dto.setName("New Laptop Name");
+        dto.setBrand("New Brand");
+        dto.setAssetDescription("New Description");
+        dto.setCategoryId(1L);
+        dto.setTypeId(1L);
+        dto.setLocation("New Location");
+        dto.setSerialNumber("SN-NEW-123");
+        dto.setPurchaseDate(LocalDateTime.of(2024, 1, 1, 10, 0));
+        dto.setWarrantyEndDate(LocalDateTime.of(2027, 1, 1, 10, 0));
+        dto.setImagePath("images/new.png");
+        return dto;
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withValidRequest_shouldReturnOk() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.assetName", is("New Laptop Name")))
+                .andExpect(jsonPath("$.brand", is("New Brand")))
+                .andExpect(jsonPath("$.serialNumber", is("SN-NEW-123")));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withNonExistentAsset_shouldReturnNotFound() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+
+        mockMvc.perform(put("/assets/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void updateAsset_withInvalidData_shouldReturnBadRequest() throws Exception {
+        UpdateAssetDto updateAssetDto = createUpdateAssetDto();
+        updateAssetDto.setName(""); // Invalid name
+
+        mockMvc.perform(put("/assets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAssetDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+}
