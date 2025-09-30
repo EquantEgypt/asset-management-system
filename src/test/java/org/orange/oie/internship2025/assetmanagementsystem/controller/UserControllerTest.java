@@ -89,4 +89,29 @@ public class UserControllerTest extends AbstractIntegrationTest {
         mockUser.setRole(role);
         return mockUser;
     }
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getUserDetails_withExistingUser_shouldReturnUser.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getUserDetails_withExistingUser_shouldReturnUser() throws Exception {
+        mockMvc.perform(get("/api/users/details/{id}", 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.username").value("admin"))
+                .andExpect(jsonPath("$.email").value("admin@orange.com"))
+                .andExpect(jsonPath("$.fullName").value("System Administrator"))
+                .andExpect(jsonPath("$.departmentName").value("IT"))
+                .andExpect(jsonPath("$.role").value("ADMIN"));
+    }
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getUserDetails_withExistingUser_shouldReturnUser.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getUserDetails_withNonExistingUser_shouldReturnError() throws Exception {
+        mockMvc.perform(get("/api/users/details/{id}", 9999L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
 }
