@@ -90,46 +90,4 @@ public class AssetSpecification {
             );
         };
     }
-
-    private static Specification<AssetAssignment> roleBasedSpec(User user) {
-        String role = user.getRole().getName();
-
-        switch (role) {
-            case "DEPARTMENT_MANAGER":
-                Set<Long> deptIds = user.getDepartment() == null ? Set.of()
-                        : Set.of(user.getDepartment().getId());
-                return (root, query, cb) -> root.join("assignedUser").get("department").get("departmentId").in(deptIds);
-            default:
-                return (root, query, cb) -> cb.conjunction();
-        }
-    }
-
-    // --- Individual filter specifications ---
-    private static Specification<AssetAssignment> assetNameContains(String value) {
-        return (root, query, cb) -> cb.like(root.join("asset").get("name"), "%" + value + "%");
-    }
-
-    private static Specification<AssetAssignment> statusEquals(String value) {
-        return (root, query, cb) -> cb.equal(root.get("status"), value);
-    }
-
-    private static Specification<AssetAssignment> typeEquals(String value) {
-        return (root, query, cb) -> cb.equal(root.join("asset").get("type").get("name"), value);
-    }
-
-    private static Specification<AssetAssignment> categoryContains(String value) {
-        return (root, query, cb) -> cb.like(root.join("asset").get("category").get("name"), "%" + value + "%");
-    }
-
-    private static Specification<AssetAssignment> brandEquals(String value) {
-        return (root, query, cb) -> cb.equal(root.join("asset").get("brand"), value);
-    }
-
-    private static Specification<AssetAssignment> assignedUserContains(String value) {
-        return (root, query, cb) -> cb.like(root.join("assignedTo").get("username"), "%" + value + "%");
-    }
-
-    private static Specification<AssetAssignment> departmentEquals(String value) {
-        return (root, query, cb) -> cb.equal(root.join("assignedUser").get("department").get("name"), value);
-    }
 }

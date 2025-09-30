@@ -13,8 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
-@RequestMapping("/request")
+@RequestMapping("/requests")
 public class RequestController {
     private final RequestService requestService;
     public RequestController(RequestService requestService){
@@ -25,22 +28,33 @@ public class RequestController {
         ResponseDTO response =  requestService.addRequest(requestDTO);
         return ResponseEntity.ok(response);
     }
-    @GetMapping()
-    public Page<ResponseDTO> getRequests(
-            @RequestParam(required = false) RequestStatus status,
+    @GetMapping("/pending")
+    public Page<ResponseDTO> getPendingRequests(
             @RequestParam(required = false) RequestType type,
             @RequestParam(required = false) String search,
-
             Pageable pageable) {
-
-        // just pass params as-is, no specs
-        return requestService.getRequests(status, type,search, pageable);
+        return requestService.getRequests(List.of(RequestStatus.PENDING), type,search, pageable,false);
+    }
+    @GetMapping("/history")
+    public Page<ResponseDTO> getRequestsHistory(
+            @RequestParam(required = false) RequestType type,
+            @RequestParam(required = false) String search,
+            Pageable pageable) {
+        return requestService.getRequests( List.of(RequestStatus.APPROVED, RequestStatus.REJECTED), type,search, pageable,false);
+    }
+    @GetMapping("/my-requests")
+    public Page<ResponseDTO> myRequests(
+            @RequestParam(required = false) RequestType type,
+            @RequestParam(required = false) String search,
+            Pageable pageable) {
+        return requestService.getRequests( null, type,search, pageable,true
+        );
     }
 
 
     @PutMapping("/response")
     @PreAuthorize("hasAuthority('IT') || hasAuthority('ADMIN') ")
-    public ResponseEntity<ResponseDTO> respondToMaintenanceRequest(
+    public ResponseEntity<ResponseDTO> respondToRequests(
             @Valid  @RequestBody  ResponseDTO response) {
         return ResponseEntity.ok(
                 requestService.respondToRequest(response)

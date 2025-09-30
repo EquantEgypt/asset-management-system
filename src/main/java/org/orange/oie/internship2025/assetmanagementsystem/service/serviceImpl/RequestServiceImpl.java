@@ -81,36 +81,43 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Page<ResponseDTO> getRequests(RequestStatus status, RequestType type,String search, Pageable pageable) {
+    public Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type,String search, Pageable pageable, boolean personal) {
         User currentUser = SecurityUtils.getCurrentUser();
         String role = currentUser.getRole().getName();
         Specification<AssetRequest> spec = Specification.where(null);
-
-        if (status != null) {
-            spec = spec.and(RequestSpecifications.byStatus(status));
+        if (statuses != null && !statuses.isEmpty()) {
+            spec = spec.and(RequestSpecifications.byStatuses(statuses));
         }
+
         if (type != null) {
             spec = spec.and(RequestSpecifications.byReqType(type));
         }
         if (search != null) {
-            spec = spec.and(RequestSpecifications.byAssetTypeOrAssetNameOrRequesterSimple(search));
+            spec = spec.and(RequestSpecifications.byAssetTypeOrAssetNameOrRequester(search));
         }
-
+        Specification<AssetRequest> ownSpec =
+                (root, query, cb) -> cb.equal(root.get("requester").get("id"), currentUser.getId());
         switch (role) {
             case "ADMIN":
-                return requestRepository.findAll(spec, pageable).map(mapper::toDTO);
+                return requestRepository.findAll(personal ? spec.and(ownSpec) : spec, pageable)
+                        .map(mapper::toDTO);
             case "IT":
+                if (personal) {
+                    return requestRepository.findAll(spec.and(ownSpec), pageable)
+                            .map(mapper::toDTO);
+                }
                 Specification<AssetRequest> itSpec =
                         RequestSpecifications.byReqType(RequestType.MAINTENANCE);
-                return requestRepository.findAll(itSpec.and(spec), pageable).map(mapper::toDTO);
+                return requestRepository.findAll(spec.and(itSpec), pageable)
+                        .map(mapper::toDTO);
             case "DEPARTMENT_MANAGER":
                 List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
                         .stream().map(User::getId).collect(Collectors.toList());
                 return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
             default:
-                Specification<AssetRequest> userSpec =
-                        (root, query, cb) -> cb.equal(root.get("requester").get("id"), currentUser.getId());
-                return requestRepository.findAll(userSpec.and(spec), pageable).map(mapper::toDTO);        }
+                return requestRepository.findAll(spec.and(ownSpec), pageable)
+                        .map(mapper::toDTO);
+        }
     }
 
     @Transactional
@@ -122,12 +129,15 @@ public class RequestServiceImpl implements RequestService {
         RequestType requestType=  request.getRequestType();
         if (response.getStatus()==RequestStatus.APPROVED) {
             request.setStatus( RequestStatus.APPROVED );
-         if(requestType==RequestType.MAINTENANCE) {
+            request.setRejectionNote(null);
+
+            if(requestType==RequestType.MAINTENANCE) {
              request.getAsset().setStatus(AssetStatus.UNDER_MAINTENANCE);
              assetRepository.save(request.getAsset());
          }
         }else{
             request.setStatus( RequestStatus.REJECTED);
+            request.setRejectionNote(response.getRejectionNote());
         }
         request.setApprovedBy(user);
         request.setApprovedDate(LocalDateTime.now());
@@ -144,6 +154,10 @@ public class RequestServiceImpl implements RequestService {
         if (response.getStatus() != RequestStatus.APPROVED && response.getStatus() != RequestStatus.REJECTED) {
             throw new BusinessException(ApiReturnCode.BAD_REQUEST,
                     "Status must be either APPROVED or REJECTED");
+        }
+        if (response.getStatus() != RequestStatus.REJECTED && response.getRejectionNote() != null) {
+            throw new BusinessException(ApiReturnCode.BAD_REQUEST,
+                    "You Can't Add A Rejection Note to an Accepted Asset");
         }
     }
 }
