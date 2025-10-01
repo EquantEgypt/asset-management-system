@@ -1,4 +1,6 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
@@ -13,6 +15,7 @@ import java.util.List;
 public interface RequestService {
 
      ResponseDTO addRequest(RequestDTO requestDTO);
-     Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type, String search, Pageable pageable, boolean personal);
-    ResponseDTO  respondToRequest(ResponseDTO response);
+     Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type, String search,boolean personal, Pageable pageable);
+    ResponseDTO approveRequest(Long id, ApproveRequestDTO dto);
+    ResponseDTO rejectRequest(Long id, RejectRequestDTO dto);
 }

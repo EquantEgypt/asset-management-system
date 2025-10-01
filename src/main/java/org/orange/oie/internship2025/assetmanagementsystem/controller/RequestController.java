@@ -2,6 +2,8 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 
 import jakarta.validation.Valid;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
@@ -13,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -28,36 +29,29 @@ public class RequestController {
         ResponseDTO response =  requestService.addRequest(requestDTO);
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/pending")
-    public Page<ResponseDTO> getPendingRequests(
+    @GetMapping()
+    public Page<ResponseDTO> getRequests(
+            @RequestParam(required = false) List<RequestStatus> statuses,
             @RequestParam(required = false) RequestType type,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) boolean personal,
             Pageable pageable) {
-        return requestService.getRequests(List.of(RequestStatus.PENDING), type,search, pageable,false);
-    }
-    @GetMapping("/history")
-    public Page<ResponseDTO> getRequestsHistory(
-            @RequestParam(required = false) RequestType type,
-            @RequestParam(required = false) String search,
-            Pageable pageable) {
-        return requestService.getRequests( List.of(RequestStatus.APPROVED, RequestStatus.REJECTED), type,search, pageable,false);
-    }
-    @GetMapping("/my-requests")
-    public Page<ResponseDTO> myRequests(
-            @RequestParam(required = false) RequestType type,
-            @RequestParam(required = false) String search,
-            Pageable pageable) {
-        return requestService.getRequests( null, type,search, pageable,true
-        );
+        return requestService.getRequests(statuses, type,search,personal, pageable);
     }
 
+    @PutMapping("/{id}/approve")
+    @PreAuthorize("hasAuthority('IT') || hasAuthority('ADMIN')")
+    public ResponseEntity<ResponseDTO> approveRequest(
+            @PathVariable Long id,
+            @Valid @RequestBody ApproveRequestDTO dto) {
+        return ResponseEntity.ok(requestService.approveRequest(id, dto));
+    }
 
-    @PutMapping("/response")
-    @PreAuthorize("hasAuthority('IT') || hasAuthority('ADMIN') ")
-    public ResponseEntity<ResponseDTO> respondToRequests(
-            @Valid  @RequestBody  ResponseDTO response) {
-        return ResponseEntity.ok(
-                requestService.respondToRequest(response)
-        );
+    @PutMapping("/{id}/reject")
+    @PreAuthorize("hasAuthority('IT') || hasAuthority('ADMIN')")
+    public ResponseEntity<ResponseDTO> rejectRequest(
+            @PathVariable Long id,
+            @Valid @RequestBody RejectRequestDTO dto) {
+        return ResponseEntity.ok(requestService.rejectRequest(id, dto));
     }
 }

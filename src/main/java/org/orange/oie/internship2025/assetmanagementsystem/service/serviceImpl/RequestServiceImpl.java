@@ -1,21 +1,18 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
+import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssignmentMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.RequestMapper;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.RequestRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.*;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
 import org.orange.oie.internship2025.assetmanagementsystem.specification.RequestSpecifications;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
@@ -46,7 +43,10 @@ public class RequestServiceImpl implements RequestService {
     private TypeRepository typeRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private AssetHistoryRepository assetHistoryRepository;
+    @Autowired
+    private AssignmentMapper assignmentMapper;
 
     @Override
     public ResponseDTO addRequest(RequestDTO requestDTO) {
@@ -88,83 +88,78 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type,String search, Pageable pageable, boolean personal) {
+    public Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type,String search,boolean personal, Pageable pageable) {
         User currentUser = SecurityUtils.getCurrentUser();
         String role = currentUser.getRole().getName();
-        Specification<AssetRequest> spec = Specification.where(null);
-        if (statuses != null && !statuses.isEmpty()) {
-            spec = spec.and(RequestSpecifications.byStatuses(statuses));
-        }
-
-        if (type != null) {
-            spec = spec.and(RequestSpecifications.byReqType(type));
-        }
-        if (search != null) {
-            spec = spec.and(RequestSpecifications.byAssetTypeOrAssetNameOrRequester(search));
-        }
+        Specification<AssetRequest> baseSpec = RequestSpecifications.fromFilters(statuses, type, search);
         Specification<AssetRequest> ownSpec =
                 (root, query, cb) -> cb.equal(root.get("requester").get("id"), currentUser.getId());
         switch (role) {
             case "ADMIN":
-                return requestRepository.findAll(personal ? spec.and(ownSpec) : spec, pageable)
+                return requestRepository.findAll(personal ? baseSpec.and(ownSpec) : baseSpec, pageable)
                         .map(mapper::toDTO);
             case "IT":
                 if (personal) {
-                    return requestRepository.findAll(spec.and(ownSpec), pageable)
+                    return requestRepository.findAll(baseSpec.and(ownSpec), pageable)
                             .map(mapper::toDTO);
                 }
                 Specification<AssetRequest> itSpec =
                         RequestSpecifications.byReqType(RequestType.MAINTENANCE);
-                return requestRepository.findAll(spec.and(itSpec), pageable)
+                return requestRepository.findAll(baseSpec.and(itSpec), pageable)
                         .map(mapper::toDTO);
             case "DEPARTMENT_MANAGER":
                 List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
                         .stream().map(User::getId).collect(Collectors.toList());
                 return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
             default:
-                return requestRepository.findAll(spec.and(ownSpec), pageable)
+                return requestRepository.findAll(baseSpec.and(ownSpec), pageable)
                         .map(mapper::toDTO);
         }
     }
-
     @Transactional
-    public ResponseDTO respondToRequest( ResponseDTO response) {
-        validateResponse(response);
-        AssetRequest request = requestRepository.findById(response.getId())
+    public ResponseDTO approveRequest(Long id, ApproveRequestDTO dto) {
+        AssetRequest request = requestRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Request not found"));
-        User user = SecurityUtils.getCurrentUser();
-        RequestType requestType=  request.getRequestType();
-        if (response.getStatus()==RequestStatus.APPROVED) {
-            request.setStatus( RequestStatus.APPROVED );
-            request.setRejectionNote(null);
 
-            if(requestType==RequestType.MAINTENANCE) {
-             request.getAsset().setStatus(AssetStatus.UNDER_MAINTENANCE);
-             assetRepository.save(request.getAsset());
-         }
-        }else{
-            request.setStatus( RequestStatus.REJECTED);
-            request.setRejectionNote(response.getRejectionNote());
+        User user = SecurityUtils.getCurrentUser();
+        request.setStatus(RequestStatus.APPROVED);
+        request.setRejectionNote(null);
+        if (dto.getAssetId() != null && request.getRequestType() == RequestType.NEW) {
+            Asset asset = assetRepository.findById(dto.getAssetId())
+                    .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
+            request.setAsset(asset);
+        }
+
+        if (request.getRequestType() == RequestType.MAINTENANCE && request.getAsset() != null) {
+            request.getAsset().setStatus(AssetStatus.UNDER_MAINTENANCE);
+            assetRepository.save(request.getAsset());
+            // Create history entry
+            AssetHistory history = assignmentMapper.toCreateAssetHistory(
+                    request.getAsset(),
+                    user,
+                    AssetStatus.UNDER_MAINTENANCE,
+                    request.getNote()
+            );
+            assetHistoryRepository.save(history);
         }
         request.setApprovedBy(user);
         request.setApprovedDate(LocalDateTime.now());
         return mapper.toDTO(requestRepository.save(request));
     }
 
-    private void validateResponse(ResponseDTO response) {
-        if (response == null || response.getId() == null) {
-            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Response ID cannot be null");
-        }
-        if (response.getStatus() == null) {
-            throw new BusinessException(ApiReturnCode.BAD_REQUEST, "Response status is required");
-        }
-        if (response.getStatus() != RequestStatus.APPROVED && response.getStatus() != RequestStatus.REJECTED) {
-            throw new BusinessException(ApiReturnCode.BAD_REQUEST,
-                    "Status must be either APPROVED or REJECTED");
-        }
-        if (response.getStatus() != RequestStatus.REJECTED && response.getRejectionNote() != null) {
-            throw new BusinessException(ApiReturnCode.BAD_REQUEST,
-                    "You Can't Add A Rejection Note to an Accepted Asset");
-        }
+    @Transactional
+    public ResponseDTO rejectRequest(Long id, RejectRequestDTO dto) {
+        AssetRequest request = requestRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Request not found"));
+
+        User user = SecurityUtils.getCurrentUser();
+
+        request.setStatus(RequestStatus.REJECTED);
+        request.setRejectionNote(dto.getRejectionNote());
+
+        request.setApprovedBy(user);
+        request.setApprovedDate(LocalDateTime.now());
+
+        return mapper.toDTO(requestRepository.save(request));
     }
 }

@@ -29,5 +29,4 @@ public class ResponseDTO {
     private LocalDateTime approvedDate;
     private String note;
     private String rejectionNote;
-
 }

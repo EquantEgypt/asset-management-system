@@ -36,21 +36,30 @@
            description="Laptop" serial_number="SN002" location="HQ"
            purchase_date="2023-01-01" warranty_end_date="2026-01-01" status="AVAILABLE"/>
 
+    <asset id="5" category_id="1" type_id="1" brand="Lenovo" name="ThinkPad"
+           description="Laptop" serial_number="SN005" location="HQ"
+           purchase_date="2023-01-01" warranty_end_date="2026-01-01" status="AVAILABLE"/>
+
     <!-- Asset Requests -->
+
+    <!-- PENDING MAINTENANCE request - has existing asset -->
     <asset_request id="1" asset_id="1" type_id="1" requester_id="3"
                    request_date="2025-09-25 10:00:00" status="PENDING"
                    request_type="MAINTENANCE" note="Keyboard issue"/>
 
-    <asset_request id="2" asset_id="2" type_id="1" requester_id="3"
+    <!-- PENDING NEW request - no asset_id attribute (will be NULL) -->
+    <asset_request id="2" type_id="1" requester_id="3"
                    request_date="2025-09-26 11:00:00" status="PENDING"
                    request_type="NEW" note="Need laptop"/>
 
+    <!-- APPROVED MAINTENANCE request -->
     <asset_request id="3" asset_id="1" type_id="1" requester_id="3"
                    request_date="2025-09-20 09:00:00" status="APPROVED"
                    request_type="MAINTENANCE" approved_by_id="2"
                    approved_date="2025-09-21 14:00:00" note="Fixed"/>
 
-    <asset_request id="4" asset_id="2" type_id="1" requester_id="3"
+    <!-- REJECTED NEW request - no asset_id (will be NULL) -->
+    <asset_request id="4" type_id="1" requester_id="3"
                    request_date="2025-09-15 08:00:00" status="REJECTED"
                    request_type="NEW" approved_by_id="1"
                    approved_date="2025-09-16 10:00:00" note="Request"
