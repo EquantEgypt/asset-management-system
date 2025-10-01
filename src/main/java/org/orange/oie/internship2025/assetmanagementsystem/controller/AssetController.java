@@ -1,13 +1,10 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 import jakarta.validation.Valid;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssignedAssetFilterDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetTypeService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.CategoryService;
@@ -26,12 +23,14 @@ public class AssetController {
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
-    public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
+    private final AssetAssignmentService assetAssignmentService;
+
+    public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService, AssetAssignmentService assetAssignmentService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
+        this.assetAssignmentService = assetAssignmentService;
     }
-
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
@@ -49,10 +48,10 @@ public class AssetController {
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
+
     ) {
         return typeService.getAllTypes(categoryId);
     }
-
     @GetMapping("/categories")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
@@ -70,12 +69,27 @@ public class AssetController {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
-
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public List<AssetDto> getAvailableAsset(
             @RequestParam(required = false) String type
     ) {
         return assetService.getAvailableAsset(type);
+    }
+
+    @PostMapping("/assign")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    public ResponseEntity assignAsset(
+            @Valid @RequestBody AssetAssignmentRequest request
+    ) {
+        assetAssignmentService.assignAsset(request);
+        return ResponseEntity.ok("Asset Assigned Successfully");
+    }
+
+    @PostMapping("/{id}/unassign")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> unassignAsset(@PathVariable Long id) {
+        AssetDto dto = assetAssignmentService.unassignAsset(id);
+        return ResponseEntity.ok(dto);
     }
 }
