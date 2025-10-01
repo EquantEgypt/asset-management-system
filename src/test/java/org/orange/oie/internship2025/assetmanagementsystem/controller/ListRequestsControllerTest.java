@@ -34,7 +34,7 @@ public class ListRequestsControllerTest extends AbstractIntegrationTest {
         try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
             mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUserByRole("ADMIN"));
 
-            mockMvc.perform(get("/requests/pending"))
+            mockMvc.perform(get("/requests"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray());
         }
@@ -50,7 +50,7 @@ public class ListRequestsControllerTest extends AbstractIntegrationTest {
         try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
             mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUserByRole("ADMIN"));
 
-            mockMvc.perform(get("/requests/history"))
+            mockMvc.perform(get("/requests"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray());
         }
@@ -65,7 +65,7 @@ public class ListRequestsControllerTest extends AbstractIntegrationTest {
         try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
             mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUserByRole("USER"));
 
-            mockMvc.perform(get("/requests/my-requests"))
+            mockMvc.perform(get("/requests"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray());
         }
