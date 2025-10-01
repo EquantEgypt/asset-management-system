@@ -39,10 +39,14 @@ public class AssetSpecification {
                 predicates.add(cb.equal(userJoin.get("id"), currentUser.getId()));
                 filter.setDepartment(null);
                 filter.setAssignedUser(null);
-            }else {
+            } else {
                 switch (role) {
                     case "DEPARTMENT_MANAGER":
                         predicates.add(cb.equal(userJoin.get("department").get("id"), currentUser.getDepartment().getId()));
+                        filter.setDepartment(null);
+                        break;
+                    case "EMPLOYEE":
+                        filter.setAssignedUser(currentUser.getUsername());
                         filter.setDepartment(null);
                         break;
                     case "IT":
