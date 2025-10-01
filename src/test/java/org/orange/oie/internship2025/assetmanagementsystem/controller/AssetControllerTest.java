@@ -86,7 +86,7 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getAllAssets_withExistingAssets_shouldReturnList() throws Exception {
 
-        mockMvc.perform(get("/assets/all"))
+        mockMvc.perform(get("/assets"))
                 .andExpect(status().isOk());
     }
 
@@ -393,5 +393,58 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         mockUser.setRole(role);
 
         return mockUser;
+    }
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asAdmin_success() throws Exception {
+        User mockUser = new User();
+        mockUser.setId(2L);
+        mockUser.setEmail("admin@test.com");
+        mockUser.setUsername("Admin");
+
+
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("AVAILABLE"));
+
+    }
+
+    // 2. Employee tries to unassign (Forbidden)
+    @Test
+    @WithMockUser(username = "employee", authorities = {"EMPLOYEE"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asEmployee_forbidden() throws Exception {
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isForbidden());
+    }
+
+    // 3. IT tries to unassign (Forbidden)
+    @Test
+    @WithMockUser(username = "it", authorities = {"IT"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asIt_forbidden() throws Exception {
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isForbidden());
+    }
+
+    // 4. Non-existing asset
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/empty-db.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_nonExistingAsset_notFound() throws Exception {
+        mockMvc.perform(post("/assets/999/unassign"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Asset not found"));
+    }
+
+    // 5. Asset is AVAILABLE (no active assignment)
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-available.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_availableAsset_error() throws Exception {
+        mockMvc.perform(post("/assets/2/unassign"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Asset is not assigned to anyone"));
     }
 }
