@@ -5,8 +5,8 @@ import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterf
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -16,7 +16,11 @@ public class AssetHistoryController {
     private AssetHistoryService assetHistoryService;
 
     @GetMapping("/history/{assetId}")
-    public ResponseEntity<List<AssetHistoryDto>> getAssetHistoryByAssetId(@PathVariable Long assetId) {
-        return ResponseEntity.ok(assetHistoryService.getHistoryByAssetId(assetId));
+    public ResponseEntity<Page<AssetHistoryDto>> getAssetHistoryByAssetId(
+            @PathVariable Long assetId,
+            Pageable pageable
+    ) {
+        Page<AssetHistoryDto> historyPage = assetHistoryService.getHistoryByAssetId(assetId, pageable);
+        return ResponseEntity.ok(historyPage);
     }
 }
