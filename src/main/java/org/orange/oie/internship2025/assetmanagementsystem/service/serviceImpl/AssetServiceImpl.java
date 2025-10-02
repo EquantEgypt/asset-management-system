@@ -28,7 +28,7 @@ public class AssetServiceImpl implements AssetService {
     private final ListAssetDTOMapper mapper;
     private final CategoryRepository categoryRepository;
     private final TypeRepository typeRepository;
-
+private  final   AssetHistoryRepository assetHistoryRepository;
     public AssetServiceImpl(AssetRepository assetRepository,
                             AssetMapper assetMapper,
                             ListAssetDTOMapper listAssetDTOMapper,

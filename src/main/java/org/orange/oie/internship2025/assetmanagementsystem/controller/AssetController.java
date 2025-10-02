@@ -86,4 +86,12 @@ public class AssetController {
     public ResponseEntity<AssetDetailsDto> getAssetDetails(@PathVariable Long id) {
         return ResponseEntity.ok(assetService.getAssetDetails(id));
     }
+    @PostMapping("/assign")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    public ResponseEntity assignAsset(
+            @Valid  @RequestBody AssetAssignmentRequest request
+    ) {
+        assetAssignmentService.assignAsset(request);
+        return ResponseEntity.ok("Asset Assigned Successfully");
+    }
 }
