@@ -17,4 +17,5 @@ public class AssignedAssetFilterDTO {
     private int size = 10;
     private String sortBy = "id";
     private boolean ascending = true;
+    private boolean myAssetsFlag = false;
 }

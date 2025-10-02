@@ -49,11 +49,12 @@ public class AssetController {
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
+
     ) {
         return typeService.getAllTypes(categoryId);
     }
-
     @GetMapping("/categories")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
@@ -70,7 +71,6 @@ public class AssetController {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
-
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public List<AssetDto> getAvailableAsset(
