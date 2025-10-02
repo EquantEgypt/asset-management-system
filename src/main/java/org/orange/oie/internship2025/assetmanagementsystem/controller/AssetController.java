@@ -85,14 +85,4 @@ public class AssetController {
     public ResponseEntity<AssetDetailsDto> getAssetDetails(@PathVariable Long id) {
         return ResponseEntity.ok(assetService.getAssetDetails(id));
     }
-
-    @GetMapping("/history/{assetId}")
-    public ResponseEntity<Page<listAssetHistoryResponseDto>> getAssetHistoryByAssetId(
-            @PathVariable Long assetId,
-            Pageable pageable
-    ) {
-        Page<listAssetHistoryResponseDto> historyPage = assetService.getHistoryByAssetId(assetId, pageable);
-        return ResponseEntity.ok(historyPage);
-    }
-
 }

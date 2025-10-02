@@ -5,10 +5,8 @@ import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -124,22 +122,6 @@ public class AssetMapper {
             dto.setAssignedToId(assignedUser.getId());
             dto.setAssignedToName(assignedUser.getUsername());
             dto.setAssignedToEmail(assignedUser.getEmail());
-        }
-
-        return dto;
-    }
-
-    public listAssetHistoryResponseDto toHistoryDto(AssetHistory history) {
-        listAssetHistoryResponseDto dto = new listAssetHistoryResponseDto();
-        dto.setId(history.getId());
-        dto.setAssetName(history.getAsset().getName());
-        dto.setNote(history.getNote());
-        dto.setTimestamp(history.getTimestamp());
-        dto.setStatus(history.getStatus());
-        if (history.getUser() != null) {
-            dto.setAssignedTo(history.getUser().getUsername());
-        } else {
-            dto.setAssignedTo(null);
         }
 
         return dto;
