@@ -1,8 +1,11 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
-
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.UserDetailsDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
+import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
+import org.orange.oie.internship2025.assetmanagementsystem.mapper.UserDetailsMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.UserMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.service.AuthService;
@@ -49,5 +52,15 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(spec, pageable);
         return UserMapper.toDtoPage(users);
 
+    }
+    @Override
+    public UserDetailsDTO getUserDetailsById(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(
+                        ApiReturnCode.USER_NOT_EXISTS,
+                        "User not found with id: " + id
+                ));
+
+        return UserDetailsMapper.toDto(user);
     }
 }
