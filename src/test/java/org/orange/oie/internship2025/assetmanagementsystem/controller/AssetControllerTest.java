@@ -3,11 +3,13 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDetailsDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
@@ -301,6 +303,27 @@ public class AssetControllerTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateAssetDto)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/getAssetDetails_withExistingAsset_shouldReturnAssetDetails.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void getAssetDetails_withExistingAsset_shouldReturnAssetDetails() throws Exception {
+        MvcResult result = mockMvc.perform(get("/assets/details/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        AssetDetailsDto assetDetails = objectMapper.readValue(jsonResponse, AssetDetailsDto.class);
+
+        Assertions.assertThat(assetDetails).isNotNull();
+        Assertions.assertThat(assetDetails.getAssetName()).isEqualTo("Laptop");
+        Assertions.assertThat(assetDetails.getBrand()).isEqualTo("Dell");
+        Assertions.assertThat(assetDetails.getCategoryName()).isEqualTo("Electronics");
+        Assertions.assertThat(assetDetails.getTypeName()).isEqualTo("Laptop");
+        Assertions.assertThat(assetDetails.getAssignedToName()).isEqualTo("testuser");
     }
 
 }

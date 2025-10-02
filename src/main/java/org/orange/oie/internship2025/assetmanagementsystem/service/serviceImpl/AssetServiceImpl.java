@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,6 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final AssetMapper assetMapper;
     private final ListAssetDTOMapper mapper;
-    private final AssetHistoryRepository assetHistoryRepository;
     private final CategoryRepository categoryRepository;
     private final TypeRepository typeRepository;
 
@@ -41,7 +39,6 @@ public class AssetServiceImpl implements AssetService {
         this.assetRepository = assetRepository;
         this.assetMapper = assetMapper;
         this.mapper = listAssetDTOMapper;
-        this.assetHistoryRepository = assetHistoryRepository;
         this.categoryRepository = categoryRepository;
         this.typeRepository = typeRepository;
     }
@@ -132,4 +129,15 @@ public class AssetServiceImpl implements AssetService {
         List<Asset> availableAssets = assetRepository.findAll(spec);
         return assetMapper.toDtoList(availableAssets);
     }
+
+    @Override
+    public AssetDetailsDto getAssetDetails(Long id) {
+        Asset asset = assetRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND,
+                        "Asset not found with id " + id));
+
+        return assetMapper.toDetailsDto(asset);
+    }
+
+
 }

@@ -8,9 +8,7 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
-import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
-import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetTypeService;
-import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.CategoryService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,13 +21,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
+
+    private final AssetAssignmentService assetAssignmentService;
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
-    public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService) {
+
+    public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService, AssetAssignmentService assetAssignmentService) {
         this.assetService = assetService;
         this.typeService = typeService;
         this.categoryService = categoryService;
+        this.assetAssignmentService = assetAssignmentService;
     }
 
     @PostMapping
@@ -77,5 +79,10 @@ public class AssetController {
             @RequestParam(required = false) String type
     ) {
         return assetService.getAvailableAsset(type);
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<AssetDetailsDto> getAssetDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(assetService.getAssetDetails(id));
     }
 }

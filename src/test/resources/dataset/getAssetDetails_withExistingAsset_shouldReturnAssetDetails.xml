@@ -1,0 +1,25 @@
+<dataset>
+    <asset_category id="1" name="Electronics"/>
+    <asset_type id="1" name="Laptop" category_id="1"/>
+    <department id="1" name="IT"/>
+    <role id="1" name="EMPLOYEE"/>
+    <users id="1" username="testuser" full_name="Test User" email="test@orange.com" password="password" department_id="1" role_id="1" is_active="true" created_at="2024-01-01" updated_at="2024-01-01"/>
+
+    <asset id="1"
+           category_id="1"
+           type_id="1"
+           brand="Dell"
+           description="A test laptop"
+           name="Laptop"
+           location="Office"
+           serial_number="SN12345"
+           purchase_date="2024-01-01"
+           warranty_end_date="2027-01-01"
+           status="ASSIGNED"/>
+
+    <asset_assignment id="1"
+                      asset_id="1"
+                      assigned_to_user_id="1"
+                      assignment_date="2024-01-02"
+                      status="ACTIVE"/>
+</dataset>

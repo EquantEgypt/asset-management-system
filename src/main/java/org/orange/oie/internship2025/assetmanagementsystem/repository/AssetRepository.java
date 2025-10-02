@@ -13,4 +13,7 @@ public Asset findByName(String name);
     boolean existsBySerialNumber(String serialNumber);
     Asset findBySerialNumber(String serialNumber);
 Optional<Asset> findByIdAndTypeIdAndCategoryId(Long assetId, Long typeId, Long categoryId);
+    List<Asset> findByStatus(AssetStatus status);
+    Asset findAssetById(Long id);
+
 }
