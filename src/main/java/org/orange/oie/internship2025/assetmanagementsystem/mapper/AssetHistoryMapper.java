@@ -1,6 +1,5 @@
 package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetHistoryDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetHistoryResponseDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetHistory;
 import org.springframework.stereotype.Component;
