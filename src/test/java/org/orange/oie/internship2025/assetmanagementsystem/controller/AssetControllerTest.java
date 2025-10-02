@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
@@ -30,13 +31,15 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mockStatic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@Transactional
 public class AssetControllerTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -79,16 +82,14 @@ public class AssetControllerTest extends AbstractIntegrationTest {
 
     @DatabaseSetup(value = "/dataset/getAllAssets_withExistingAssets_shouldReturnList.xml", type = DatabaseOperation.CLEAN_INSERT)
     @Test
-    @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getAllAssets_withExistingAssets_shouldReturnList() throws Exception {
 
-        mockMvc.perform(get("/assets/all"))
+        mockMvc.perform(get("/assets"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @DatabaseSetup(value = "/dataset/addAsset_withValidRequest_shouldReturnCreatedAsset.xml", type = DatabaseOperation.CLEAN_INSERT)
     void addAsset_withValidRequest_shouldReturnCreatedAsset() throws Exception {
@@ -123,7 +124,6 @@ public class AssetControllerTest extends AbstractIntegrationTest {
 
     @DatabaseSetup(value = "/dataset/getAllTypes_withExistingTypes_shouldReturnList.xml", type = DatabaseOperation.CLEAN_INSERT)
     @Test
-    @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getAllTypes_withExistingTypes_shouldReturnList() throws Exception {
 
@@ -232,7 +232,6 @@ public class AssetControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @DatabaseSetup(value = "/dataset/updateAsset_dataset.xml", type = DatabaseOperation.CLEAN_INSERT)
     void updateAsset_withInvalidSerialNumberFormat_shouldReturnBadRequest() throws Exception {
@@ -303,4 +302,117 @@ public class AssetControllerTest extends AbstractIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asAdmin_success() throws Exception {
+        User mockUser = new User();
+        mockUser.setId(2L);
+        mockUser.setEmail("admin@test.com");
+        mockUser.setUsername("Admin");
+
+
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("AVAILABLE"));
+
+    }
+
+    // 2. Employee tries to unassign (Forbidden)
+    @Test
+    @WithMockUser(username = "employee", authorities = {"EMPLOYEE"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asEmployee_forbidden() throws Exception {
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isForbidden());
+    }
+
+    // 3. IT tries to unassign (Forbidden)
+    @Test
+    @WithMockUser(username = "it", authorities = {"IT"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-assigned.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_asIt_forbidden() throws Exception {
+        mockMvc.perform(post("/assets/1/unassign"))
+                .andExpect(status().isForbidden());
+    }
+
+    // 4. Non-existing asset
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/empty-db.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_nonExistingAsset_notFound() throws Exception {
+        mockMvc.perform(post("/assets/999/unassign"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Asset not found"));
+    }
+
+    // 5. Asset is AVAILABLE (no active assignment)
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    @DatabaseSetup(value = "/dataset/unassignAsset/asset-available.xml", type = DatabaseOperation.CLEAN_INSERT)
+    void unassignAsset_availableAsset_error() throws Exception {
+        mockMvc.perform(post("/assets/2/unassign"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Asset is not assigned to anyone"));
+    }
+
+    @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @WithMockUser(username = "MARYIAM", authorities = {"IT"})
+    void assignAsset_withAlreadyAssignedAssets_shouldReturnError() throws Exception {
+
+        AssetAssignmentRequest request = new AssetAssignmentRequest();
+        request.setAssetId(2L);
+        request.setUserId(2L);
+        request.setCategoryId(1L);
+        request.setTypeId(1L);
+        request.setNote("Assigning Chair to maryiam");
+
+        mockMvc.perform(post("/assets/assign")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.error").value("ASSET_ALREADY_EXISTS"))
+                .andExpect(jsonPath("$.code").value(100)).andExpect(jsonPath("$.message").value("Asset is not available"));
+
+    }
+
+    @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @WithMockUser(username = "MARYIAM", authorities = {"IT"})
+    void assignAsset_shouldReturnSuccess() throws Exception {
+
+        AssetAssignmentRequest request = new AssetAssignmentRequest();
+        request.setAssetId(1L);
+        request.setUserId(2L);
+        request.setCategoryId(1L);
+        request.setTypeId(1L);
+        request.setNote("Assigning Laptop to maryiam");
+        mockMvc.perform(post("/assets/assign")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Asset Assigned Successfully"));
+    }
+
+    private User getLoggedInUserByRole(String roleName) {
+        User mockUser = new User();
+        mockUser.setId(1L);
+        mockUser.setUsername("MARYIAM");
+        mockUser.setFullName("MARY");
+        mockUser.setEmail("admin@example.com");
+
+        Department dept = new Department();
+        dept.setId(1L);
+        dept.setName("IT");
+        mockUser.setDepartment(dept);
+
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(roleName);
+        mockUser.setRole(role);
+
+        return mockUser;
+    }
 }
