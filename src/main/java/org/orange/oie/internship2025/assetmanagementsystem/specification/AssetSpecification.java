@@ -78,16 +78,7 @@ public class AssetSpecification {
             if (filter.getDepartment() != null && !filter.getDepartment().isBlank()) {
                 predicates.add(cb.equal(userJoin.get("department").get("name"), filter.getDepartment()));
             }
-
-    public static Specification<Asset> availableByType(String type) {
-        return (root, query, cb) -> {
-            if (type == null || type.isBlank()) {
-                return cb.equal(root.get("status"), AssetStatus.AVAILABLE);
-            }
-            return cb.and(
-                    cb.equal(root.get("status"), AssetStatus.AVAILABLE),
-                    cb.equal(root.join("type").get("name"), type)
-            );
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

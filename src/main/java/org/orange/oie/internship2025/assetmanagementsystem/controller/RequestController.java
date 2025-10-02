@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/requests")
+@RequestMapping("/request")
 public class RequestController {
     private final RequestService requestService;
     public RequestController(RequestService requestService){

@@ -40,7 +40,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
 
             ApproveRequestDTO dto = new ApproveRequestDTO();
 
-            mockMvc.perform(put("/requests/1/approve")
+            mockMvc.perform(put("/request/1/approve")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -60,7 +60,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
             ApproveRequestDTO dto = new ApproveRequestDTO();
             dto.setAssetId(5L);
 
-            mockMvc.perform(put("/requests/2/approve")
+            mockMvc.perform(put("/request/2/approve")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -80,7 +80,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
 
             ApproveRequestDTO dto = new ApproveRequestDTO();
 
-            mockMvc.perform(put("/requests/999/approve")
+            mockMvc.perform(put("/request/999/approve")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isNotFound())
@@ -95,7 +95,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
     void approveRequest_asEmployee_shouldReturnForbidden() throws Exception {
         ApproveRequestDTO dto = new ApproveRequestDTO();
 
-        mockMvc.perform(put("/requests/1/approve")
+        mockMvc.perform(put("/request/1/approve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -113,7 +113,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
             RejectRequestDTO dto = new RejectRequestDTO();
             dto.setRejectionNote("Not available");
 
-            mockMvc.perform(put("/requests/2/reject")
+            mockMvc.perform(put("/request/2/reject")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -134,7 +134,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
             RejectRequestDTO dto = new RejectRequestDTO();
             dto.setRejectionNote("Not available");
 
-            mockMvc.perform(put("/requests/999/reject")
+            mockMvc.perform(put("/request/999/reject")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isNotFound())
@@ -150,7 +150,7 @@ class RequestActionsControllerTest extends AbstractIntegrationTest {
         RejectRequestDTO dto = new RejectRequestDTO();
         dto.setRejectionNote("Not available");
 
-        mockMvc.perform(put("/requests/1/reject")
+        mockMvc.perform(put("/request/1/reject")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
