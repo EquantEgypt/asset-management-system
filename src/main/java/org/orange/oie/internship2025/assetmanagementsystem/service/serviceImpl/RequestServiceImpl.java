@@ -1,9 +1,7 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
+import org.apache.catalina.connector.Request;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
@@ -81,34 +79,10 @@ public class RequestServiceImpl implements RequestService {
         return response;
     }
 
-    @Override
-    public Page<ResponseDTO> getRequests(List<RequestStatus> statuses, RequestType type,String search,boolean personal, Pageable pageable) {
+    public Page<ResponseDTO> getRequests(RequestFilter filter, Pageable pageable) {
         User currentUser = SecurityUtils.getCurrentUser();
-        String role = currentUser.getRole().getName();
-        Specification<AssetRequest> baseSpec = RequestSpecifications.fromFilters(statuses, type, search);
-        Specification<AssetRequest> ownSpec =
-                (root, query, cb) -> cb.equal(root.get("requester").get("id"), currentUser.getId());
-        switch (role) {
-            case "ADMIN":
-                return requestRepository.findAll(personal ? baseSpec.and(ownSpec) : baseSpec, pageable)
-                        .map(mapper::toDTO);
-            case "IT":
-                if (personal) {
-                    return requestRepository.findAll(baseSpec.and(ownSpec), pageable)
-                            .map(mapper::toDTO);
-                }
-                Specification<AssetRequest> itSpec =
-                        RequestSpecifications.byReqType(RequestType.MAINTENANCE);
-                return requestRepository.findAll(baseSpec.and(itSpec), pageable)
-                        .map(mapper::toDTO);
-            case "DEPARTMENT_MANAGER":
-                List<Long> userIds = userRepository.findAllByDepartment(currentUser.getDepartment())
-                        .stream().map(User::getId).collect(Collectors.toList());
-                return requestRepository.findAllByRequesterIdIn(userIds, pageable).map(mapper::toDTO);
-            default:
-                return requestRepository.findAll(baseSpec.and(ownSpec), pageable)
-                        .map(mapper::toDTO);
-        }
+        Specification<AssetRequest> spec = RequestSpecifications.buildRoleBasedSpecification(currentUser, filter);
+        return requestRepository.findAll(spec, pageable).map(mapper::toDTO);
     }
     @Transactional
     public ResponseDTO approveRequest(Long id, ApproveRequestDTO dto) {

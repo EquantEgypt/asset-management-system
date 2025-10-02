@@ -1,32 +1,18 @@
 package org.orange.oie.internship2025.assetmanagementsystem.specification;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestFilter;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequestSpecifications {
-    public static Specification<AssetRequest> fromFilters(List<RequestStatus> statuses,
-                                                          RequestType type,
-                                                          String search) {
-        Specification<AssetRequest> spec = Specification.where(null);
 
-        if (statuses != null && !statuses.isEmpty()) {
-            spec = spec.and(byStatuses(statuses));
-        }
-
-        if (type != null) {
-            spec = spec.and(byReqType(type));
-        }
-
-        if (search != null && !search.trim().isEmpty()) {
-            spec = spec.and(byAssetTypeOrAssetNameOrRequester(search));
-        }
-
-        return spec;
-    }
     public static Specification<AssetRequest> byReqType(RequestType type){
         return(root,query,cb)->
                 cb.equal(root.get("requestType"),type);
@@ -40,20 +26,61 @@ public class RequestSpecifications {
         };
     }
 
-    public static Specification<AssetRequest> byAssetTypeOrAssetNameOrRequester(String search) {
-        return (root, query, cb) -> {
-            if (search == null || search.trim().isEmpty()) {
-                return cb.conjunction();
-            }
-            String likePattern = "%" + search.trim().toLowerCase() + "%";
 
-            return cb.or(
-                    cb.like(cb.lower(root.join("assetType", JoinType.LEFT).get("name")), likePattern),
-                    cb.like(cb.lower(root.join("asset", JoinType.LEFT).get("name")), likePattern),
-                    cb.like(cb.lower(root.join("requester", JoinType.LEFT).get("email")), likePattern)
-            );
+    public static Specification<AssetRequest> withFilter(RequestFilter filter) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (filter.getStatus() != null) {
+                if (filter.getStatus().equalsIgnoreCase("PAST")) {
+                    predicates.add(root.get("status").in(RequestStatus.APPROVED, RequestStatus.REJECTED));
+                } else {
+                    predicates.add(cb.equal(root.get("status"), RequestStatus.valueOf(filter.getStatus())));
+                }
+            }
+            if (filter.getType() != null) {
+                predicates.add(cb.equal(root.get("requestType"), filter.getType()));
+            }
+            if (filter.getDepartmentId() != null) {
+                predicates.add(cb.equal(root.join("requester").join("department").get("id"), filter.getDepartmentId()));
+            }
+            if (filter.getSearch() != null && !filter.getSearch().trim().isEmpty()) {
+                String likePattern = "%" + filter.getSearch().trim().toLowerCase() + "%";
+                predicates.add(
+                        cb.or(
+                                cb.like(cb.lower(root.join("assetType", JoinType.LEFT).get("name")), likePattern),
+                                cb.like(cb.lower(root.join("asset", JoinType.LEFT).get("name")), likePattern),
+                                cb.like(cb.lower(root.join("requester", JoinType.LEFT).get("username")), likePattern),
+                                cb.like(cb.lower(root.join("requester", JoinType.LEFT).get("email")), likePattern)
+                        )
+                );
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 
+    public static Specification<AssetRequest> requestedFor(Long userId) {
+        return (root, query, cb) -> cb.equal(root.get("requester").get("id"), userId);
+    }
+
+    public static Specification<AssetRequest> typeEquals(RequestType type) {
+        return (root, query, cb) -> cb.equal(root.get("requestType"), type);
+
+    }
+    public static Specification<AssetRequest> buildRoleBasedSpecification(User currentUser, RequestFilter filter) {
+        String roleName = currentUser.getRole().getName();
+
+        if (roleName.equals("ADMIN")) {
+            return RequestSpecifications.withFilter(filter);
+        } else if (roleName.equals("IT")) {
+            return Specification
+                    .where(RequestSpecifications.requestedFor(currentUser.getId()))
+                    .or(RequestSpecifications.typeEquals(RequestType.MAINTENANCE))
+                    .and(RequestSpecifications.withFilter(filter));
+        } else {
+            return Specification
+                    .where(RequestSpecifications.requestedFor(currentUser.getId()))
+                    .and(RequestSpecifications.withFilter(filter));
+        }
+    }
 }
 

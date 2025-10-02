@@ -2,12 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.controller;
 
 
 import jakarta.validation.Valid;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
-import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.*;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,14 +24,9 @@ public class RequestController {
         ResponseDTO response =  requestService.addRequest(requestDTO);
         return ResponseEntity.ok(response);
     }
-    @GetMapping()
-    public Page<ResponseDTO> getRequests(
-            @RequestParam(required = false) List<RequestStatus> statuses,
-            @RequestParam(required = false) RequestType type,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) boolean personal,
-            Pageable pageable) {
-        return requestService.getRequests(statuses, type,search,personal, pageable);
+    @GetMapping
+    public Page<ResponseDTO> getRequests(RequestFilter filter, Pageable pageable) {
+        return requestService.getRequests(filter, pageable);
     }
 
     @PutMapping("/{id}/approve")
