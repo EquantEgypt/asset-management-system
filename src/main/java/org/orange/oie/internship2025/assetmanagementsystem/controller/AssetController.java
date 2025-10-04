@@ -78,4 +78,9 @@ public class AssetController {
     ) {
         return assetService.getAvailableAsset(type);
     }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<AssetDetailsDto> getAssetDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(assetService.getAssetDetails(id));
+    }
 }

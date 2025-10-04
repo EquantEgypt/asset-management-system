@@ -132,4 +132,13 @@ public class AssetServiceImpl implements AssetService {
         List<Asset> availableAssets = assetRepository.findAll(spec);
         return assetMapper.toDtoList(availableAssets);
     }
+    @Override
+    public AssetDetailsDto getAssetDetails(Long id) {
+        Asset asset = assetRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND,
+                        "Asset not found with id " + id));
+
+        return assetMapper.toDetailsDto(asset);
+    }
+
 }
