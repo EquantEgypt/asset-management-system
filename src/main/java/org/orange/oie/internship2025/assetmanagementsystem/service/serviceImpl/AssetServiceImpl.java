@@ -28,7 +28,7 @@ public class AssetServiceImpl implements AssetService {
     private final ListAssetDTOMapper mapper;
     private final CategoryRepository categoryRepository;
     private final TypeRepository typeRepository;
-
+private  final   AssetHistoryRepository assetHistoryRepository;
     public AssetServiceImpl(AssetRepository assetRepository,
                             AssetMapper assetMapper,
                             ListAssetDTOMapper listAssetDTOMapper,
@@ -39,6 +39,7 @@ public class AssetServiceImpl implements AssetService {
         this.assetRepository = assetRepository;
         this.assetMapper = assetMapper;
         this.mapper = listAssetDTOMapper;
+        this.assetHistoryRepository = assetHistoryRepository;
         this.categoryRepository = categoryRepository;
         this.typeRepository = typeRepository;
     }
@@ -65,7 +66,6 @@ public class AssetServiceImpl implements AssetService {
 
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
-
         return assetMapper.toDto(savedAsset);
     }
 

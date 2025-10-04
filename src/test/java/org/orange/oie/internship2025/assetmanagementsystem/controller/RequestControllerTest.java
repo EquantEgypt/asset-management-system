@@ -6,6 +6,8 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ApproveRequestDTO;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RejectRequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Department;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.Role;
@@ -19,7 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.mockStatic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -215,6 +219,197 @@ void addRequest_whenUserDoesNotExist_shouldReturnNotFound() throws Exception {
                 .andExpect(status().isNotFound());
     }
 }
+
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "it_user", authorities = {"IT"})
+    void approveRequest_shouldReturnSuccess() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("IT", 2L, "it_user", 1L));
+
+            ApproveRequestDTO dto = new ApproveRequestDTO();
+
+            mockMvc.perform(put("/request/1/approve")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value("APPROVED"))
+                    .andExpect(jsonPath("$.rejectionNote").isEmpty());
+        }
+    }
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void approveRequest_withAssetId_shouldReturnSuccess() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("ADMIN", 1L, "admin", 1L));
+
+            ApproveRequestDTO dto = new ApproveRequestDTO();
+            dto.setAssetId(5L);
+
+            mockMvc.perform(put("/request/2/approve")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value("APPROVED"))
+                    .andExpect(jsonPath("$.assetId").value(5));
+        }
+    }
+
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "it_user", authorities = {"IT"})
+    void approveRequest_notFound_shouldReturnNotFound() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("IT", 2L, "it_user", 1L));
+
+            ApproveRequestDTO dto = new ApproveRequestDTO();
+
+            mockMvc.perform(put("/request/999/approve")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.message").value("Request not found"));
+        }
+    }
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "employee", authorities = {"EMPLOYEE"})
+    void approveRequest_asEmployee_shouldReturnForbidden() throws Exception {
+        ApproveRequestDTO dto = new ApproveRequestDTO();
+
+        mockMvc.perform(put("/request/1/approve")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isForbidden());
+    }
+
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void rejectRequest_shouldReturnSuccess() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("ADMIN", 1L, "admin", 1L));
+
+            RejectRequestDTO dto = new RejectRequestDTO();
+            dto.setRejectionNote("Not available");
+
+            mockMvc.perform(put("/request/2/reject")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value("REJECTED"))
+                    .andExpect(jsonPath("$.rejectionNote").value("Not available"));
+        }
+    }
+
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "it_user", authorities = {"IT"})
+    void rejectRequest_notFound_shouldReturnNotFound() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("IT", 2L, "it_user", 1L));
+
+            RejectRequestDTO dto = new RejectRequestDTO();
+            dto.setRejectionNote("Not available");
+
+            mockMvc.perform(put("/request/999/reject")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.message").value("Request not found"));
+        }
+    }
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "employee", authorities = {"EMPLOYEE"})
+    void rejectRequest_asEmployee_shouldReturnForbidden() throws Exception {
+        RejectRequestDTO dto = new RejectRequestDTO();
+        dto.setRejectionNote("Not available");
+
+        mockMvc.perform(put("/request/1/reject")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void getPendingRequests_shouldReturnSuccess() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("ADMIN", 1L, "admin", 1L));
+
+            mockMvc.perform(get("/request"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content").isArray());
+        }
+    }
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void getRequestsHistory_shouldReturnSuccess() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("ADMIN", 1L, "admin", 1L));
+
+            mockMvc.perform(get("/request"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content").isArray());
+        }
+    }
+
+
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getMyRequests_shouldReturnUserOwnRequests() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(getLoggedInUser("USER", 3L, "regular_user", 1L)
+            );
+
+            mockMvc.perform(get("/request"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content").isArray());
+        }
+    }
+    @DatabaseSetup(value = "/dataset/requests_data.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void getRequests_withSearchAndFilter_shouldReturnFilteredResults() throws Exception {
+        try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
+            mocked.when(SecurityUtils::getCurrentUser).thenReturn(
+                    getLoggedInUser("ADMIN", 1L, "admin", 1L)
+            );
+
+            mockMvc.perform(get("/request")
+                            .param("search", "Dell XPS") // more specific than "Laptop"
+                            .param("status", "PENDING")
+                            .param("page", "0")
+                            .param("size", "10"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content.length()").value(1))
+                    .andExpect(jsonPath("$.content[0].assetName").value("Dell XPS"));
+        }
+        }
 
     // --- helpers ---
 

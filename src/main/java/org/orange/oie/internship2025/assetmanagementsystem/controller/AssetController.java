@@ -33,7 +33,6 @@ public class AssetController {
         this.categoryService = categoryService;
         this.assetAssignmentService = assetAssignmentService;
     }
-
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
@@ -48,6 +47,8 @@ public class AssetController {
         return ResponseEntity.ok(dto);
     }
 
+
+
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
@@ -56,7 +57,6 @@ public class AssetController {
         return typeService.getAllTypes(categoryId);
     }
     @GetMapping("/categories")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
     }
@@ -67,6 +67,7 @@ public class AssetController {
         List<AssetDto> assets = assetService.getAllAssets();
         return ResponseEntity.ok(assets);
     }
+
 
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
@@ -84,5 +85,13 @@ public class AssetController {
     @GetMapping("/details/{id}")
     public ResponseEntity<AssetDetailsDto> getAssetDetails(@PathVariable Long id) {
         return ResponseEntity.ok(assetService.getAssetDetails(id));
+    }
+    @PostMapping("/assign")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    public ResponseEntity assignAsset(
+            @Valid  @RequestBody AssetAssignmentRequest request
+    ) {
+        assetAssignmentService.assignAsset(request);
+        return ResponseEntity.ok("Asset Assigned Successfully");
     }
 }

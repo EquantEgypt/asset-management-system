@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetAssignmentRequest;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDetailsDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.UpdateAssetDto;
@@ -32,11 +33,11 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mockStatic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 public class AssetControllerTest extends AbstractIntegrationTest {
@@ -326,4 +327,72 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         Assertions.assertThat(assetDetails.getAssignedToName()).isEqualTo("testuser");
     }
 
+
+    @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "MARYIAM", authorities = {"IT"})
+    void assignAsset_shouldReturnSuccess() throws Exception {
+        securityUtilsMock.when(SecurityUtils::getCurrentUser)
+                .thenReturn(getLoggedInUserByRole("IT"));
+
+        AssetAssignmentRequest request = new AssetAssignmentRequest();
+        request.setAssetId(1L);
+        request.setUserId(2L);
+        request.setCategoryId(1L);
+        request.setTypeId(1L);
+        request.setNote("Assigning Laptop to maryiam");
+
+        mockMvc.perform(post("/assets/assign")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Asset Assigned Successfully"));
+    }
+
+    @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @Test
+    @Transactional
+    @WithMockUser(username = "MARYIAM", authorities = {"IT"})
+    void assignAsset_withAlreadyAssignedAssets_shouldReturnError() throws Exception {
+        securityUtilsMock.when(SecurityUtils::getCurrentUser)
+                .thenReturn(getLoggedInUserByRole("IT"));
+
+        AssetAssignmentRequest request = new AssetAssignmentRequest();
+        request.setAssetId(2L);
+        request.setUserId(2L);
+        request.setCategoryId(1L);
+        request.setTypeId(1L);
+        request.setNote("Assigning Chair to maryiam");
+
+        mockMvc.perform(post("/assets/assign")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.error").value("ASSET_ALREADY_EXISTS"))
+                .andExpect(jsonPath("$.code").value(100))
+                .andExpect(jsonPath("$.message").value("Asset is not available"));
+    }
+
+
+    private User getLoggedInUserByRole(String roleName) {
+        User mockUser = new User();
+        mockUser.setId(1L);
+        mockUser.setUsername("MARYIAM");
+        mockUser.setFullName("MARY");
+        mockUser.setEmail("admin@example.com");
+
+        Department dept = new Department();
+        dept.setId(1L);
+        dept.setName("IT");
+        mockUser.setDepartment(dept);
+
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(roleName);
+        mockUser.setRole(role);
+
+        return mockUser;
+    }
 }

@@ -50,4 +50,7 @@ public class AssetRequest {
 
     @Column(name="note")
     private String note;
+
+    @Column(name="rejection_note")
+    private String rejectionNote;
 }
