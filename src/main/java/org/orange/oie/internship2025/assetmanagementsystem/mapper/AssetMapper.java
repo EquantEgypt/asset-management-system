@@ -98,7 +98,7 @@ public class AssetMapper {
         for (Asset asset : assetsList) {
             dtoList.add(toDto(asset));
         }
-           return dtoList;
+        return dtoList;
     }
 
     public AssetDetailsDto toDetailsDto(Asset asset) {

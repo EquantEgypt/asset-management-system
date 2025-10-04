@@ -129,7 +129,7 @@ private  final   AssetHistoryRepository assetHistoryRepository;
         List<Asset> availableAssets = assetRepository.findAll(spec);
         return assetMapper.toDtoList(availableAssets);
     }
-
+  
     @Override
     public AssetDetailsDto getAssetDetails(Long id) {
         Asset asset = assetRepository.findById(id)
@@ -138,6 +138,4 @@ private  final   AssetHistoryRepository assetHistoryRepository;
 
         return assetMapper.toDetailsDto(asset);
     }
-
-
 }

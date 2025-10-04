@@ -327,7 +327,6 @@ public class AssetControllerTest extends AbstractIntegrationTest {
         Assertions.assertThat(assetDetails.getAssignedToName()).isEqualTo("testuser");
     }
 
-
     @DatabaseSetup(value = "/dataset/assignAsset_withValidData.xml", type = DatabaseOperation.CLEAN_INSERT)
     @Test
     @Transactional
