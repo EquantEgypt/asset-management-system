@@ -13,5 +13,4 @@ public interface AssetService {
     List<AssetDto> getAvailableAsset(String type);
     Page<ListAssetDTO> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable);
     AssetDetailsDto getAssetDetails(Long id);
-
 }

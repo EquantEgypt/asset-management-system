@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +26,9 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
     private final AssetMapper assetMapper;
     private final ListAssetDTOMapper mapper;
-    private final AssetHistoryRepository assetHistoryRepository;
     private final CategoryRepository categoryRepository;
     private final TypeRepository typeRepository;
-
+private  final   AssetHistoryRepository assetHistoryRepository;
     public AssetServiceImpl(AssetRepository assetRepository,
                             AssetMapper assetMapper,
                             ListAssetDTOMapper listAssetDTOMapper,
@@ -68,7 +66,6 @@ public class AssetServiceImpl implements AssetService {
 
         Asset asset = assetMapper.toEntity(assetDto);
         Asset savedAsset = assetRepository.save(asset);
-
         return assetMapper.toDto(savedAsset);
     }
 
@@ -132,6 +129,7 @@ public class AssetServiceImpl implements AssetService {
         List<Asset> availableAssets = assetRepository.findAll(spec);
         return assetMapper.toDtoList(availableAssets);
     }
+  
     @Override
     public AssetDetailsDto getAssetDetails(Long id) {
         Asset asset = assetRepository.findById(id)
@@ -140,5 +138,4 @@ public class AssetServiceImpl implements AssetService {
 
         return assetMapper.toDetailsDto(asset);
     }
-
 }

@@ -1,5 +1,4 @@
 package org.orange.oie.internship2025.assetmanagementsystem.controller;
-
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Test;
@@ -8,16 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 public class AssetHistoryControllerTest extends AbstractIntegrationTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Test
     @Transactional
     @WithMockUser(username = "admin", authorities = {"ADMIN"})

@@ -1,26 +1,29 @@
 package org.orange.oie.internship2025.assetmanagementsystem.service.serviceImpl;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.RequestDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.ResponseDTO;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetRequest;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.User;
+import org.apache.catalina.connector.Request;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.requestAsset.*;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
+import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestStatus;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.RequestType;
 import org.orange.oie.internship2025.assetmanagementsystem.errors.ApiReturnCode;
 import org.orange.oie.internship2025.assetmanagementsystem.exception.BusinessException;
+import org.orange.oie.internship2025.assetmanagementsystem.mapper.AssignmentMapper;
 import org.orange.oie.internship2025.assetmanagementsystem.mapper.RequestMapper;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.AssetRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.RequestRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
-import org.orange.oie.internship2025.assetmanagementsystem.repository.UserRepository;
+import org.orange.oie.internship2025.assetmanagementsystem.repository.*;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.RequestService;
+import org.orange.oie.internship2025.assetmanagementsystem.specification.RequestSpecifications;
 import org.orange.oie.internship2025.assetmanagementsystem.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +42,10 @@ public class RequestServiceImpl implements RequestService {
     private TypeRepository typeRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private AssetHistoryRepository assetHistoryRepository;
+    @Autowired
+    private AssignmentMapper assignmentMapper;
 
     @Override
     public ResponseDTO addRequest(RequestDTO requestDTO) {
@@ -66,11 +72,62 @@ public class RequestServiceImpl implements RequestService {
                 throw new AccessDeniedException("You are not allowed to perform this operation");
             }
         }
-
         AssetRequest assetRequest = mapper.toEntity(requestDTO);
         AssetRequest req = requestRepository.save(assetRequest);
         req.setRequester(user.get());
         ResponseDTO response = mapper.toDTO(req);
         return response;
+    }
+
+    public Page<ResponseDTO> getRequests(RequestFilter filter, Pageable pageable) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        Specification<AssetRequest> spec = RequestSpecifications.buildRoleBasedSpecification(currentUser, filter);
+        return requestRepository.findAll(spec, pageable).map(mapper::toDTO);
+    }
+    @Transactional
+    public ResponseDTO approveRequest(Long id, ApproveRequestDTO dto) {
+        AssetRequest request = requestRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Request not found"));
+
+        User user = SecurityUtils.getCurrentUser();
+        request.setStatus(RequestStatus.APPROVED);
+        request.setRejectionNote(null);
+        if (dto.getAssetId() != null && request.getRequestType() == RequestType.NEW) {
+            Asset asset = assetRepository.findById(dto.getAssetId())
+                    .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Asset not found"));
+            request.setAsset(asset);
+        }
+
+        if (request.getRequestType() == RequestType.MAINTENANCE && request.getAsset() != null) {
+            request.getAsset().setStatus(AssetStatus.UNDER_MAINTENANCE);
+            assetRepository.save(request.getAsset());
+            // Create history entry
+            AssetHistory history = assignmentMapper.toCreateAssetHistory(
+                    request.getAsset(),
+                    user,
+                    AssetStatus.UNDER_MAINTENANCE,
+                    request.getNote()
+            );
+            assetHistoryRepository.save(history);
+        }
+        request.setApprovedBy(user);
+        request.setApprovedDate(LocalDateTime.now());
+        return mapper.toDTO(requestRepository.save(request));
+    }
+
+    @Transactional
+    public ResponseDTO rejectRequest(Long id, RejectRequestDTO dto) {
+        AssetRequest request = requestRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiReturnCode.ASSET_NOT_FOUND, "Request not found"));
+
+        User user = SecurityUtils.getCurrentUser();
+
+        request.setStatus(RequestStatus.REJECTED);
+        request.setRejectionNote(dto.getRejectionNote());
+
+        request.setApprovedBy(user);
+        request.setApprovedDate(LocalDateTime.now());
+
+        return mapper.toDTO(requestRepository.save(request));
     }
 }

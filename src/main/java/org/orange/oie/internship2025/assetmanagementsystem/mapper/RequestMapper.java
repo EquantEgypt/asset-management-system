@@ -30,7 +30,6 @@ public class RequestMapper {
             return null;
         }
         AssetRequest entity = new AssetRequest();
-
         User user = new User();
         user.setId(dto.getRequesterId());
         entity.setRequester(user);
@@ -48,27 +47,36 @@ public class RequestMapper {
         entity.setNote(dto.getNote());
         return entity;
     }
-
     public ResponseDTO toDTO(AssetRequest entity) {
         if (entity == null) {
             return null;
         }
         ResponseDTO dto = new ResponseDTO();
         if (entity.getAsset() != null) {
-            dto.setAsset(entity.getAsset());
+            dto.setAssetId(entity.getAsset().getId());
+            dto.setAssetName(entity.getAsset().getName());
         }
         if (entity.getApprovedBy() != null) {
             dto.setApprovedBy(entity.getApprovedBy().getUsername());
             dto.setApprovedDate(entity.getApprovedDate());
         }
         dto.setId(entity.getId());
-        dto.setAssetTypeId(entity.getAssetType().getId());
-
-        dto.setRequester(entity.getRequester().getUsername());
         dto.setRequestDate(entity.getRequestDate());
         dto.setStatus(entity.getStatus());
         dto.setRequestType(entity.getRequestType());
         dto.setNote(entity.getNote());
+        dto.setRejectionNote(entity.getRejectionNote());
+        dto.setRequester(entity.getRequester().getUsername());
+        dto.setRequesterId(entity.getRequester().getId());
+        if (entity.getAssetType() != null) {
+            dto.setAssetTypeId(entity.getAssetType().getId());
+            dto.setAssetTypeName(entity.getAssetType().getName());
+            if (entity.getAssetType().getCategory() != null) {
+                dto.setCategoryId(entity.getAssetType().getCategory().getId());
+                dto.setCategoryName(entity.getAssetType().getCategory().getName());
+            }
+        }
         return dto;
     }
+
 }

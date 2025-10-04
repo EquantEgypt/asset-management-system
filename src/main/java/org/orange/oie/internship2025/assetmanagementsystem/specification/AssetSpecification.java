@@ -55,6 +55,7 @@ public class AssetSpecification {
                         break;
                 }
             }
+
             // Add normal filters
             if (filter.getAssetName() != null && !filter.getAssetName().isBlank()) {
                 predicates.add(cb.like(root.get("name"), "%" + filter.getAssetName() + "%"));
@@ -77,7 +78,6 @@ public class AssetSpecification {
             if (filter.getDepartment() != null && !filter.getDepartment().isBlank()) {
                 predicates.add(cb.equal(userJoin.get("department").get("name"), filter.getDepartment()));
             }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
