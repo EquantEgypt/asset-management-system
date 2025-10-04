@@ -1,14 +1,15 @@
 package org.orange.oie.internship2025.assetmanagementsystem.mapper;
 
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetDto;
-import org.orange.oie.internship2025.assetmanagementsystem.dto.AssetRequestDto;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Asset;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Category;
-import org.orange.oie.internship2025.assetmanagementsystem.entity.Type;
+import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
+import org.orange.oie.internship2025.assetmanagementsystem.entity.*;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.CategoryRepository;
 import org.orange.oie.internship2025.assetmanagementsystem.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class AssetMapper {
@@ -18,20 +19,24 @@ public class AssetMapper {
 
     @Autowired
     private TypeRepository typeRepository;
-
-    public AssetDto toDto(Asset asset) {
+    public static AssetDto toDto(Asset asset) {
         if (asset == null) {
             return null;
         }
 
         AssetDto assetDto = new AssetDto();
-        assetDto.setAssetId(asset.getAssetId());
-        assetDto.setAssetName(asset.getAssetName());
+        assetDto.setAssetId(asset.getId());
+        assetDto.setAssetName(asset.getName());
+        assetDto.setImagePath(asset.getImagePath());
+        assetDto.setLocation(asset.getLocation());
+        assetDto.setSerialNumber(asset.getSerialNumber());
+        assetDto.setPurchaseDate(asset.getPurchaseDate().toString());
+        assetDto.setWarrantyEndDate(asset.getWarrantyEndDate().toString());
+        assetDto.setStatus(asset.getStatus());
         assetDto.setBrand(asset.getBrand());
-        assetDto.setAssetDescription(asset.getAssetDescription());
+        assetDto.setAssetDescription(asset.getDescription());
         assetDto.setCategory(asset.getCategory());
         assetDto.setType(asset.getType());
-        assetDto.setQuantity(asset.getQuantity());
 
         return assetDto;
     }
@@ -42,18 +47,84 @@ public class AssetMapper {
         }
 
         Asset asset = new Asset();
-        asset.setAssetName(assetDto.getAssetName());
+        asset.setName(assetDto.getName());
         asset.setBrand(assetDto.getBrand());
-        asset.setAssetDescription(assetDto.getAssetDescription());
-        asset.setQuantity(assetDto.getQuantity());
+        asset.setDescription(assetDto.getAssetDescription());
 
-        Category category = categoryRepository.findById(assetDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        Type type = typeRepository.findById(assetDto.getTypeId())
-                .orElseThrow(() -> new RuntimeException("Type not found"));
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
 
         asset.setCategory(category);
         asset.setType(type);
+
+        asset.setLocation(assetDto.getLocation());
+        asset.setSerialNumber(assetDto.getSerialNumber());
+        asset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
+        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
+        asset.setStatus(assetDto.getStatus());
+        asset.setImagePath(assetDto.getImagePath());
         return asset;
     }
+
+    public Asset toEntity(UpdateAssetDto assetDto) {
+        if (assetDto == null) {
+            return null;
+        }
+        Asset asset = new Asset();
+        asset.setName(assetDto.getName());
+        asset.setBrand(assetDto.getBrand());
+        asset.setDescription(assetDto.getAssetDescription());
+
+        AssetCategory category = categoryRepository.getById(assetDto.getCategoryId());
+        AssetType type = typeRepository.getById(assetDto.getTypeId());
+
+        asset.setCategory(category);
+        asset.setType(type);
+
+        asset.setLocation(assetDto.getLocation());
+        asset.setSerialNumber(assetDto.getSerialNumber());
+        asset.setPurchaseDate(assetDto.getPurchaseDate().toLocalDate());
+        asset.setWarrantyEndDate(assetDto.getWarrantyEndDate().toLocalDate());
+        asset.setImagePath(assetDto.getImagePath());
+        return asset;
+    }
+
+    public static List<AssetDto> toDtoList(List<Asset> assetsList) {
+        if (assetsList == null) {
+            return Collections.emptyList();
+        }
+
+        List<AssetDto> dtoList = new ArrayList<>();
+        for (Asset asset : assetsList) {
+            dtoList.add(toDto(asset));
+        }
+        return dtoList;
+    }
+
+    public AssetDetailsDto toDetailsDto(Asset asset) {
+        AssetDetailsDto dto = new AssetDetailsDto();
+        dto.setAssetId(asset.getId());
+        dto.setAssetName(asset.getName());
+        dto.setBrand(asset.getBrand());
+        dto.setAssetDescription(asset.getDescription());
+        dto.setCategoryName(asset.getCategory().getName());
+        dto.setTypeName(asset.getType().getName());
+        dto.setLocation(asset.getLocation());
+        dto.setSerialNumber(asset.getSerialNumber());
+        dto.setPurchaseDate(asset.getPurchaseDate().toString());
+        dto.setWarrantyEndDate(asset.getWarrantyEndDate().toString());
+        dto.setStatus(asset.getStatus());
+        dto.setImagePath(asset.getImagePath());
+
+        if (asset.getAssignments() != null && !asset.getAssignments().isEmpty()) {
+            var userAssignment = asset.getAssignments().get(asset.getAssignments().size() - 1);
+            User assignedUser = userAssignment.getAssignedTo();
+            dto.setAssignedToId(assignedUser.getId());
+            dto.setAssignedToName(assignedUser.getUsername());
+            dto.setAssignedToEmail(assignedUser.getEmail());
+        }
+
+        return dto;
+    }
+
 }
