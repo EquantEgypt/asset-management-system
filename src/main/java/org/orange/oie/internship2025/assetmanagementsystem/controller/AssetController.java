@@ -8,6 +8,10 @@ import org.orange.oie.internship2025.assetmanagementsystem.dto.ListAssetDTO;
 import org.orange.oie.internship2025.assetmanagementsystem.dto.*;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetCategory;
 import org.orange.oie.internship2025.assetmanagementsystem.entity.AssetType;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetAssignmentService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.AssetTypeService;
+import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.CategoryService;
 import org.orange.oie.internship2025.assetmanagementsystem.service.serviceInterface.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +25,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
-
-    private final AssetAssignmentService assetAssignmentService;
     private final AssetService assetService;
     private final AssetTypeService typeService;
     private final CategoryService categoryService;
+    private final AssetAssignmentService assetAssignmentService;
 
     public AssetController(AssetService assetService, AssetTypeService typeService, CategoryService categoryService, AssetAssignmentService assetAssignmentService) {
         this.assetService = assetService;
@@ -33,6 +36,7 @@ public class AssetController {
         this.categoryService = categoryService;
         this.assetAssignmentService = assetAssignmentService;
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AssetDto> addAsset(@Valid @RequestBody AssetRequestDto assetRequestDto) {
@@ -47,15 +51,13 @@ public class AssetController {
         return ResponseEntity.ok(dto);
     }
 
-
-
     @GetMapping("/types")
     public List<AssetType> getAllTypes(
             @RequestParam(required = false) Long categoryId
-
     ) {
         return typeService.getAllTypes(categoryId);
     }
+
     @GetMapping("/categories")
     public List<AssetCategory> getAllCategories() {
         return categoryService.getAllCategories();
@@ -68,12 +70,12 @@ public class AssetController {
         return ResponseEntity.ok(assets);
     }
 
-
     @GetMapping
     public ResponseEntity<Page<ListAssetDTO>> getFilteredAsset(AssignedAssetFilterDTO filterDTO, Pageable pageable) {
         Page<ListAssetDTO> assets = assetService.getFilteredAsset(filterDTO, pageable);
         return ResponseEntity.ok(assets);
     }
+
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public List<AssetDto> getAvailableAsset(
@@ -90,9 +92,16 @@ public class AssetController {
     @PostMapping("/assign")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     public ResponseEntity assignAsset(
-            @Valid  @RequestBody AssetAssignmentRequest request
+            @Valid @RequestBody AssetAssignmentRequest request
     ) {
         assetAssignmentService.assignAsset(request);
         return ResponseEntity.ok("Asset Assigned Successfully");
+    }
+
+    @PostMapping("/{id}/unassign")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AssetDto> unassignAsset(@PathVariable Long id) {
+        AssetDto dto = assetAssignmentService.unassignAsset(id);
+        return ResponseEntity.ok(dto);
     }
 }
