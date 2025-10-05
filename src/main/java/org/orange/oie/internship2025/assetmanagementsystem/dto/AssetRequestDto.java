@@ -2,6 +2,7 @@ package org.orange.oie.internship2025.assetmanagementsystem.dto;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Pattern;
 import org.orange.oie.internship2025.assetmanagementsystem.enums.AssetStatus;
 
 import jakarta.persistence.Column;
@@ -38,6 +39,7 @@ public class AssetRequestDto {
     private String location;
 
     @NotBlank(message = "Serial number cannot be empty")
+    @Pattern(regexp = "^SN-[A-Z0-9-]+$", message = "Serial number must follow the format SN-XXXX")
     private String serialNumber;
 
     private LocalDateTime purchaseDate;

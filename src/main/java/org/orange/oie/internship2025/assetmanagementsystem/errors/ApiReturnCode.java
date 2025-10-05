@@ -17,7 +17,8 @@ public enum ApiReturnCode {
     INVALID_ASSET_STATUS(101, HttpStatus.BAD_REQUEST, Level.WARN),
     ASSET_NOT_FOUND(102, HttpStatus.NOT_FOUND, Level.WARN),
     USER_NOT_EXISTS(103, HttpStatus.NOT_FOUND, Level.WARN),
-    INVALID_ASSET(101, HttpStatus.BAD_REQUEST, Level.WARN);
+    INVALID_ASSET(101, HttpStatus.BAD_REQUEST, Level.WARN),
+    ASSET_NOT_ASSIGNED(105, HttpStatus.CONFLICT, Level.WARN);
 
 
     private final int code;
